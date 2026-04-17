@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>time aligns</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  /* ══════════════════════════════════════════════════
+     TOKENS
+     ══════════════════════════════════════════════════ */
+  :root {
+    --ink: #0A0A0A;
+    --paper: #FFFFFF;
+    --hover: #F7F7F7;
+    --buffer-bg: #FAFAF8;
+    --rule: #D4D4D4;
+    --rule-hair: #ECECEC;
+    --mute: #6B6B6B;
+    --mute-soft: #B0B0B0;
+    --accent: #DC2626;
+    --accent-soft: #FEE2E2;
+
+    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px;
+    --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
+
+    --t-xxs: 9px; --t-xs: 10px; --t-sm: 11px; --t-md: 12px;
+    --t-lg: 14px; --t-xl: 18px; --t-2xl: 24px; --t-3xl: 36px;
+
+    --rail-w: 152px;
+    --lane-h: 40px;
+    --ms-h: 40px;
+    --axis-h: 56px;
+
+    --pad-x: var(--s-7);
+  }
+
+  @media (max-width: 720px) {
+    :root { --pad-x: var(--s-4); --rail-w: 120px; }
+  }
+  @media (min-width: 1440px) {
+    :root { --pad-x: var(--s-8); }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  html { background: var(--paper); }
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+    font-size: var(--t-md);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .page {
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--s-7) var(--pad-x) var(--s-9);
+  }
+
+  /* ══════════════════════════════════════════════════
+     HEADER
+     ══════════════════════════════════════════════════ */
+  .doc-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--s-5);
+    align-items: baseline;
+    padding-bottom: var(--s-7);
+  }
+  .doc-header h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: var(--t-3xl);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .doc-clock {
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-lg);
+    color: var(--ink);
+    letter-spacing: 0.04em;
+  }
+  .doc-clock .time {
+    color: var(--mute-soft);
+    margin-left: 6px;
+  }
+
+  /* ══════════════════════════════════════════════════
+     STICKY TOOLBAR
+     ══════════════════════════════════════════════════ */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: var(--s-4) 0;
+    margin-bottom: var(--s-7);
+  }
+  .t-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--s-5);
+    row-gap: var(--s-3);
+  }
+  .t-spacer { flex: 1; min-width: var(--s-4); }
+
+  .t-input {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--s-2);
+  }
+  .t-label {
+    font-size: var(--t-xxs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 500;
+  }
+
+  .tool-input {
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-sm);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    padding: 4px 2px 3px;
+    color: var(--ink);
+    border-radius: 0;
+    letter-spacing: 0.02em;
+    min-width: 120px;
+  }
+  .tool-input:focus { outline: none; border-bottom-color: var(--accent); }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: opacity(0.45) grayscale(1);
+    cursor: pointer;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    filter: opacity(0.9) grayscale(1);
+  }
+
+  .link {
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-sm);
+    background: none;
+    border: none;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 2px 0 3px;
+    border-bottom: 1px solid currentColor;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+    transition: color 0.1s, border-bottom-color 0.1s;
+  }
+  .link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .link.muted {
+    color: var(--mute);
+    font-weight: 400;
+    border-bottom-color: var(--rule);
+  }
+  .link.muted:hover { color: var(--ink); border-bottom-color: var(--ink); }
+  .link.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .link.active:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+  .save-indicator {
+    font-size: var(--t-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mute-soft);
+    transition: color 0.2s;
+    font-weight: 500;
+  }
+  .save-indicator.flash { color: var(--accent); }
+
+  /* ══════════════════════════════════════════════════
+     TIMELINE
+     ══════════════════════════════════════════════════ */
+  .tl-scroll {
+    overflow-x: auto;
+    overflow-y: visible;
+    margin: 0 calc(-1 * var(--pad-x));
+    padding: 0 var(--pad-x) var(--s-3);
+    scrollbar-width: thin;
+  }
+  .tl-scroll::-webkit-scrollbar { height: 6px; }
+  .tl-scroll::-webkit-scrollbar-thumb { background: var(--rule); }
+  .tl-scroll::-webkit-scrollbar-track { background: transparent; }
+
+  .tl {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--rail-w) 1fr;
+    align-items: stretch;
+    user-select: none;
+  }
+
+  .tl-rail {
+    border-right: 1px solid var(--ink);
+    position: sticky;
+    left: 0;
+    background: var(--paper);
+    z-index: 5;
+  }
+  .tl-rail .rail-cell {
+    height: var(--lane-h);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: var(--s-4);
+    border-bottom: 1px solid var(--rule-hair);
+    position: relative;
+  }
+  .tl-rail .rail-cell.axis-cell {
+    height: var(--axis-h);
+    border-bottom: 1px solid var(--ink);
+    align-items: flex-end;
+    padding-bottom: var(--s-2);
+  }
+  .tl-rail .rail-cell.milestone-cell {
+    height: var(--ms-h);
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper);
+  }
+  .tl-rail .rail-cell.milestone-cell .label {
+    color: var(--mute);
+    font-weight: 500;
+  }
+  .tl-rail .rail-cell .track-label-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-2);
+  }
+  body.edit-mode .tl-rail .rail-cell .track-label-wrap { cursor: pointer; }
+  body.edit-mode .tl-rail .rail-cell .track-label-wrap:hover .name { color: var(--accent); }
+  .tl-rail .rail-cell .name {
+    font-size: var(--t-sm);
+    font-weight: 600;
+    color: var(--ink);
+    transition: color 0.1s;
+  }
+  .tl-rail .rail-cell .sub {
+    font-size: var(--t-xxs);
+    color: var(--mute);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .tl-rail .rail-add-track {
+    height: 32px;
+    display: none;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: var(--s-4);
+    font-size: var(--t-xxs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mute);
+    cursor: pointer;
+    border-bottom: 1px solid var(--rule-hair);
+    font-weight: 500;
+  }
+  body.edit-mode .tl-rail .rail-add-track { display: flex; }
+  .tl-rail .rail-add-track:hover { color: var(--accent); }
+
+  .tl-content { position: relative; }
+
+  /* BUFFER backgrounds — subtle indication of pre/post-window time */
+  .tl-buffer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: var(--buffer-bg);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* AXIS */
+  .tl-axis {
+    height: var(--axis-h);
+    position: relative;
+    border-bottom: 1px solid var(--ink);
+    background: transparent;
+  }
+  .tl-axis .tick {
+    position: absolute;
+    top: 32px;
+    bottom: 0;
+    width: 1px;
+    background: var(--rule);
+  }
+  .tl-axis .tick.major {
+    background: var(--ink);
+    top: 20px;
+  }
+  .tl-axis .tick.in-buffer {
+    opacity: 0.45;
+  }
+  .tl-axis .tick-label {
+    position: absolute;
+    top: 8px;
+    font-size: var(--t-xxs);
+    color: var(--mute);
+    letter-spacing: 0.1em;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .tl-axis .tick-label.major {
+    color: var(--ink);
+    font-weight: 600;
+    font-size: var(--t-xs);
+  }
+  .tl-axis .tick-label.in-buffer {
+    color: var(--mute-soft);
+    font-weight: 400;
+  }
+  .tl-axis .month-label {
+    position: absolute;
+    top: 8px;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: var(--t-xl);
+    color: var(--ink);
+    transform: translateX(12px);
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .tl-axis .month-label.in-buffer {
+    color: var(--mute-soft);
+  }
+
+  /* MILESTONES — distinct strip */
+  .tl-milestones {
+    position: relative;
+    height: var(--ms-h);
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper);
+  }
+  body.edit-mode .tl-milestones { cursor: crosshair; }
+  .tl-milestone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    z-index: 3;
+    touch-action: none;
+  }
+  body.edit-mode .tl-milestone { cursor: grab; }
+  body.edit-mode .tl-milestone:active { cursor: grabbing; }
+  .m-dot {
+    width: 9px;
+    height: 9px;
+    background: var(--accent);
+    transform: rotate(45deg);
+    margin-left: -4.5px;
+    flex-shrink: 0;
+    transition: transform 0.08s;
+    pointer-events: none;
+  }
+  .tl-milestone:hover .m-dot { transform: rotate(45deg) scale(1.3); }
+  .tl-milestone.soft .m-dot {
+    background: var(--paper);
+    border: 1.5px solid var(--accent);
+  }
+  .m-text {
+    margin-left: 10px;
+    font-size: var(--t-sm);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+  }
+  .m-day {
+    color: var(--mute);
+    font-weight: 500;
+  }
+  .m-sep {
+    color: var(--mute-soft);
+    margin: 0 5px;
+  }
+  .m-label {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .tl-milestone:not(.soft) .m-label {
+    font-weight: 600;
+  }
+  .tl-milestone.dragging { z-index: 10; }
+  .tl-milestone.dragging .m-dot { transform: rotate(45deg) scale(1.5); }
+
+  /* VERTICALS — Walls + Today */
+  .tl-vertical {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .tl-start {
+    width: 1.5px;
+    background: var(--ink);
+  }
+  .tl-horizon {
+    width: 2px;
+    background: var(--ink);
+  }
+  .tl-horizon::after {
+    content: 'HORIZON';
+    position: absolute;
+    bottom: 12px;
+    left: 8px;
+    font-size: var(--t-xxs);
+    letter-spacing: 0.18em;
+    color: var(--ink);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-weight: 600;
+  }
+  .tl-today {
+    width: 1px;
+    background: var(--accent);
+    opacity: 0.85;
+  }
+  .tl-today::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -2.5px;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  /* LANES */
+  .tl-lane {
+    position: relative;
+    height: var(--lane-h);
+    border-bottom: 1px solid var(--rule-hair);
+    background: transparent;
+  }
+  .tl-lane:last-of-type { border-bottom: 1px solid var(--ink); }
+  body.edit-mode .tl-lane:hover { background: rgba(247, 247, 247, 0.5); }
+
+  /* BARS */
+  .bar {
+    position: absolute;
+    top: 7px;
+    bottom: 7px;
+    padding: 0 var(--s-2);
+    display: flex;
+    align-items: center;
+    font-size: var(--t-xxs);
+    letter-spacing: 0.04em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    z-index: 1;
+    font-weight: 500;
+    touch-action: none;
+    transition: box-shadow 0.08s;
+  }
+  body.edit-mode .bar { cursor: grab; }
+  body.edit-mode .bar:active { cursor: grabbing; }
+  .bar:hover {
+    z-index: 4;
+    box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--accent);
+  }
+  .bar.dragging {
+    opacity: 0.85;
+    z-index: 10;
+    box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--accent), 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .bar.committed {
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .bar.active {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--paper);
+    font-weight: 600;
+  }
+  .bar.tentative {
+    border: 1px dashed var(--mute);
+    background: var(--paper);
+    color: var(--mute);
+  }
+  .bar.waiting {
+    border: 1px dashed var(--accent);
+    color: var(--accent);
+    background-color: var(--paper);
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 4px, var(--accent-soft) 4px, var(--accent-soft) 5px);
+  }
+  .bar.beyond {
+    border: 1px dotted var(--mute);
+    background: var(--paper);
+    color: var(--mute);
+    font-style: italic;
+  }
+  .bar .ix {
+    font-weight: 600;
+    margin-right: var(--s-1);
+    opacity: 0.6;
+  }
+
+  body.edit-mode .bar::before,
+  body.edit-mode .bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    cursor: ew-resize;
+    z-index: 2;
+  }
+  body.edit-mode .bar::before { left: 0; }
+  body.edit-mode .bar::after { right: 0; }
+  body.edit-mode .bar:hover::before {
+    border-left: 2px solid var(--ink);
+    background: linear-gradient(to right, rgba(220, 38, 38, 0.15), transparent);
+  }
+  body.edit-mode .bar:hover::after {
+    border-right: 2px solid var(--ink);
+    background: linear-gradient(to left, rgba(220, 38, 38, 0.15), transparent);
+  }
+  body.edit-mode .bar.active:hover::before { border-left-color: var(--paper); }
+  body.edit-mode .bar.active:hover::after { border-right-color: var(--paper); }
+
+  /* DRAG TIP */
+  .drag-tip {
+    position: fixed;
+    z-index: 200;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 6px 10px;
+    font-size: var(--t-xxs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    pointer-events: none;
+    font-weight: 600;
+    display: none;
+    white-space: nowrap;
+  }
+  .drag-tip.show { display: block; }
+  .drag-tip .sep { color: var(--mute-soft); margin: 0 6px; }
+  .drag-tip .accent { color: var(--accent); }
+
+  /* ══════════════════════════════════════════════════
+     POPOVER
+     ══════════════════════════════════════════════════ */
+  .pop-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.45);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: var(--s-4);
+  }
+  .pop-scrim.open { display: flex; }
+  .popover {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    padding: var(--s-5) var(--s-5) var(--s-4);
+    width: 380px;
+    max-width: 100%;
+    box-shadow: 6px 6px 0 rgba(10, 10, 10, 0.1);
+  }
+  .popover .pop-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--s-4);
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--rule);
+  }
+  .popover .pop-title {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: var(--t-xl);
+  }
+  .popover .pop-kind {
+    font-size: var(--t-xxs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 500;
+  }
+  .popover .field {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: var(--s-3);
+    align-items: baseline;
+    margin-bottom: var(--s-3);
+  }
+  .popover .field label {
+    font-size: var(--t-xxs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 500;
+  }
+  .popover .field input,
+  .popover .field select,
+  .popover .field textarea {
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-sm);
+    padding: 6px 8px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    border-radius: 0;
+    width: 100%;
+  }
+  .popover .field input:focus,
+  .popover .field select:focus,
+  .popover .field textarea:focus { outline: none; border-color: var(--ink); }
+  .popover .field .check {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+  }
+  .popover .pop-actions {
+    display: flex;
+    gap: var(--s-3);
+    margin-top: var(--s-4);
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .popover .pop-actions .link.danger {
+    color: var(--accent);
+    margin-left: auto;
+  }
+  .popover .pop-actions .link.danger:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+  /* ══════════════════════════════════════════════════
+     PUNCH SHEET — bigger, breathier
+     ══════════════════════════════════════════════════ */
+  .ledger {
+    margin-top: var(--s-9);
+  }
+  .week-group { margin-bottom: var(--s-7); }
+  .week-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-3);
+    padding-bottom: var(--s-2);
+    margin-bottom: var(--s-3);
+    border-bottom: 1px solid var(--ink);
+  }
+  .week-head .wnum {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .week-head .wlabel {
+    font-size: var(--t-xs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 500;
+  }
+  .week-head .wdates {
+    margin-left: auto;
+    font-size: var(--t-xs);
+    color: var(--mute);
+    letter-spacing: 0.1em;
+  }
+  .week-head .link {
+    margin-left: var(--s-3);
+    display: none;
+    font-size: var(--t-xxs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  body.edit-mode .week-head .link { display: inline-block; }
+  .row {
+    display: grid;
+    grid-template-columns: 108px 1fr 220px;
+    gap: var(--s-4);
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--rule-hair);
+    align-items: baseline;
+  }
+  body.edit-mode .row { cursor: pointer; }
+  body.edit-mode .row:hover { background: var(--hover); }
+  .row:last-child { border-bottom: none; }
+  .row .tag {
+    font-size: var(--t-xxs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 600;
+  }
+  .row .task {
+    color: var(--ink);
+    line-height: 1.55;
+    font-size: var(--t-md);
+  }
+  .row .route {
+    text-align: right;
+    font-size: var(--t-xs);
+    color: var(--mute);
+    letter-spacing: 0.04em;
+  }
+  .row .route:not(:empty)::before { content: '→ '; color: var(--mute-soft); }
+  .row.blocked .tag { color: var(--accent); }
+  .row.blocked .task::before { content: '▲ '; color: var(--accent); font-size: 9px; margin-right: 2px; }
+  .row.decision .task::before { content: '◆ '; color: var(--ink); margin-right: 2px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 720px) {
+    .doc-header { grid-template-columns: 1fr; gap: var(--s-2); padding-bottom: var(--s-5); }
+    .doc-header h1 { font-size: 28px; }
+    .doc-clock { font-size: var(--t-md); }
+    .row { grid-template-columns: 80px 1fr; padding: var(--s-3) 0; }
+    .row .route { grid-column: 2; text-align: left; padding-top: 2px; }
+    .popover .field { grid-template-columns: 1fr; gap: var(--s-1); }
+  }
+</style>
+</head>
+<body class="edit-mode">
+<div class="page">
+
+  <header class="doc-header">
+    <h1>time aligns</h1>
+    <div class="doc-clock"><span id="clock-date">—</span><span class="time" id="clock-time">—</span></div>
+  </header>
+
+  <div class="toolbar">
+    <div class="t-row">
+      <button class="link active" id="btn-edit-toggle">Editing · Live</button>
+
+      <span class="t-input">
+        <span class="t-label">Start</span>
+        <input type="date" id="in-start" class="tool-input">
+      </span>
+
+      <span class="t-input">
+        <span class="t-label">Horizon</span>
+        <input type="date" id="in-horizon" class="tool-input">
+      </span>
+
+      <span class="t-spacer"></span>
+
+      <span class="save-indicator" id="save-indicator">Saved</span>
+      <button class="link muted" id="btn-sync" title="Pull latest from GitHub">Sync</button>
+      <button class="link muted" id="btn-token" title="Set GitHub token">Token</button>
+      <button class="link muted" id="btn-undo" title="Undo (⌘Z)">Undo</button>
+      <button class="link muted" id="btn-export">Export</button>
+      <button class="link muted" id="btn-import">Import</button>
+      <button class="link muted" id="btn-reset">Reset</button>
+    </div>
+  </div>
+
+  <div class="tl-scroll" id="tl-scroll">
+    <div class="tl" id="tl-root"></div>
+  </div>
+
+  <div class="ledger" id="ledger-root"></div>
+
+</div>
+
+<div class="drag-tip" id="drag-tip"></div>
+
+<div class="pop-scrim" id="pop-scrim">
+  <div class="popover" id="popover"></div>
+</div>
+
+<input type="file" id="file-import" accept="application/json" style="display:none">
+
+<script>
+/* ════════════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════════════ */
+
+const STORAGE_KEY = 'time-aligns-v7';
+const BUFFER_DAYS = 14;  // axis extends this many days before start, after horizon
+const MIN_PX_PER_DAY = 6;
+
+/* ════════════════════════════════════════════════════
+   GITHUB-BACKED PERSISTENCE
+   State is stored at state.json in this repo. Reads are
+   public (no token needed if repo is public); writes go
+   through the Contents API with a Personal Access Token
+   stored in localStorage. Last write wins, with a stale-
+   SHA refresh on conflict.
+   ════════════════════════════════════════════════════ */
+const GH_REPO   = 'jalulia/timeline';
+const GH_FILE   = 'state.json';
+const GH_BRANCH = 'main';
+const TOKEN_KEY = 'time-aligns-gh-token';
+const CACHE_KEY = 'time-aligns-cache-v1';
+let currentSha = null;     // most recent SHA of state.json we saw
+
+function getToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
+function setToken(t) {
+  if (t) localStorage.setItem(TOKEN_KEY, t);
+  else   localStorage.removeItem(TOKEN_KEY);
+}
+function authHeaders() {
+  const t = getToken();
+  return t ? { 'Authorization': 'token ' + t } : {};
+}
+
+const uid = () => Math.random().toString(36).slice(2, 9);
+const toISO = (d) => {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+};
+const fromISO = (s) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (d, n) => { const c = new Date(d); c.setDate(c.getDate() + n); return c; };
+const daysBetween = (a, b) => Math.round((fromISO(b) - fromISO(a)) / 86400000);
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fmtShort = (iso) => { const d = fromISO(iso); return `${d.getDate()} ${MONTHS[d.getMonth()]}`; };
+
+const SEED = {
+  startDate: '2026-04-17',
+  horizonDate: '2026-05-31',
+  tracks: [
+    { id: 't-yoshi', name: 'Yoshi', sub: 'build', sequential: true, phases: [
+      { id: uid(), label: 'Plan & Dossier',   state: 'active',    start: '2026-04-17', days: 5,  ix: '01' },
+      { id: uid(), label: 'Sample & Order',   state: 'committed', start: '2026-04-22', days: 7,  ix: '02' },
+      { id: uid(), label: 'Body Prep',        state: 'committed', start: '2026-04-29', days: 6,  ix: '03' },
+      { id: uid(), label: 'Soundproofing',    state: 'committed', start: '2026-05-05', days: 7,  ix: '04' },
+      { id: uid(), label: 'Cabinet Build',    state: 'committed', start: '2026-05-12', days: 14, ix: '05' },
+      { id: uid(), label: 'Finish',           state: 'committed', start: '2026-05-26', days: 5,  ix: '06' }
+    ]},
+    { id: 't-cl', name: 'CL / CNC', sub: 'proc.', sequential: false, phases: [
+      { id: uid(), label: 'Waiting · vendor', state: 'waiting',   start: '2026-04-17', days: 7 },
+      { id: uid(), label: 'Decide',           state: 'tentative', start: '2026-04-24', days: 2 },
+      { id: uid(), label: 'Order · receive',  state: 'tentative', start: '2026-04-26', days: 5 }
+    ]},
+    { id: 't-heidi', name: 'Heidi', sub: 'reach', sequential: false, phases: [
+      { id: uid(), label: 'Draft · send',     state: 'committed', start: '2026-04-18', days: 2 },
+      { id: uid(), label: 'Waiting · reply',  state: 'waiting',   start: '2026-04-20', days: 7 },
+      { id: uid(), label: 'Follow-up',        state: 'tentative', start: '2026-04-27', days: 4 }
+    ]},
+    { id: 't-mom', name: 'Mom', sub: 'visit', sequential: false, phases: [
+      { id: uid(), label: 'Confirm window',   state: 'tentative', start: '2026-04-20', days: 5 },
+      { id: uid(), label: 'Travel · ~1wk',    state: 'tentative', start: '2026-05-05', days: 7 }
+    ]},
+    { id: 't-comms', name: 'Comms', sub: 'team', sequential: false, phases: [
+      { id: uid(), label: 'Work packages',    state: 'committed', start: '2026-04-21', days: 4 },
+      { id: uid(), label: 'Brief team',       state: 'tentative', start: '2026-05-03', days: 4 },
+      { id: uid(), label: 'Re-sync',          state: 'tentative', start: '2026-05-12', days: 3 }
+    ]},
+    { id: 't-peru', name: 'Peru', sub: 'beyond', sequential: false, phases: [
+      { id: uid(), label: '→ June+ · plan w/ Matt', state: 'beyond', start: '2026-05-26', days: 12 }
+    ]}
+  ],
+  milestones: [
+    { id: uid(), label: 'Heidi draft',  date: '2026-04-19', soft: true  },
+    { id: uid(), label: 'CL cutoff',    date: '2026-04-24', soft: false },
+    { id: uid(), label: 'Mom date',     date: '2026-04-29', soft: true  },
+    { id: uid(), label: 'Travel tent.', date: '2026-05-05', soft: false }
+  ],
+  tasks: [
+    { id: uid(), tag: 'Yoshi',    text: 'Budget ballpark — confirm ~$20k start covers what, what comes after', route: 'dossier / budget',    type: 'decision', week: 1 },
+    { id: uid(), tag: 'Yoshi',    text: 'HBL sheets — 3 vs 4, which faces show, order sample first',           route: 'dossier / materials', type: 'decision', week: 1 },
+    { id: uid(), tag: 'Yoshi',    text: 'Cabinet layout — water, puff, stove, sink, storage positions',        route: 'dossier / layout',    type: 'decision', week: 1 },
+    { id: uid(), tag: 'Yoshi',    text: 'Build sequence lock — soundproofing + body holes before cabinetry',   route: 'dossier / sequence',  type: 'decision', week: 1 },
+    { id: uid(), tag: 'Yoshi',    text: 'Emissions / Georgia legalization status',                             route: 'dossier / compliance', type: 'decision', week: 1 },
+    { id: uid(), tag: 'Heidi',    text: 'Draft with fresh brain — impactful, clear ask, no filler',            route: 'outreach / heidi',    type: 'normal',   week: 1 },
+    { id: uid(), tag: 'Mom',      text: 'Reply with window for summer help',                                   route: 'personal / calendar', type: 'normal',   week: 1 },
+    { id: uid(), tag: 'CL / CNC', text: 'Vendor response overdue — self-set cutoff 24 Apr, then self-pay path', route: 'waiting / decision',  type: 'blocked',  week: 1 },
+    { id: uid(), tag: 'Comms',    text: "Single-voice AI pass on combined dossier (check for Matt's zip of PDFs)", route: 'tools / dossier', type: 'normal',   week: 1 },
+    { id: uid(), tag: 'Yoshi',    text: 'Place HBL order, soundproofing order, queue delivery for return',     route: 'orders',              type: 'normal',   week: 2 },
+    { id: uid(), tag: 'Comms',    text: 'Work packages — 90% whiteboards per person pre-travel',               route: 'handoff',             type: 'normal',   week: 2 },
+    { id: uid(), tag: 'Heidi',    text: 'If no reply by end of week, soft follow-up',                          route: 'outreach / heidi',    type: 'normal',   week: 2 },
+    { id: uid(), tag: 'Yoshi',    text: 'Fill water tank hole, front left, remaining body penetrations',      route: 'build / body',        type: 'normal',   week: 3 },
+    { id: uid(), tag: 'Comms',    text: 'Brief team on departure date, open threads, decision authority',     route: 'handoff',             type: 'normal',   week: 3 },
+    { id: uid(), tag: 'Mom',      text: 'Travel window — ~1 week on the ground (tentative)',                  route: 'personal / travel',   type: 'normal',   week: 4 },
+    { id: uid(), tag: 'Yoshi',    text: 'Soundproofing install, 2–3 layers + vibration',                      route: 'build / sound',       type: 'normal',   week: 4 },
+    { id: uid(), tag: 'Yoshi',    text: 'Cabinet build begins once soundproofing closed out',                 route: 'build / cabinet',     type: 'normal',   week: 5 },
+    { id: uid(), tag: 'Yoshi',    text: 'Finish & equip — final fit, water, power, inventory',               route: 'build / finish',      type: 'normal',   week: 6 },
+    { id: uid(), tag: 'Peru',     text: 'Plan with Matt — dates, scope, what ships where',                    route: 'beyond-horizon',      type: 'normal',   week: 6 }
+  ]
+};
+
+let state = JSON.parse(JSON.stringify(SEED));
+let editMode = true;
+let saveTimer = null;
+
+function realToday() { return toISO(new Date()); }
+
+const history = [];
+const HISTORY_LIMIT = 60;
+function snapshot() { history.push(JSON.stringify(state)); if (history.length > HISTORY_LIMIT) history.shift(); }
+function undo() {
+  if (history.length < 2) { flashSave('Nothing to undo'); return; }
+  history.pop();
+  state = JSON.parse(history[history.length - 1]);
+  syncInputs(); render(); persistOnly();
+  flashSave('Undone');
+}
+
+const saveEl = document.getElementById('save-indicator');
+let flashTimer = null;
+function flashSave(text) {
+  saveEl.textContent = text;
+  saveEl.classList.add('flash');
+  if (flashTimer) clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => { saveEl.classList.remove('flash'); saveEl.textContent = 'Saved'; }, 800);
+}
+
+async function loadState() {
+  // Try GitHub first; fall back to local cache so the page still renders offline.
+  try {
+    const url = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}?ref=${GH_BRANCH}&t=${Date.now()}`;
+    const r = await fetch(url, { headers: authHeaders(), cache: 'no-store' });
+    if (r.status === 404) {
+      // state.json doesn't exist yet — first ever run against a fresh repo.
+      currentSha = null;
+      flashSave('New repo');
+      return;
+    }
+    if (!r.ok) throw new Error('load ' + r.status);
+    const data = await r.json();
+    currentSha = data.sha;
+    // GitHub returns base64 with line breaks; strip them before decoding.
+    const json = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+    const parsed = JSON.parse(json);
+    if (parsed && parsed.tracks && parsed.milestones && parsed.tasks) {
+      state = parsed;
+      localStorage.setItem(CACHE_KEY, json);
+      flashSave('Synced');
+    }
+  } catch (e) {
+    console.warn('GitHub load failed, trying cache', e);
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) { try { state = JSON.parse(cached); flashSave('Offline'); } catch (err) {} }
+    else { flashSave('Offline · seed'); }
+  }
+}
+
+async function persistNow() {
+  const token = getToken();
+  if (!token) { flashSave('Need token'); return false; }
+  const json = JSON.stringify(state, null, 2);
+  // Cache before network so a failed save still leaves a recoverable local copy.
+  localStorage.setItem(CACHE_KEY, json);
+  const body = {
+    message: 'update timeline ' + new Date().toISOString(),
+    content: btoa(unescape(encodeURIComponent(json))),
+    branch: GH_BRANCH,
+  };
+  if (currentSha) body.sha = currentSha;
+  try {
+    flashSave('Saving…');
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`, {
+      method: 'PUT',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (r.status === 409 || r.status === 422) {
+      // SHA stale — someone else saved between our load and our save. Pull and warn.
+      flashSave('Out of date — pulling');
+      await loadState(); syncInputs(); render();
+      return false;
+    }
+    if (r.status === 401 || r.status === 403) {
+      flashSave('Auth failed'); return false;
+    }
+    if (!r.ok) throw new Error('save ' + r.status);
+    const data = await r.json();
+    currentSha = data.content.sha;
+    flashSave('Saved');
+    return true;
+  } catch (e) {
+    console.warn('save failed', e);
+    flashSave('Save failed');
+    return false;
+  }
+}
+
+function persistOnly() {
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(persistNow, 800); // debounce so a drag doesn't spam commits
+}
+
+function saveState() { snapshot(); persistOnly(); flashSave('Queued'); }
+
+/* ════════════════════════════════════════════════════
+   GEOMETRY — extended axis, horizon at right edge,
+   start + horizon are walls within
+   ════════════════════════════════════════════════════ */
+
+const RAIL_W = 152, RAIL_W_NARROW = 120;
+function getRailW() { return window.innerWidth <= 720 ? RAIL_W_NARROW : RAIL_W; }
+
+function viewStartDate() { return toISO(addDays(fromISO(state.startDate), -BUFFER_DAYS)); }
+function viewEndDate()   { return toISO(addDays(fromISO(state.horizonDate),  BUFFER_DAYS)); }
+function totalViewDays() { return Math.max(1, daysBetween(viewStartDate(), viewEndDate()) + 1); }
+function workingDays()   { return Math.max(1, daysBetween(state.startDate, state.horizonDate) + 1); }
+
+function pxPerDay() {
+  const scroll = document.getElementById('tl-scroll');
+  if (!scroll) return 12;
+  const padX = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--pad-x')) || 48;
+  const innerW = scroll.clientWidth - padX * 2;
+  const available = innerW - getRailW();
+  const ideal = available / totalViewDays();
+  return Math.max(MIN_PX_PER_DAY, Math.floor(ideal * 10) / 10);
+}
+
+function dayOffset(iso) { return daysBetween(viewStartDate(), iso); }
+function xForDate(iso) { return dayOffset(iso) * pxPerDay(); }
+function dateFromX(x) {
+  const days = Math.round(x / pxPerDay());
+  return toISO(addDays(fromISO(viewStartDate()), days));
+}
+
+function isInBuffer(iso) {
+  const d = fromISO(iso);
+  return d < fromISO(state.startDate) || d > fromISO(state.horizonDate);
+}
+
+/* ════════════════════════════════════════════════════
+   CLOCK
+   ════════════════════════════════════════════════════ */
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock-date').textContent =
+    `${MONTHS[now.getMonth()]} ${now.getDate()} ${now.getFullYear()}`;
+  document.getElementById('clock-time').textContent =
+    `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+}
+
+/* ════════════════════════════════════════════════════
+   RENDER
+   ════════════════════════════════════════════════════ */
+
+function renderTimeline() {
+  const root = document.getElementById('tl-root');
+  const td = totalViewDays();
+  const ppd = pxPerDay();
+  const tw = td * ppd;
+  const vStart = fromISO(viewStartDate());
+  const vEnd   = fromISO(viewEndDate());
+  const todayIso = realToday();
+
+  // Buffer background panels
+  const startWallX = xForDate(state.startDate);
+  const horizonWallX = xForDate(state.horizonDate);
+  const buffersHtml = `
+    <div class="tl-buffer" style="left:0; width:${startWallX}px;"></div>
+    <div class="tl-buffer" style="left:${horizonWallX + 2}px; right:0;"></div>
+  `;
+
+  // Months — full extended range
+  const months = [];
+  let m = new Date(vStart.getFullYear(), vStart.getMonth(), 1);
+  while (m <= vEnd) {
+    const mIso = toISO(m < vStart ? vStart : m);
+    const inBuf = isInBuffer(mIso);
+    months.push({ iso: mIso, name: m.toLocaleString('en', { month: 'long' }), inBuf });
+    m = new Date(m.getFullYear(), m.getMonth() + 1, 1);
+  }
+
+  // Week ticks — full extended range, every 7 days from viewStart
+  const weeks = [];
+  for (let i = 0; i < td; i += 7) {
+    const d = addDays(vStart, i);
+    const iso = toISO(d);
+    weeks.push({ iso, isMajor: d.getDate() <= 7, inBuf: isInBuffer(iso) });
+  }
+
+  const axisHtml = `
+    <div class="tl-axis" style="width:${tw}px;">
+      ${months.map(mo => {
+        const cls = mo.inBuf ? 'in-buffer' : '';
+        return `<span class="month-label ${cls}" style="left:${dayOffset(mo.iso) * ppd}px;">${mo.name}</span>`;
+      }).join('')}
+      ${weeks.map(w => {
+        const off = dayOffset(w.iso) * ppd;
+        const major = w.isMajor ? 'major' : '';
+        const buf = w.inBuf ? 'in-buffer' : '';
+        return `
+          <div class="tick ${major} ${buf}" style="left:${off}px;"></div>
+          <span class="tick-label ${major} ${buf}" style="left:${off}px;">${fromISO(w.iso).getDate()}</span>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  // Milestones — sorted, labels truncate based on next milestone distance
+  const sortedMs = [...state.milestones].sort((a, b) => fromISO(a.date) - fromISO(b.date));
+  const msHtml = `
+    <div class="tl-milestones" id="ms-lane" style="width:${tw}px;">
+      ${sortedMs.map((ms, i) => {
+        const off = dayOffset(ms.date) * ppd;
+        if (off < -8 || off > tw + 8) return '';
+        const next = sortedMs[i + 1];
+        let maxW = 240;
+        if (next) {
+          const nextOff = dayOffset(next.date) * ppd;
+          maxW = Math.max(28, nextOff - off - 16);
+        }
+        const day = fromISO(ms.date).getDate();
+        return `
+          <div class="tl-milestone ${ms.soft ? 'soft' : ''}" style="left:${off}px;" data-ms="${ms.id}">
+            <div class="m-dot"></div>
+            <div class="m-text" style="max-width:${maxW}px;"><span class="m-day">${day}</span><span class="m-sep">·</span><span class="m-label">${escapeHtml(ms.label)}</span></div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  // Lanes — bars positioned within view, beyond-state allowed in right buffer
+  const lanesHtml = state.tracks.map(tr => {
+    const bars = tr.phases.map(p => {
+      const off = dayOffset(p.start) * ppd;
+      const w = p.days * ppd;
+      if (off + w < 0 || off > tw) return '';
+      const ix = p.ix ? `<span class="ix">${escapeHtml(p.ix)}</span>` : '';
+      return `<div class="bar ${p.state}" style="left:${off}px; width:${w}px;"
+                   data-track="${tr.id}" data-phase="${p.id}">${ix}${escapeHtml(p.label)}</div>`;
+    }).join('');
+    return `<div class="tl-lane" data-track="${tr.id}" style="width:${tw}px;">${bars}</div>`;
+  }).join('');
+
+  // Walls + Today
+  const todayOff = dayOffset(todayIso) * ppd;
+  const todayInRange = todayOff >= -2 && todayOff <= tw + 2;
+
+  const verticals = `
+    <div class="tl-vertical tl-start" style="left:${startWallX}px;"></div>
+    <div class="tl-vertical tl-horizon" style="left:${horizonWallX}px;"></div>
+    ${todayInRange ? `<div class="tl-vertical tl-today" style="left:${todayOff}px;"></div>` : ''}
+  `;
+
+  const railHtml = `
+    <div class="tl-rail">
+      <div class="rail-cell axis-cell"></div>
+      <div class="rail-cell milestone-cell"><span class="label">Milestones</span></div>
+      ${state.tracks.map(tr => `
+        <div class="rail-cell" data-track="${tr.id}">
+          <div class="track-label-wrap" data-track="${tr.id}">
+            <span class="name">${escapeHtml(tr.name)}</span>
+            <span class="sub">${escapeHtml(tr.sub || '')}</span>
+          </div>
+        </div>
+      `).join('')}
+      <div class="rail-add-track" id="rail-add-track">+ Track</div>
+    </div>
+  `;
+
+  const addLaneSpacer = `<div style="height:32px;display:${editMode ? 'block' : 'none'};width:${tw}px;"></div>`;
+
+  root.innerHTML = `
+    ${railHtml}
+    <div class="tl-content" style="width:${tw}px;">
+      ${buffersHtml}
+      ${verticals}
+      ${axisHtml}
+      ${msHtml}
+      ${lanesHtml}
+      ${addLaneSpacer}
+    </div>
+  `;
+}
+
+function renderLedger() {
+  const root = document.getElementById('ledger-root');
+  const byWeek = {};
+  state.tasks.forEach(t => { if (!byWeek[t.week]) byWeek[t.week] = []; byWeek[t.week].push(t); });
+  const weekNums = Object.keys(byWeek).map(Number).sort((a, b) => a - b);
+
+  const weekRange = (n) => {
+    const s = addDays(fromISO(state.startDate), (n - 1) * 7);
+    const e = addDays(s, 6);
+    return `${fmtShort(toISO(s))} — ${fmtShort(toISO(e))}`;
+  };
+  const weekActive = (n) => {
+    const s = addDays(fromISO(state.startDate), (n - 1) * 7);
+    const e = addDays(s, 6);
+    const seq = state.tracks.find(t => t.sequential);
+    if (!seq) return '';
+    const overlap = seq.phases.find(p => {
+      const ps = fromISO(p.start);
+      const pe = addDays(ps, p.days - 1);
+      return !(pe < s || ps > e);
+    });
+    return overlap ? `Active: ${overlap.label}` : '';
+  };
+
+  if (!weekNums.length) {
+    root.innerHTML = `<div style="color:var(--mute); font-size:var(--t-sm); padding:var(--s-4) 0;">No tasks yet.</div>`;
+    return;
+  }
+
+  root.innerHTML = weekNums.map(n => `
+    <div class="week-group">
+      <div class="week-head">
+        <span class="wnum">Wk ${n}</span>
+        <span class="wlabel">${weekRange(n)}</span>
+        <button class="link muted" data-add-task="${n}">+ Task</button>
+        <span class="wdates">${weekActive(n)}</span>
+      </div>
+      ${byWeek[n].map(t => `
+        <div class="row ${t.type === 'blocked' ? 'blocked' : t.type === 'decision' ? 'decision' : ''}" data-task="${t.id}">
+          <span class="tag">${escapeHtml(t.tag)}</span>
+          <span class="task">${escapeHtml(t.text)}</span>
+          <span class="route">${escapeHtml(t.route || '')}</span>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+function render() { renderTimeline(); renderLedger(); }
+
+/* ════════════════════════════════════════════════════
+   POPOVER
+   ════════════════════════════════════════════════════ */
+
+function openPopover(kind, title, fields, onSave, onDelete) {
+  const scrim = document.getElementById('pop-scrim');
+  const pop = document.getElementById('popover');
+  pop.innerHTML = `
+    <div class="pop-head">
+      <span class="pop-title">${escapeHtml(title)}</span>
+      <span class="pop-kind">${escapeHtml(kind)}</span>
+    </div>
+    ${fields.map(renderField).join('')}
+    <div class="pop-actions">
+      <button class="link muted" data-pop-action="cancel">Cancel</button>
+      <button class="link active" data-pop-action="save">Save</button>
+      ${onDelete ? '<button class="link danger" data-pop-action="delete">Delete</button>' : ''}
+    </div>
+  `;
+  scrim.classList.add('open');
+
+  const getVal = (key) => {
+    const el = pop.querySelector(`[data-field="${key}"]`);
+    if (!el) return undefined;
+    if (el.type === 'checkbox') return el.checked;
+    if (el.type === 'number') return Number(el.value);
+    return el.value;
+  };
+  const submit = () => {
+    const v = {}; fields.forEach(f => { v[f.key] = getVal(f.key); });
+    onSave(v); closePopover(); render(); saveState();
+  };
+
+  pop.querySelectorAll('[data-pop-action]').forEach(b => {
+    b.onclick = () => {
+      const action = b.dataset.popAction;
+      if (action === 'cancel') return closePopover();
+      if (action === 'save') submit();
+      if (action === 'delete') { onDelete(); closePopover(); render(); saveState(); }
+    };
+  });
+  pop.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); submit(); }
+  });
+  const first = pop.querySelector('input, select, textarea');
+  if (first) setTimeout(() => { first.focus(); if (first.select) first.select(); }, 30);
+}
+
+function renderField(f) {
+  if (f.type === 'select') {
+    return `<div class="field"><label>${escapeHtml(f.label)}</label>
+      <select data-field="${f.key}">
+        ${f.options.map(o => `<option value="${escapeHtml(o.value)}" ${o.value === f.value ? 'selected' : ''}>${escapeHtml(o.label)}</option>`).join('')}
+      </select></div>`;
+  }
+  if (f.type === 'checkbox') {
+    return `<div class="field"><label>${escapeHtml(f.label)}</label>
+      <div class="check"><input type="checkbox" data-field="${f.key}" ${f.value ? 'checked' : ''}>
+      <span style="color:var(--mute); font-size:var(--t-xxs);">${escapeHtml(f.hint || '')}</span></div></div>`;
+  }
+  return `<div class="field"><label>${escapeHtml(f.label)}</label>
+    <input type="${f.type}" data-field="${f.key}" value="${escapeHtml(f.value != null ? f.value : '')}"
+      ${f.min != null ? `min="${f.min}"` : ''} ${f.max != null ? `max="${f.max}"` : ''}></div>`;
+}
+
+function closePopover() { document.getElementById('pop-scrim').classList.remove('open'); }
+
+/* ════════════════════════════════════════════════════
+   EDIT ACTIONS
+   ════════════════════════════════════════════════════ */
+
+const STATE_OPTS = [
+  { value: 'active',    label: 'Active — now' },
+  { value: 'committed', label: 'Committed' },
+  { value: 'tentative', label: 'Tentative' },
+  { value: 'waiting',   label: 'Waiting / blocked' },
+  { value: 'beyond',    label: 'Beyond horizon' }
+];
+const STATE_CYCLE = ['committed', 'active', 'tentative', 'waiting', 'beyond'];
+
+function findPhase(trackId, phaseId) {
+  const tr = state.tracks.find(t => t.id === trackId);
+  return { track: tr, phase: tr ? tr.phases.find(p => p.id === phaseId) : null };
+}
+function cyclePhaseState(trackId, phaseId) {
+  const { phase } = findPhase(trackId, phaseId);
+  if (!phase) return;
+  const idx = STATE_CYCLE.indexOf(phase.state);
+  phase.state = STATE_CYCLE[(idx + 1) % STATE_CYCLE.length];
+  render(); saveState();
+}
+
+function editPhase(trackId, phaseId) {
+  const { track, phase } = findPhase(trackId, phaseId);
+  if (!phase) return;
+  openPopover('Phase', phase.label, [
+    { type: 'text', key: 'label', label: 'Label', value: phase.label },
+    { type: 'select', key: 'state', label: 'State', value: phase.state, options: STATE_OPTS },
+    { type: 'date', key: 'start', label: 'Start', value: phase.start },
+    { type: 'number', key: 'days', label: 'Days', value: phase.days, min: 1 },
+    { type: 'text', key: 'ix', label: 'Index', value: phase.ix || '' }
+  ],
+  (v) => {
+    phase.label = v.label; phase.state = v.state; phase.start = v.start;
+    phase.days = Math.max(1, Number(v.days) || 1);
+    phase.ix = v.ix || undefined;
+  },
+  () => { track.phases = track.phases.filter(p => p.id !== phaseId); });
+}
+
+function addPhase(trackId, suggestedStart) {
+  const track = state.tracks.find(t => t.id === trackId);
+  openPopover('New phase', `${track.name} · add`, [
+    { type: 'text', key: 'label', label: 'Label', value: '' },
+    { type: 'select', key: 'state', label: 'State', value: 'committed', options: STATE_OPTS },
+    { type: 'date', key: 'start', label: 'Start', value: suggestedStart || realToday() },
+    { type: 'number', key: 'days', label: 'Days', value: 5, min: 1 },
+    { type: 'text', key: 'ix', label: 'Index', value: '' }
+  ],
+  (v) => {
+    if (!v.label) return;
+    track.phases.push({ id: uid(), label: v.label, state: v.state, start: v.start,
+      days: Math.max(1, Number(v.days) || 1), ix: v.ix || undefined });
+  });
+}
+
+function editTrack(trackId) {
+  const track = state.tracks.find(t => t.id === trackId);
+  openPopover('Track', track.name, [
+    { type: 'text', key: 'name', label: 'Name', value: track.name },
+    { type: 'text', key: 'sub', label: 'Sub', value: track.sub || '' },
+    { type: 'checkbox', key: 'sequential', label: 'Sequential', value: !!track.sequential, hint: 'phases must follow in order' }
+  ],
+  (v) => { track.name = v.name; track.sub = v.sub; track.sequential = v.sequential; },
+  () => { state.tracks = state.tracks.filter(t => t.id !== trackId); });
+}
+
+function addTrack() {
+  openPopover('New track', 'Add track', [
+    { type: 'text', key: 'name', label: 'Name', value: '' },
+    { type: 'text', key: 'sub', label: 'Sub', value: '' },
+    { type: 'checkbox', key: 'sequential', label: 'Sequential', value: false, hint: 'phases must follow in order' }
+  ],
+  (v) => {
+    if (!v.name) return;
+    state.tracks.push({ id: uid(), name: v.name, sub: v.sub, sequential: !!v.sequential, phases: [] });
+  });
+}
+
+function editMilestone(msId) {
+  const ms = state.milestones.find(m => m.id === msId);
+  openPopover('Milestone', ms.label, [
+    { type: 'text', key: 'label', label: 'Label', value: ms.label },
+    { type: 'date', key: 'date', label: 'Date', value: ms.date },
+    { type: 'checkbox', key: 'soft', label: 'Soft', value: !!ms.soft, hint: 'decision/marker vs. hard deadline' }
+  ],
+  (v) => { ms.label = v.label; ms.date = v.date; ms.soft = v.soft; },
+  () => { state.milestones = state.milestones.filter(m => m.id !== msId); });
+}
+
+function addMilestone(suggestedDate) {
+  openPopover('New milestone', 'Add milestone', [
+    { type: 'text', key: 'label', label: 'Label', value: '' },
+    { type: 'date', key: 'date', label: 'Date', value: suggestedDate || realToday() },
+    { type: 'checkbox', key: 'soft', label: 'Soft', value: true, hint: 'decision/marker vs. hard deadline' }
+  ],
+  (v) => {
+    if (!v.label) return;
+    state.milestones.push({ id: uid(), label: v.label, date: v.date, soft: !!v.soft });
+  });
+}
+
+const TASK_TYPE_OPTS = [
+  { value: 'normal', label: 'Normal' },
+  { value: 'decision', label: 'Decision ◆' },
+  { value: 'blocked', label: 'Blocked ▲' }
+];
+
+function editTask(taskId) {
+  const task = state.tasks.find(t => t.id === taskId);
+  openPopover('Task', task.text.slice(0, 40), [
+    { type: 'text', key: 'tag', label: 'Tag', value: task.tag },
+    { type: 'text', key: 'text', label: 'Task', value: task.text },
+    { type: 'text', key: 'route', label: 'Route', value: task.route || '' },
+    { type: 'select', key: 'type', label: 'Type', value: task.type, options: TASK_TYPE_OPTS },
+    { type: 'number', key: 'week', label: 'Week', value: task.week, min: 1 }
+  ],
+  (v) => {
+    task.tag = v.tag; task.text = v.text; task.route = v.route; task.type = v.type;
+    task.week = Math.max(1, Number(v.week) || 1);
+  },
+  () => { state.tasks = state.tasks.filter(t => t.id !== taskId); });
+}
+
+function addTask(week) {
+  openPopover('New task', `Wk ${week} · add`, [
+    { type: 'text', key: 'tag', label: 'Tag', value: '' },
+    { type: 'text', key: 'text', label: 'Task', value: '' },
+    { type: 'text', key: 'route', label: 'Route', value: '' },
+    { type: 'select', key: 'type', label: 'Type', value: 'normal', options: TASK_TYPE_OPTS }
+  ],
+  (v) => {
+    if (!v.text) return;
+    state.tasks.push({ id: uid(), tag: v.tag || '·', text: v.text, route: v.route, type: v.type, week });
+  });
+}
+
+/* ════════════════════════════════════════════════════
+   DRAG
+   ════════════════════════════════════════════════════ */
+
+const DRAG_THRESHOLD = 4;
+const RESIZE_ZONE = 8;
+let drag = null;
+const tip = document.getElementById('drag-tip');
+
+function showTip(text, x, y) {
+  tip.innerHTML = text;
+  tip.style.left = (x + 14) + 'px';
+  tip.style.top = (y + 14) + 'px';
+  tip.classList.add('show');
+}
+function hideTip() { tip.classList.remove('show'); }
+
+function startBarDrag(e, barEl) {
+  const { phase } = findPhase(barEl.dataset.track, barEl.dataset.phase);
+  if (!phase) return;
+  const rect = barEl.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  let mode = 'move';
+  if (rect.width >= 24) {
+    if (x <= RESIZE_ZONE) mode = 'resize-l';
+    else if (x >= rect.width - RESIZE_ZONE) mode = 'resize-r';
+  }
+  drag = {
+    kind: 'bar', mode, barEl, trackId: barEl.dataset.track, phaseId: barEl.dataset.phase,
+    origStart: phase.start, origDays: phase.days,
+    pointerStartX: e.clientX, pointerStartY: e.clientY,
+    activated: false, modifierUsed: e.metaKey || e.ctrlKey
+  };
+  e.preventDefault();
+}
+function startMilestoneDrag(e, msEl) {
+  const ms = state.milestones.find(m => m.id === msEl.dataset.ms);
+  if (!ms) return;
+  drag = {
+    kind: 'milestone', msEl, msId: msEl.dataset.ms, origDate: ms.date,
+    pointerStartX: e.clientX, pointerStartY: e.clientY, activated: false
+  };
+  e.preventDefault();
+}
+function onPointerMove(e) {
+  if (!drag) return;
+  const dx = e.clientX - drag.pointerStartX;
+  const dy = e.clientY - drag.pointerStartY;
+  if (!drag.activated) {
+    if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
+    drag.activated = true;
+    if (drag.kind === 'bar') drag.barEl.classList.add('dragging');
+    if (drag.kind === 'milestone') drag.msEl.classList.add('dragging');
+  }
+  const ppd = pxPerDay();
+  const dDays = Math.round(dx / ppd);
+
+  if (drag.kind === 'bar') {
+    const { phase } = findPhase(drag.trackId, drag.phaseId);
+    if (!phase) return;
+    if (drag.mode === 'move') {
+      phase.start = clampDate(toISO(addDays(fromISO(drag.origStart), dDays)));
+      drag.barEl.style.left = (dayOffset(phase.start) * ppd) + 'px';
+      drag.barEl.style.width = (phase.days * ppd) + 'px';
+      const endDate = toISO(addDays(fromISO(phase.start), phase.days - 1));
+      showTip(`<span class="accent">${fmtShort(phase.start)}</span><span class="sep">→</span><span class="accent">${fmtShort(endDate)}</span><span class="sep">·</span>${phase.days}d`, e.clientX, e.clientY);
+    } else if (drag.mode === 'resize-r') {
+      phase.days = Math.max(1, drag.origDays + dDays);
+      drag.barEl.style.width = (phase.days * ppd) + 'px';
+      const endDate = toISO(addDays(fromISO(phase.start), phase.days - 1));
+      showTip(`${fmtShort(phase.start)}<span class="sep">→</span><span class="accent">${fmtShort(endDate)}</span><span class="sep">·</span><span class="accent">${phase.days}d</span>`, e.clientX, e.clientY);
+    } else if (drag.mode === 'resize-l') {
+      const maxLeftDays = drag.origDays - 1;
+      const shift = Math.min(maxLeftDays, dDays);
+      phase.start = clampDate(toISO(addDays(fromISO(drag.origStart), shift)));
+      phase.days = Math.max(1, drag.origDays - shift);
+      drag.barEl.style.left = (dayOffset(phase.start) * ppd) + 'px';
+      drag.barEl.style.width = (phase.days * ppd) + 'px';
+      const endDate = toISO(addDays(fromISO(phase.start), phase.days - 1));
+      showTip(`<span class="accent">${fmtShort(phase.start)}</span><span class="sep">→</span>${fmtShort(endDate)}<span class="sep">·</span><span class="accent">${phase.days}d</span>`, e.clientX, e.clientY);
+    }
+  }
+
+  if (drag.kind === 'milestone') {
+    const ms = state.milestones.find(m => m.id === drag.msId);
+    ms.date = clampDate(toISO(addDays(fromISO(drag.origDate), dDays)));
+    drag.msEl.style.left = (dayOffset(ms.date) * ppd) + 'px';
+    showTip(`<span class="accent">${fmtShort(ms.date)}</span><span class="sep">·</span>${escapeHtml(ms.label)}`, e.clientX, e.clientY);
+  }
+}
+function clampDate(iso) {
+  // Constrain to working window for bars + milestones (not view buffer)
+  const d = fromISO(iso);
+  const min = fromISO(state.startDate);
+  if (d < min) return state.startDate;
+  return iso;
+}
+function onPointerUp(e) {
+  if (!drag) return;
+  const wasActivated = drag.activated;
+  if (drag.kind === 'bar' && drag.barEl) drag.barEl.classList.remove('dragging');
+  if (drag.kind === 'milestone' && drag.msEl) drag.msEl.classList.remove('dragging');
+  hideTip();
+  if (wasActivated) { saveState(); renderLedger(); }
+  else {
+    if (drag.kind === 'bar') {
+      if (drag.modifierUsed) cyclePhaseState(drag.trackId, drag.phaseId);
+      else editPhase(drag.trackId, drag.phaseId);
+    }
+    if (drag.kind === 'milestone') editMilestone(drag.msId);
+  }
+  drag = null;
+}
+
+document.addEventListener('pointerdown', (e) => {
+  const bar = e.target.closest('.bar');
+  if (bar) {
+    if (editMode) startBarDrag(e, bar);
+    else { e.preventDefault(); editPhase(bar.dataset.track, bar.dataset.phase); }
+    return;
+  }
+  const ms = e.target.closest('.tl-milestone');
+  if (ms) {
+    if (editMode) startMilestoneDrag(e, ms);
+    else { e.preventDefault(); editMilestone(ms.dataset.ms); }
+    return;
+  }
+});
+document.addEventListener('pointermove', onPointerMove);
+document.addEventListener('pointerup', onPointerUp);
+document.addEventListener('pointercancel', onPointerUp);
+
+document.addEventListener('click', (e) => {
+  if (drag) return;
+  if (editMode) {
+    const msLane = e.target.closest('#ms-lane');
+    if (msLane && !e.target.closest('.tl-milestone')) {
+      const rect = msLane.getBoundingClientRect();
+      addMilestone(dateFromX(e.clientX - rect.left));
+      return;
+    }
+    const lane = e.target.closest('.tl-lane');
+    if (lane && !e.target.closest('.bar')) {
+      const rect = lane.getBoundingClientRect();
+      addPhase(lane.dataset.track, dateFromX(e.clientX - rect.left));
+      return;
+    }
+    const trackLabel = e.target.closest('.track-label-wrap');
+    if (trackLabel) { editTrack(trackLabel.dataset.track); return; }
+    if (e.target.id === 'rail-add-track') { addTrack(); return; }
+    const row = e.target.closest('.row');
+    if (row && row.dataset.task) { editTask(row.dataset.task); return; }
+    const addTaskBtn = e.target.closest('[data-add-task]');
+    if (addTaskBtn) { addTask(Number(addTaskBtn.dataset.addTask)); return; }
+  }
+  if (e.target.id === 'pop-scrim') closePopover();
+});
+
+document.addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
+    if (document.getElementById('pop-scrim').classList.contains('open')) return;
+    e.preventDefault(); undo(); return;
+  }
+  if (e.key === 'e' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+    toggleEdit(); return;
+  }
+  if (e.key === 'Escape') {
+    if (drag) { drag = null; hideTip(); render(); }
+    else closePopover();
+  }
+});
+
+/* ════════════════════════════════════════════════════
+   TOOLBAR
+   ════════════════════════════════════════════════════ */
+
+function toggleEdit() {
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode', editMode);
+  const btn = document.getElementById('btn-edit-toggle');
+  btn.classList.toggle('active', editMode);
+  btn.classList.toggle('muted', !editMode);
+  btn.textContent = editMode ? 'Editing · Live' : 'Read-only';
+  render();
+}
+
+document.getElementById('btn-edit-toggle').addEventListener('click', toggleEdit);
+document.getElementById('btn-undo').addEventListener('click', undo);
+document.getElementById('in-start').addEventListener('change', (e) => {
+  state.startDate = e.target.value; render(); saveState();
+});
+document.getElementById('in-horizon').addEventListener('change', (e) => {
+  state.horizonDate = e.target.value; render(); saveState();
+});
+document.getElementById('btn-export').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `time-aligns-${realToday()}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  flashSave('Exported');
+});
+document.getElementById('btn-import').addEventListener('click', () => document.getElementById('file-import').click());
+document.getElementById('file-import').addEventListener('change', (e) => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const imp = JSON.parse(ev.target.result);
+      if (imp && imp.tracks && imp.milestones && imp.tasks) {
+        state = imp; syncInputs(); render(); saveState(); flashSave('Imported');
+      } else { alert('Invalid file.'); }
+    } catch (err) { alert('Could not parse file.'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+document.getElementById('btn-reset').addEventListener('click', () => {
+  if (confirm('Reset to seed timeline? This clears all edits.')) {
+    state = JSON.parse(JSON.stringify(SEED));
+    syncInputs(); render(); saveState();
+  }
+});
+document.getElementById('btn-sync').addEventListener('click', async () => {
+  flashSave('Syncing…');
+  await loadState();
+  syncInputs(); render();
+});
+document.getElementById('btn-token').addEventListener('click', () => {
+  const existing = getToken();
+  const masked = existing ? existing.slice(0, 4) + '…' + existing.slice(-4) : '(none)';
+  const next = prompt(
+    'GitHub Personal Access Token (with "repo" scope).\n' +
+    'Stored locally in this browser only.\n' +
+    'Current: ' + masked + '\n\n' +
+    'Paste new token, leave blank to keep, or type "clear" to remove:',
+    ''
+  );
+  if (next === null) return;              // cancel
+  if (next === '') { flashSave('Unchanged'); return; }
+  if (next.toLowerCase() === 'clear') { setToken(''); flashSave('Token cleared'); return; }
+  setToken(next.trim());
+  flashSave('Token saved');
+});
+
+function syncInputs() {
+  document.getElementById('in-start').value = state.startDate;
+  document.getElementById('in-horizon').value = state.horizonDate;
+}
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(renderTimeline, 80);
+});
+
+(async function init() {
+  await loadState();
+  syncInputs();
+  render();
+  snapshot();
+  updateClock();
+  setInterval(updateClock, 30000);
+})();
+</script>
+</body>
+</html>
