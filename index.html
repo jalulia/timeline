@@ -16,10 +16,11 @@
     --buffer-bg: #FAFAF8;
     --rule: #D4D4D4;
     --rule-hair: #ECECEC;
+    --rule-fine: #F0F0F0;
     --mute: #6B6B6B;
     --mute-soft: #B0B0B0;
-    --accent: #DC2626;
-    --accent-soft: #FEE2E2;
+    --accent: #FF4A02;
+    --accent-soft: #FFE8DD;
 
     --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px;
     --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
@@ -28,15 +29,17 @@
     --t-lg: 14px; --t-xl: 18px; --t-2xl: 24px; --t-3xl: 36px;
 
     --rail-w: 152px;
-    --lane-h: 40px;
-    --ms-h: 40px;
+    --row-h: 30px;       /* single phase row height */
+    --row-pad: 4px;      /* lane top/bottom padding */
+    --ms-row-h: 22px;    /* milestone single row */
+    --ms-pad: 6px;
     --axis-h: 56px;
 
     --pad-x: var(--s-7);
   }
 
   @media (max-width: 720px) {
-    :root { --pad-x: var(--s-4); --rail-w: 120px; }
+    :root { --pad-x: var(--s-4); --rail-w: 128px; }
   }
   @media (min-width: 1440px) {
     :root { --pad-x: var(--s-8); }
@@ -76,7 +79,6 @@
     font-weight: 400;
     line-height: 1;
     letter-spacing: -0.01em;
-    color: var(--ink);
   }
   .doc-clock {
     font-family: 'DM Mono', monospace;
@@ -84,10 +86,7 @@
     color: var(--ink);
     letter-spacing: 0.04em;
   }
-  .doc-clock .time {
-    color: var(--mute-soft);
-    margin-left: 6px;
-  }
+  .doc-clock .time { color: var(--mute-soft); margin-left: 6px; }
 
   /* ══════════════════════════════════════════════════
      STICKY TOOLBAR
@@ -109,12 +108,7 @@
     row-gap: var(--s-3);
   }
   .t-spacer { flex: 1; min-width: var(--s-4); }
-
-  .t-input {
-    display: inline-flex;
-    align-items: baseline;
-    gap: var(--s-2);
-  }
+  .t-input { display: inline-flex; align-items: baseline; gap: var(--s-2); }
   .t-label {
     font-size: var(--t-xxs);
     letter-spacing: 0.18em;
@@ -183,95 +177,12 @@
   /* ══════════════════════════════════════════════════
      TIMELINE
      ══════════════════════════════════════════════════ */
-  .tl-scroll {
-    overflow-x: auto;
-    overflow-y: visible;
-    margin: 0 calc(-1 * var(--pad-x));
-    padding: 0 var(--pad-x) var(--s-3);
-    scrollbar-width: thin;
-  }
-  .tl-scroll::-webkit-scrollbar { height: 6px; }
-  .tl-scroll::-webkit-scrollbar-thumb { background: var(--rule); }
-  .tl-scroll::-webkit-scrollbar-track { background: transparent; }
-
   .tl {
     position: relative;
-    display: grid;
-    grid-template-columns: var(--rail-w) 1fr;
-    align-items: stretch;
+    width: 100%;
     user-select: none;
   }
 
-  .tl-rail {
-    border-right: 1px solid var(--ink);
-    position: sticky;
-    left: 0;
-    background: var(--paper);
-    z-index: 5;
-  }
-  .tl-rail .rail-cell {
-    height: var(--lane-h);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: var(--s-4);
-    border-bottom: 1px solid var(--rule-hair);
-    position: relative;
-  }
-  .tl-rail .rail-cell.axis-cell {
-    height: var(--axis-h);
-    border-bottom: 1px solid var(--ink);
-    align-items: flex-end;
-    padding-bottom: var(--s-2);
-  }
-  .tl-rail .rail-cell.milestone-cell {
-    height: var(--ms-h);
-    border-bottom: 1px solid var(--ink);
-    background: var(--paper);
-  }
-  .tl-rail .rail-cell.milestone-cell .label {
-    color: var(--mute);
-    font-weight: 500;
-  }
-  .tl-rail .rail-cell .track-label-wrap {
-    display: flex;
-    align-items: baseline;
-    gap: var(--s-2);
-  }
-  body.edit-mode .tl-rail .rail-cell .track-label-wrap { cursor: pointer; }
-  body.edit-mode .tl-rail .rail-cell .track-label-wrap:hover .name { color: var(--accent); }
-  .tl-rail .rail-cell .name {
-    font-size: var(--t-sm);
-    font-weight: 600;
-    color: var(--ink);
-    transition: color 0.1s;
-  }
-  .tl-rail .rail-cell .sub {
-    font-size: var(--t-xxs);
-    color: var(--mute);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  .tl-rail .rail-add-track {
-    height: 32px;
-    display: none;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: var(--s-4);
-    font-size: var(--t-xxs);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--mute);
-    cursor: pointer;
-    border-bottom: 1px solid var(--rule-hair);
-    font-weight: 500;
-  }
-  body.edit-mode .tl-rail .rail-add-track { display: flex; }
-  .tl-rail .rail-add-track:hover { color: var(--accent); }
-
-  .tl-content { position: relative; }
-
-  /* BUFFER backgrounds — subtle indication of pre/post-window time */
   .tl-buffer {
     position: absolute;
     top: 0;
@@ -281,73 +192,62 @@
     pointer-events: none;
   }
 
-  /* AXIS */
+  /* AXIS — ruler style */
   .tl-axis {
-    height: var(--axis-h);
     position: relative;
+    height: var(--axis-h);
     border-bottom: 1px solid var(--ink);
-    background: transparent;
+    z-index: 2;
   }
-  .tl-axis .tick {
+  .day-tick {
     position: absolute;
-    top: 32px;
-    bottom: 0;
     width: 1px;
-    background: var(--rule);
+    background: var(--rule-fine);
   }
-  .tl-axis .tick.major {
-    background: var(--ink);
-    top: 20px;
-  }
-  .tl-axis .tick.in-buffer {
-    opacity: 0.45;
-  }
-  .tl-axis .tick-label {
+  .day-tick.minor { top: 44px; bottom: 0; }
+  .day-tick.quarter { top: 38px; bottom: 0; background: var(--rule); }
+  .day-tick.week { top: 30px; bottom: 0; background: var(--mute); }
+  .day-tick.month { top: 24px; bottom: 0; background: var(--ink); width: 1.5px; }
+  .day-tick.in-buffer { opacity: 0.4; }
+
+  .day-num {
     position: absolute;
-    top: 8px;
+    top: 9px;
     font-size: var(--t-xxs);
     color: var(--mute);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     transform: translateX(-50%);
     white-space: nowrap;
     font-weight: 500;
   }
-  .tl-axis .tick-label.major {
-    color: var(--ink);
-    font-weight: 600;
-    font-size: var(--t-xs);
-  }
-  .tl-axis .tick-label.in-buffer {
-    color: var(--mute-soft);
-    font-weight: 400;
-  }
-  .tl-axis .month-label {
+  .day-num.week { color: var(--ink); font-weight: 600; }
+  .day-num.month { color: var(--ink); font-weight: 700; font-size: var(--t-xs); }
+  .day-num.in-buffer { color: var(--mute-soft); font-weight: 400; opacity: 0.75; }
+
+  .month-label {
     position: absolute;
-    top: 8px;
+    top: 6px;
     font-family: 'Instrument Serif', serif;
     font-style: italic;
     font-size: var(--t-xl);
     color: var(--ink);
-    transform: translateX(12px);
+    transform: translateX(14px);
     white-space: nowrap;
     line-height: 1;
+    pointer-events: none;
   }
-  .tl-axis .month-label.in-buffer {
-    color: var(--mute-soft);
-  }
+  .month-label.in-buffer { color: var(--mute-soft); }
 
-  /* MILESTONES — distinct strip */
+  /* MILESTONES — distinct strip with stacking */
   .tl-milestones {
     position: relative;
-    height: var(--ms-h);
     border-bottom: 1px solid var(--ink);
     background: var(--paper);
+    z-index: 2;
   }
-  body.edit-mode .tl-milestones { cursor: crosshair; }
   .tl-milestone {
     position: absolute;
-    top: 0;
-    bottom: 0;
+    height: var(--ms-row-h);
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -380,36 +280,22 @@
     letter-spacing: 0.04em;
     pointer-events: none;
   }
-  .m-day {
-    color: var(--mute);
-    font-weight: 500;
-  }
-  .m-sep {
-    color: var(--mute-soft);
-    margin: 0 5px;
-  }
-  .m-label {
-    color: var(--ink);
-    font-weight: 500;
-  }
-  .tl-milestone:not(.soft) .m-label {
-    font-weight: 600;
-  }
+  .m-day { color: var(--mute); font-weight: 500; }
+  .m-sep { color: var(--mute-soft); margin: 0 5px; }
+  .m-label { color: var(--ink); font-weight: 500; }
+  .tl-milestone:not(.soft) .m-label { font-weight: 600; }
   .tl-milestone.dragging { z-index: 10; }
   .tl-milestone.dragging .m-dot { transform: rotate(45deg) scale(1.5); }
 
-  /* VERTICALS — Walls + Today */
+  /* VERTICALS */
   .tl-vertical {
     position: absolute;
     top: 0;
     bottom: 0;
-    z-index: 2;
+    z-index: 4;
     pointer-events: none;
   }
-  .tl-start {
-    width: 1.5px;
-    background: var(--ink);
-  }
+  .tl-start { width: 1.5px; background: var(--ink); }
   .tl-horizon {
     width: 2px;
     background: var(--ink);
@@ -442,21 +328,160 @@
     border-radius: 50%;
   }
 
-  /* LANES */
+  .tl-scrub {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--ink);
+    z-index: 6;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.08s, background 0.08s, width 0.08s;
+  }
+  body.edit-mode .tl-scrub.show { opacity: 0.65; }
+  .tl-scrub.active {
+    opacity: 1 !important;
+    background: var(--accent);
+    width: 2px;
+  }
+  .tl-scrub.active::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -3.25px;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .tl-scrub-tag {
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    font-size: var(--t-xxs);
+    letter-spacing: 0.12em;
+    background: var(--paper);
+    color: var(--ink);
+    padding: 2px 5px;
+    font-weight: 600;
+    border: 1px solid var(--ink);
+    white-space: nowrap;
+    transition: color 0.08s, border-color 0.08s;
+  }
+  .tl-scrub.active .tl-scrub-tag {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* Phases/milestones highlight as scrub passes through them */
+  .bar.scrub-hit {
+    box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--accent);
+    z-index: 4;
+  }
+  .tl-milestone.scrub-hit .m-dot {
+    transform: rotate(45deg) scale(1.4);
+  }
+
+  /* Crosshair cursor on every scrubbable zone */
+  body.edit-mode .tl-tracks,
+  body.edit-mode .tl-axis,
+  body.edit-mode .tl-milestones { cursor: ew-resize; }
+  body.edit-mode .tl-axis:hover,
+  body.edit-mode .tl-milestones:hover { background: rgba(255, 74, 2, 0.015); }
+
+  /* TRACKS WRAPPER */
+  .tl-tracks {
+    position: relative;
+  }
+
+  /* RAIL — sticky overlay */
+  .tl-rail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--rail-w);
+    z-index: 5;
+    background: var(--paper);
+    border-right: 1px solid var(--rule-hair);
+  }
+  .tl-rail .rail-cell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: var(--row-pad) var(--s-4) var(--row-pad) var(--s-2);
+    border-bottom: 1px solid var(--rule-hair);
+    background: var(--paper);
+  }
+  .tl-rail .rail-cell .track-label-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  body.edit-mode .tl-rail .rail-cell .track-label-wrap { cursor: pointer; }
+  body.edit-mode .tl-rail .rail-cell .track-label-wrap:hover .name { color: var(--accent); }
+  .track-cat { display: none; } /* deprecated — replaced by .track-dot */
+  .track-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ink);
+    flex-shrink: 0;
+    align-self: center;
+    margin-right: 2px;
+  }
+  .name-line {
+    display: flex;
+    align-items: center;
+    gap: var(--s-1);
+    line-height: 1.2;
+  }
+  .name-line .sub { margin-left: var(--s-1); align-self: baseline; }
+  .name {
+    font-size: var(--t-sm);
+    font-weight: 600;
+    color: var(--ink);
+    transition: color 0.1s;
+  }
+  .sub {
+    font-size: var(--t-xxs);
+    color: var(--mute);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .tl-rail .rail-add-track {
+    height: 32px;
+    display: none;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: var(--s-4);
+    font-size: var(--t-xxs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mute);
+    cursor: pointer;
+    border-bottom: 1px solid var(--rule-hair);
+    font-weight: 500;
+    background: var(--paper);
+  }
+  body.edit-mode .tl-rail .rail-add-track { display: flex; }
+  .tl-rail .rail-add-track:hover { color: var(--accent); }
+
+  /* LANES — height set inline based on row count */
   .tl-lane {
     position: relative;
-    height: var(--lane-h);
     border-bottom: 1px solid var(--rule-hair);
     background: transparent;
   }
   .tl-lane:last-of-type { border-bottom: 1px solid var(--ink); }
-  body.edit-mode .tl-lane:hover { background: rgba(247, 247, 247, 0.5); }
 
   /* BARS */
   .bar {
     position: absolute;
-    top: 7px;
-    bottom: 7px;
+    height: 22px;
     padding: 0 var(--s-2);
     display: flex;
     align-items: center;
@@ -515,6 +540,16 @@
     opacity: 0.6;
   }
 
+  .paint-bar {
+    position: absolute;
+    height: 22px;
+    background: var(--accent);
+    opacity: 0.25;
+    border: 1px dashed var(--accent);
+    pointer-events: none;
+    z-index: 8;
+  }
+
   body.edit-mode .bar::before,
   body.edit-mode .bar::after {
     content: '';
@@ -529,16 +564,15 @@
   body.edit-mode .bar::after { right: 0; }
   body.edit-mode .bar:hover::before {
     border-left: 2px solid var(--ink);
-    background: linear-gradient(to right, rgba(220, 38, 38, 0.15), transparent);
+    background: linear-gradient(to right, rgba(255, 74, 2, 0.15), transparent);
   }
   body.edit-mode .bar:hover::after {
     border-right: 2px solid var(--ink);
-    background: linear-gradient(to left, rgba(220, 38, 38, 0.15), transparent);
+    background: linear-gradient(to left, rgba(255, 74, 2, 0.15), transparent);
   }
   body.edit-mode .bar.active:hover::before { border-left-color: var(--paper); }
   body.edit-mode .bar.active:hover::after { border-right-color: var(--paper); }
 
-  /* DRAG TIP */
   .drag-tip {
     position: fixed;
     z-index: 200;
@@ -634,6 +668,32 @@
     gap: var(--s-2);
     font-size: var(--t-sm);
   }
+  .popover .field .color-field {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .popover .field .color-field input[type="color"] {
+    width: 38px;
+    height: 28px;
+    padding: 2px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .popover .field .color-field .color-swatch-label {
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-xs);
+    color: var(--mute);
+    letter-spacing: 0.04em;
+  }
+  .popover .field .hint {
+    font-size: var(--t-xxs);
+    color: var(--mute-soft);
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
   .popover .pop-actions {
     display: flex;
     gap: var(--s-3);
@@ -648,12 +708,8 @@
   }
   .popover .pop-actions .link.danger:hover { color: var(--ink); border-bottom-color: var(--ink); }
 
-  /* ══════════════════════════════════════════════════
-     PUNCH SHEET — bigger, breathier
-     ══════════════════════════════════════════════════ */
-  .ledger {
-    margin-top: var(--s-9);
-  }
+  /* PUNCH SHEET */
+  .ledger { margin-top: var(--s-9); }
   .week-group { margin-bottom: var(--s-7); }
   .week-head {
     display: flex;
@@ -709,11 +765,7 @@
     color: var(--mute);
     font-weight: 600;
   }
-  .row .task {
-    color: var(--ink);
-    line-height: 1.55;
-    font-size: var(--t-md);
-  }
+  .row .task { color: var(--ink); line-height: 1.55; font-size: var(--t-md); }
   .row .route {
     text-align: right;
     font-size: var(--t-xs);
@@ -725,7 +777,61 @@
   .row.blocked .task::before { content: '▲ '; color: var(--accent); font-size: 9px; margin-right: 2px; }
   .row.decision .task::before { content: '◆ '; color: var(--ink); margin-right: 2px; }
 
-  /* RESPONSIVE */
+  /* Inline task composer — fluid, no modal */
+  .row.row-inline {
+    background: var(--hover);
+    box-shadow: inset 2px 0 0 var(--accent);
+    cursor: default !important;
+    padding: var(--s-2) 0 var(--s-2) var(--s-3);
+  }
+  body.edit-mode .row.row-inline:hover { background: var(--hover); }
+  .row.row-inline input {
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-md);
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed var(--mute-soft);
+    padding: 3px 2px 3px;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    width: 100%;
+    border-radius: 0;
+  }
+  .row.row-inline input:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+    border-bottom-style: solid;
+  }
+  .row.row-inline input.inline-tag {
+    font-size: var(--t-xxs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--mute);
+  }
+  .row.row-inline input.inline-route {
+    text-align: right;
+    font-size: var(--t-xs);
+    color: var(--mute);
+  }
+  .row.row-inline input::placeholder { color: var(--mute-soft); font-style: italic; }
+  .row.row-inline input.inline-tag::placeholder { font-style: normal; letter-spacing: 0.15em; }
+
+  /* Add-task "+ Task" hint slot — always present in edit-mode */
+  .add-task-line {
+    display: none;
+    padding: var(--s-3) 0;
+    border-bottom: 1px dashed var(--rule-hair);
+  }
+  body.edit-mode .add-task-line { display: block; }
+  .add-task-line .link {
+    font-size: var(--t-xxs);
+    letter-spacing: 0.15em;
+    color: var(--mute);
+    border-bottom: 1px dashed var(--mute-soft);
+  }
+  .add-task-line .link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
   @media (max-width: 720px) {
     .doc-header { grid-template-columns: 1fr; gap: var(--s-2); padding-bottom: var(--s-5); }
     .doc-header h1 { font-size: 28px; }
@@ -747,32 +853,21 @@
   <div class="toolbar">
     <div class="t-row">
       <button class="link active" id="btn-edit-toggle">Editing · Live</button>
-
-      <span class="t-input">
-        <span class="t-label">Start</span>
-        <input type="date" id="in-start" class="tool-input">
-      </span>
-
-      <span class="t-input">
-        <span class="t-label">Horizon</span>
-        <input type="date" id="in-horizon" class="tool-input">
-      </span>
-
+      <span class="t-input"><span class="t-label">Start</span><input type="date" id="in-start" class="tool-input"></span>
+      <span class="t-input"><span class="t-label">Horizon</span><input type="date" id="in-horizon" class="tool-input"></span>
+      <button class="link muted" id="btn-add-milestone">+ Milestone</button>
       <span class="t-spacer"></span>
-
       <span class="save-indicator" id="save-indicator">Saved</span>
+      <button class="link muted" id="btn-undo" title="Undo (⌘Z)">Undo</button>
       <button class="link muted" id="btn-sync" title="Pull latest from GitHub">Sync</button>
       <button class="link muted" id="btn-token" title="Set GitHub token">Token</button>
-      <button class="link muted" id="btn-undo" title="Undo (⌘Z)">Undo</button>
       <button class="link muted" id="btn-export">Export</button>
       <button class="link muted" id="btn-import">Import</button>
       <button class="link muted" id="btn-reset">Reset</button>
     </div>
   </div>
 
-  <div class="tl-scroll" id="tl-scroll">
-    <div class="tl" id="tl-root"></div>
-  </div>
+  <div class="tl" id="tl-root"></div>
 
   <div class="ledger" id="ledger-root"></div>
 
@@ -791,24 +886,30 @@
    STATE
    ════════════════════════════════════════════════════ */
 
-const STORAGE_KEY = 'time-aligns-v7';
-const BUFFER_DAYS = 14;  // axis extends this many days before start, after horizon
-const MIN_PX_PER_DAY = 6;
+const STORAGE_KEY = 'time-aligns-v10';
+const VISIBLE_BUFFER_DAYS = 14;
+const MIN_PX_PER_DAY = 4;
+const PAINT_MIN_DAYS = 1;
+const ROW_H = 30;        // single phase row
+const ROW_PAD = 4;       // top/bottom padding inside lane
+const MS_ROW_H = 22;
+const MS_PAD = 6;
+const MS_MIN_LABEL_PX = 68;
 
 /* ════════════════════════════════════════════════════
    GITHUB-BACKED PERSISTENCE
-   State is stored at state.json in this repo. Reads are
-   public (no token needed if repo is public); writes go
-   through the Contents API with a Personal Access Token
-   stored in localStorage. Last write wins, with a stale-
-   SHA refresh on conflict.
+   State is stored as state.json in a GitHub repo.
+   Reads: public if repo is public, otherwise need token.
+   Writes: PUT via Contents API with a Personal Access
+   Token stored in this browser's localStorage. On SHA
+   conflict we re-pull and surface the collision.
    ════════════════════════════════════════════════════ */
 const GH_REPO   = 'jalulia/timeline';
 const GH_FILE   = 'state.json';
 const GH_BRANCH = 'main';
 const TOKEN_KEY = 'time-aligns-gh-token';
 const CACHE_KEY = 'time-aligns-cache-v1';
-let currentSha = null;     // most recent SHA of state.json we saw
+let currentSha = null;
 
 function getToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
 function setToken(t) {
@@ -837,7 +938,7 @@ const SEED = {
   startDate: '2026-04-17',
   horizonDate: '2026-05-31',
   tracks: [
-    { id: 't-yoshi', name: 'Yoshi', sub: 'build', sequential: true, phases: [
+    { id: 't-yoshi', name: 'Yoshi', sub: 'build', color: '#D97706', sequential: true, phases: [
       { id: uid(), label: 'Plan & Dossier',   state: 'active',    start: '2026-04-17', days: 5,  ix: '01' },
       { id: uid(), label: 'Sample & Order',   state: 'committed', start: '2026-04-22', days: 7,  ix: '02' },
       { id: uid(), label: 'Body Prep',        state: 'committed', start: '2026-04-29', days: 6,  ix: '03' },
@@ -845,34 +946,35 @@ const SEED = {
       { id: uid(), label: 'Cabinet Build',    state: 'committed', start: '2026-05-12', days: 14, ix: '05' },
       { id: uid(), label: 'Finish',           state: 'committed', start: '2026-05-26', days: 5,  ix: '06' }
     ]},
-    { id: 't-cl', name: 'CL / CNC', sub: 'proc.', sequential: false, phases: [
+    { id: 't-cl', name: 'CL / CNC', sub: 'proc.', color: '#0891B2', sequential: false, phases: [
       { id: uid(), label: 'Waiting · vendor', state: 'waiting',   start: '2026-04-17', days: 7 },
-      { id: uid(), label: 'Decide',           state: 'tentative', start: '2026-04-24', days: 2 },
-      { id: uid(), label: 'Order · receive',  state: 'tentative', start: '2026-04-26', days: 5 }
+      { id: uid(), label: 'Decide',           state: 'tentative', start: '2026-04-22', days: 5 },
+      { id: uid(), label: 'Order · receive',  state: 'tentative', start: '2026-04-26', days: 7 }
     ]},
-    { id: 't-heidi', name: 'Heidi', sub: 'reach', sequential: false, phases: [
-      { id: uid(), label: 'Draft · send',     state: 'committed', start: '2026-04-18', days: 2 },
-      { id: uid(), label: 'Waiting · reply',  state: 'waiting',   start: '2026-04-20', days: 7 },
+    { id: 't-heidi', name: 'Heidi', sub: 'reach', color: '#7C3AED', sequential: false, phases: [
+      { id: uid(), label: 'Draft · send',     state: 'committed', start: '2026-04-18', days: 5 },
+      { id: uid(), label: 'Waiting · reply',  state: 'waiting',   start: '2026-04-20', days: 10 },
       { id: uid(), label: 'Follow-up',        state: 'tentative', start: '2026-04-27', days: 4 }
     ]},
-    { id: 't-mom', name: 'Mom', sub: 'visit', sequential: false, phases: [
-      { id: uid(), label: 'Confirm window',   state: 'tentative', start: '2026-04-20', days: 5 },
+    { id: 't-mom', name: 'Mom', sub: 'visit', color: '#EC4899', sequential: false, phases: [
+      { id: uid(), label: 'Confirm window',   state: 'tentative', start: '2026-04-20', days: 7 },
+      { id: uid(), label: 'Book flights',     state: 'tentative', start: '2026-04-24', days: 4 },
       { id: uid(), label: 'Travel · ~1wk',    state: 'tentative', start: '2026-05-05', days: 7 }
     ]},
-    { id: 't-comms', name: 'Comms', sub: 'team', sequential: false, phases: [
-      { id: uid(), label: 'Work packages',    state: 'committed', start: '2026-04-21', days: 4 },
+    { id: 't-comms', name: 'Comms', sub: 'team', color: '#059669', sequential: false, phases: [
+      { id: uid(), label: 'Work packages',    state: 'committed', start: '2026-04-21', days: 6 },
+      { id: uid(), label: 'Team sync',        state: 'tentative', start: '2026-04-24', days: 3 },
       { id: uid(), label: 'Brief team',       state: 'tentative', start: '2026-05-03', days: 4 },
       { id: uid(), label: 'Re-sync',          state: 'tentative', start: '2026-05-12', days: 3 }
-    ]},
-    { id: 't-peru', name: 'Peru', sub: 'beyond', sequential: false, phases: [
-      { id: uid(), label: '→ June+ · plan w/ Matt', state: 'beyond', start: '2026-05-26', days: 12 }
     ]}
   ],
   milestones: [
-    { id: uid(), label: 'Heidi draft',  date: '2026-04-19', soft: true  },
-    { id: uid(), label: 'CL cutoff',    date: '2026-04-24', soft: false },
-    { id: uid(), label: 'Mom date',     date: '2026-04-29', soft: true  },
-    { id: uid(), label: 'Travel tent.', date: '2026-05-05', soft: false }
+    { id: uid(), label: 'Heidi draft',    date: '2026-04-19', soft: true  },
+    { id: uid(), label: 'HBL sample req', date: '2026-04-20', soft: true  },
+    { id: uid(), label: 'CL cutoff',      date: '2026-04-24', soft: false },
+    { id: uid(), label: 'Dossier lock',   date: '2026-04-25', soft: true  },
+    { id: uid(), label: 'Mom date',       date: '2026-04-29', soft: true  },
+    { id: uid(), label: 'Travel tent.',   date: '2026-05-05', soft: false }
   ],
   tasks: [
     { id: uid(), tag: 'Yoshi',    text: 'Budget ballpark — confirm ~$20k start covers what, what comes after', route: 'dossier / budget',    type: 'decision', week: 1 },
@@ -892,8 +994,7 @@ const SEED = {
     { id: uid(), tag: 'Mom',      text: 'Travel window — ~1 week on the ground (tentative)',                  route: 'personal / travel',   type: 'normal',   week: 4 },
     { id: uid(), tag: 'Yoshi',    text: 'Soundproofing install, 2–3 layers + vibration',                      route: 'build / sound',       type: 'normal',   week: 4 },
     { id: uid(), tag: 'Yoshi',    text: 'Cabinet build begins once soundproofing closed out',                 route: 'build / cabinet',     type: 'normal',   week: 5 },
-    { id: uid(), tag: 'Yoshi',    text: 'Finish & equip — final fit, water, power, inventory',               route: 'build / finish',      type: 'normal',   week: 6 },
-    { id: uid(), tag: 'Peru',     text: 'Plan with Matt — dates, scope, what ships where',                    route: 'beyond-horizon',      type: 'normal',   week: 6 }
+    { id: uid(), tag: 'Yoshi',    text: 'Finish & equip — final fit, water, power, inventory',               route: 'build / finish',      type: 'normal',   week: 6 }
   ]
 };
 
@@ -937,7 +1038,6 @@ async function loadState() {
     if (!r.ok) throw new Error('load ' + r.status);
     const data = await r.json();
     currentSha = data.sha;
-    // GitHub returns base64 with line breaks; strip them before decoding.
     const json = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
     const parsed = JSON.parse(json);
     if (parsed && parsed.tracks && parsed.milestones && parsed.tasks) {
@@ -957,7 +1057,6 @@ async function persistNow() {
   const token = getToken();
   if (!token) { flashSave('Need token'); return false; }
   const json = JSON.stringify(state, null, 2);
-  // Cache before network so a failed save still leaves a recoverable local copy.
   localStorage.setItem(CACHE_KEY, json);
   const body = {
     message: 'update timeline ' + new Date().toISOString(),
@@ -973,14 +1072,11 @@ async function persistNow() {
       body: JSON.stringify(body),
     });
     if (r.status === 409 || r.status === 422) {
-      // SHA stale — someone else saved between our load and our save. Pull and warn.
       flashSave('Out of date — pulling');
       await loadState(); syncInputs(); render();
       return false;
     }
-    if (r.status === 401 || r.status === 403) {
-      flashSave('Auth failed'); return false;
-    }
+    if (r.status === 401 || r.status === 403) { flashSave('Auth failed'); return false; }
     if (!r.ok) throw new Error('save ' + r.status);
     const data = await r.json();
     currentSha = data.content.sha;
@@ -1001,38 +1097,105 @@ function persistOnly() {
 function saveState() { snapshot(); persistOnly(); flashSave('Queued'); }
 
 /* ════════════════════════════════════════════════════
-   GEOMETRY — extended axis, horizon at right edge,
-   start + horizon are walls within
+   LABEL POOL — 3rd taxonomy layer
    ════════════════════════════════════════════════════ */
 
-const RAIL_W = 152, RAIL_W_NARROW = 120;
-function getRailW() { return window.innerWidth <= 720 ? RAIL_W_NARROW : RAIL_W; }
+function labelPool() {
+  const set = new Set();
+  state.tracks.forEach(t => { if (t.label && t.label.trim()) set.add(t.label.trim()); });
+  return [...set].sort((a, b) => a.localeCompare(b));
+}
 
-function viewStartDate() { return toISO(addDays(fromISO(state.startDate), -BUFFER_DAYS)); }
-function viewEndDate()   { return toISO(addDays(fromISO(state.horizonDate),  BUFFER_DAYS)); }
-function totalViewDays() { return Math.max(1, daysBetween(viewStartDate(), viewEndDate()) + 1); }
-function workingDays()   { return Math.max(1, daysBetween(state.startDate, state.horizonDate) + 1); }
+/* ════════════════════════════════════════════════════
+   GEOMETRY
+   ════════════════════════════════════════════════════ */
 
-function pxPerDay() {
-  const scroll = document.getElementById('tl-scroll');
-  if (!scroll) return 12;
+const RAIL_W_NORMAL = 152, RAIL_W_NARROW = 128;
+function getRailW() { return window.innerWidth <= 720 ? RAIL_W_NARROW : RAIL_W_NORMAL; }
+
+let _geom = null;
+function recomputeGeometry() {
+  const tlEl = document.getElementById('tl-root');
   const padX = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--pad-x')) || 48;
-  const innerW = scroll.clientWidth - padX * 2;
-  const available = innerW - getRailW();
-  const ideal = available / totalViewDays();
-  return Math.max(MIN_PX_PER_DAY, Math.floor(ideal * 10) / 10);
-}
+  const pageInnerW = (tlEl ? tlEl.clientWidth : (window.innerWidth - padX * 2));
+  const railW = getRailW();
+  const workingDays = Math.max(1, daysBetween(state.startDate, state.horizonDate) + 1);
 
-function dayOffset(iso) { return daysBetween(viewStartDate(), iso); }
-function xForDate(iso) { return dayOffset(iso) * pxPerDay(); }
+  let ppd = (pageInnerW - railW) / (workingDays + 2 * VISIBLE_BUFFER_DAYS);
+  if (ppd < MIN_PX_PER_DAY) ppd = MIN_PX_PER_DAY;
+  ppd = Math.floor(ppd * 100) / 100;
+
+  const railBufferDays = railW / ppd;
+  const totalLeftBufferDays = railBufferDays + VISIBLE_BUFFER_DAYS;
+  const viewStart = toISO(addDays(fromISO(state.startDate), -Math.ceil(totalLeftBufferDays)));
+  const viewEnd   = toISO(addDays(fromISO(state.horizonDate),  VISIBLE_BUFFER_DAYS));
+  const totalViewDays = Math.max(1, daysBetween(viewStart, viewEnd) + 1);
+  const totalWidth = totalViewDays * ppd;
+
+  _geom = { ppd, viewStart, viewEnd, totalViewDays, totalWidth, railW, pageInnerW };
+  return _geom;
+}
+function geom() { return _geom || recomputeGeometry(); }
+
+function dayOffset(iso) { return daysBetween(geom().viewStart, iso); }
+function xForDate(iso) { return dayOffset(iso) * geom().ppd; }
 function dateFromX(x) {
-  const days = Math.round(x / pxPerDay());
-  return toISO(addDays(fromISO(viewStartDate()), days));
+  const days = Math.round(x / geom().ppd);
+  return toISO(addDays(fromISO(geom().viewStart), days));
 }
-
 function isInBuffer(iso) {
   const d = fromISO(iso);
   return d < fromISO(state.startDate) || d > fromISO(state.horizonDate);
+}
+
+/* ════════════════════════════════════════════════════
+   STACKING — assign rows to overlapping items
+   ════════════════════════════════════════════════════ */
+
+// Phases within a track: row = lowest index where this phase doesn't overlap
+function assignPhaseRows(phases) {
+  const sorted = [...phases].sort((a, b) =>
+    fromISO(a.start) - fromISO(b.start) || a.days - b.days
+  );
+  const rowEnds = []; // per-row last end-date as Date
+  const result = new Map();
+  sorted.forEach(p => {
+    const pStart = fromISO(p.start);
+    const pEnd = addDays(pStart, p.days - 1);
+    let row = 0;
+    while (row < rowEnds.length && rowEnds[row] >= pStart) row++;
+    rowEnds[row] = pEnd;
+    result.set(p.id, row);
+  });
+  return { rowFor: result, rowCount: Math.max(1, rowEnds.length) };
+}
+
+// Milestones: stacking based on visual width
+function assignMilestoneRows(milestones, ppd) {
+  const sorted = [...milestones].sort((a, b) => fromISO(a.date) - fromISO(b.date));
+  const rowEnds = []; // per-row right-pixel-edge
+  const result = new Map();
+  sorted.forEach(ms => {
+    const x = dayOffset(ms.date) * ppd;
+    const right = x + MS_MIN_LABEL_PX;
+    let row = 0;
+    while (row < rowEnds.length && rowEnds[row] >= x) row++;
+    rowEnds[row] = right;
+    result.set(ms.id, row);
+  });
+  return { rowFor: result, rowCount: Math.max(1, rowEnds.length) };
+}
+
+/* ════════════════════════════════════════════════════
+   RULER AXIS — ticks every day, adaptive number density
+   ════════════════════════════════════════════════════ */
+
+function tickSpacing(ppd, pageInnerW) {
+  const monthFrac = (30 * ppd) / pageInnerW;
+  if (monthFrac >= 0.5)   return 1; // every day
+  if (monthFrac >= 0.25)  return 2; // every other day
+  if (monthFrac >= 0.125) return 4; // ~weekly-ish
+  return 7;                          // every 7 days
 }
 
 /* ════════════════════════════════════════════════════
@@ -1053,113 +1216,134 @@ function updateClock() {
 
 function renderTimeline() {
   const root = document.getElementById('tl-root');
-  const td = totalViewDays();
-  const ppd = pxPerDay();
-  const tw = td * ppd;
-  const vStart = fromISO(viewStartDate());
-  const vEnd   = fromISO(viewEndDate());
+  recomputeGeometry();
+  const g = geom();
+  const tw = g.totalWidth;
+  const ppd = g.ppd;
+  const vStart = fromISO(g.viewStart);
+  const vEnd   = fromISO(g.viewEnd);
   const todayIso = realToday();
+  const td = g.totalViewDays;
 
-  // Buffer background panels
+  // Buffers
   const startWallX = xForDate(state.startDate);
   const horizonWallX = xForDate(state.horizonDate);
   const buffersHtml = `
     <div class="tl-buffer" style="left:0; width:${startWallX}px;"></div>
-    <div class="tl-buffer" style="left:${horizonWallX + 2}px; right:0;"></div>
+    <div class="tl-buffer" style="left:${horizonWallX + 2}px; width:${tw - horizonWallX - 2}px;"></div>
   `;
 
-  // Months — full extended range
-  const months = [];
+  // ── AXIS ─────────────────────────────────────────
+  const spacing = tickSpacing(ppd, g.pageInnerW);
+
+  let axisInner = '';
+  for (let i = 0; i < td; i++) {
+    const d = addDays(vStart, i);
+    const iso = toISO(d);
+    const off = i * ppd;
+    const day = d.getDate();
+    const inBuf = isInBuffer(iso);
+
+    // Tick weight
+    let tickClass = 'minor';
+    if (day === 1) tickClass = 'month';
+    else if (day === 8 || day === 15 || day === 22 || day === 29) tickClass = 'week';
+    else if (day % 2 === 1 && spacing <= 4) tickClass = 'quarter';
+
+    if (inBuf) tickClass += ' in-buffer';
+
+    axisInner += `<div class="day-tick ${tickClass}" style="left:${off}px;"></div>`;
+
+    // Number visibility
+    let showNum = false;
+    let numClass = '';
+    if (day === 1) { showNum = true; numClass = 'month'; }
+    else if (day === 8 || day === 15 || day === 22 || day === 29) {
+      // always show quarter-anchors when spacing <= 7
+      if (spacing <= 7) { showNum = true; numClass = 'week'; }
+    }
+    else if ((day - 1) % spacing === 0) { showNum = true; }
+
+    if (showNum) {
+      const numCls = `${numClass}${inBuf ? ' in-buffer' : ''}`;
+      axisInner += `<div class="day-num ${numCls}" style="left:${off}px;">${day}</div>`;
+    }
+  }
+
+  // Month labels
   let m = new Date(vStart.getFullYear(), vStart.getMonth(), 1);
   while (m <= vEnd) {
     const mIso = toISO(m < vStart ? vStart : m);
     const inBuf = isInBuffer(mIso);
-    months.push({ iso: mIso, name: m.toLocaleString('en', { month: 'long' }), inBuf });
+    const monthName = m.toLocaleString('en', { month: 'long' });
+    axisInner += `<div class="month-label ${inBuf ? 'in-buffer' : ''}" style="left:${dayOffset(mIso) * ppd}px;">${monthName}</div>`;
     m = new Date(m.getFullYear(), m.getMonth() + 1, 1);
   }
 
-  // Week ticks — full extended range, every 7 days from viewStart
-  const weeks = [];
-  for (let i = 0; i < td; i += 7) {
-    const d = addDays(vStart, i);
-    const iso = toISO(d);
-    weeks.push({ iso, isMajor: d.getDate() <= 7, inBuf: isInBuffer(iso) });
-  }
+  const axisHtml = `<div class="tl-axis" style="width:${tw}px;">${axisInner}</div>`;
 
-  const axisHtml = `
-    <div class="tl-axis" style="width:${tw}px;">
-      ${months.map(mo => {
-        const cls = mo.inBuf ? 'in-buffer' : '';
-        return `<span class="month-label ${cls}" style="left:${dayOffset(mo.iso) * ppd}px;">${mo.name}</span>`;
-      }).join('')}
-      ${weeks.map(w => {
-        const off = dayOffset(w.iso) * ppd;
-        const major = w.isMajor ? 'major' : '';
-        const buf = w.inBuf ? 'in-buffer' : '';
-        return `
-          <div class="tick ${major} ${buf}" style="left:${off}px;"></div>
-          <span class="tick-label ${major} ${buf}" style="left:${off}px;">${fromISO(w.iso).getDate()}</span>
-        `;
-      }).join('')}
-    </div>
-  `;
+  // ── MILESTONES ──────────────────────────────────
+  const msPlan = assignMilestoneRows(state.milestones, ppd);
+  const msStripH = MS_PAD * 2 + msPlan.rowCount * MS_ROW_H + (msPlan.rowCount - 1) * 2;
 
-  // Milestones — sorted, labels truncate based on next milestone distance
-  const sortedMs = [...state.milestones].sort((a, b) => fromISO(a.date) - fromISO(b.date));
-  const msHtml = `
-    <div class="tl-milestones" id="ms-lane" style="width:${tw}px;">
-      ${sortedMs.map((ms, i) => {
-        const off = dayOffset(ms.date) * ppd;
-        if (off < -8 || off > tw + 8) return '';
-        const next = sortedMs[i + 1];
-        let maxW = 240;
-        if (next) {
-          const nextOff = dayOffset(next.date) * ppd;
-          maxW = Math.max(28, nextOff - off - 16);
-        }
-        const day = fromISO(ms.date).getDate();
-        return `
-          <div class="tl-milestone ${ms.soft ? 'soft' : ''}" style="left:${off}px;" data-ms="${ms.id}">
-            <div class="m-dot"></div>
-            <div class="m-text" style="max-width:${maxW}px;"><span class="m-day">${day}</span><span class="m-sep">·</span><span class="m-label">${escapeHtml(ms.label)}</span></div>
-          </div>
-        `;
-      }).join('')}
-    </div>
-  `;
+  let msInner = '';
+  state.milestones.forEach(ms => {
+    const off = dayOffset(ms.date) * ppd;
+    if (off < -8 || off > tw + 8) return;
+    const row = msPlan.rowFor.get(ms.id) || 0;
+    const top = MS_PAD + row * (MS_ROW_H + 2);
+    // Compute right limit based on next milestone in same row
+    let maxW = 240;
+    const sortedInRow = [...state.milestones]
+      .filter(o => msPlan.rowFor.get(o.id) === row && o.id !== ms.id)
+      .sort((a, b) => fromISO(a.date) - fromISO(b.date));
+    const after = sortedInRow.find(o => fromISO(o.date) > fromISO(ms.date));
+    if (after) {
+      maxW = Math.max(28, dayOffset(after.date) * ppd - off - 16);
+    }
+    const day = fromISO(ms.date).getDate();
+    msInner += `
+      <div class="tl-milestone ${ms.soft ? 'soft' : ''}" style="left:${off}px; top:${top}px;" data-ms="${ms.id}">
+        <div class="m-dot"></div>
+        <div class="m-text" style="max-width:${maxW}px;"><span class="m-day">${day}</span><span class="m-sep">·</span><span class="m-label">${escapeHtml(ms.label)}</span></div>
+      </div>
+    `;
+  });
+  const msHtml = `<div class="tl-milestones" id="ms-lane" style="width:${tw}px; height:${msStripH}px;">${msInner}</div>`;
 
-  // Lanes — bars positioned within view, beyond-state allowed in right buffer
-  const lanesHtml = state.tracks.map(tr => {
+  // ── TRACKS ──────────────────────────────────────
+  // Compute row plans + heights per track
+  const trackPlans = state.tracks.map(tr => {
+    const plan = assignPhaseRows(tr.phases);
+    const laneH = ROW_PAD * 2 + plan.rowCount * ROW_H + (plan.rowCount - 1) * 2;
+    return { tr, plan, laneH };
+  });
+
+  const lanesHtml = trackPlans.map(({ tr, plan, laneH }) => {
     const bars = tr.phases.map(p => {
       const off = dayOffset(p.start) * ppd;
       const w = p.days * ppd;
       if (off + w < 0 || off > tw) return '';
       const ix = p.ix ? `<span class="ix">${escapeHtml(p.ix)}</span>` : '';
-      return `<div class="bar ${p.state}" style="left:${off}px; width:${w}px;"
+      const row = plan.rowFor.get(p.id) || 0;
+      const top = ROW_PAD + row * (ROW_H + 2);
+      return `<div class="bar ${p.state}" style="left:${off}px; width:${w}px; top:${top}px;"
                    data-track="${tr.id}" data-phase="${p.id}">${ix}${escapeHtml(p.label)}</div>`;
     }).join('');
-    return `<div class="tl-lane" data-track="${tr.id}" style="width:${tw}px;">${bars}</div>`;
+    return `<div class="tl-lane" data-track="${tr.id}" style="width:${tw}px; height:${laneH}px;">${bars}</div>`;
   }).join('');
 
-  // Walls + Today
-  const todayOff = dayOffset(todayIso) * ppd;
-  const todayInRange = todayOff >= -2 && todayOff <= tw + 2;
-
-  const verticals = `
-    <div class="tl-vertical tl-start" style="left:${startWallX}px;"></div>
-    <div class="tl-vertical tl-horizon" style="left:${horizonWallX}px;"></div>
-    ${todayInRange ? `<div class="tl-vertical tl-today" style="left:${todayOff}px;"></div>` : ''}
-  `;
-
+  // Rail cells matching lane heights
   const railHtml = `
     <div class="tl-rail">
-      <div class="rail-cell axis-cell"></div>
-      <div class="rail-cell milestone-cell"><span class="label">Milestones</span></div>
-      ${state.tracks.map(tr => `
-        <div class="rail-cell" data-track="${tr.id}">
+      ${trackPlans.map(({ tr, laneH }) => `
+        <div class="rail-cell" data-track="${tr.id}" style="height:${laneH}px;">
           <div class="track-label-wrap" data-track="${tr.id}">
-            <span class="name">${escapeHtml(tr.name)}</span>
-            <span class="sub">${escapeHtml(tr.sub || '')}</span>
+            <div class="name-line">
+              ${tr.color ? `<span class="track-dot" style="background:${escapeHtml(tr.color)};"></span>` : ''}
+              <span class="name">${escapeHtml(tr.name)}</span>
+              ${tr.sub ? `<span class="sub">${escapeHtml(tr.sub)}</span>` : ''}
+            </div>
           </div>
         </div>
       `).join('')}
@@ -1167,19 +1351,31 @@ function renderTimeline() {
     </div>
   `;
 
-  const addLaneSpacer = `<div style="height:32px;display:${editMode ? 'block' : 'none'};width:${tw}px;"></div>`;
+  // Walls + Today + Scrub
+  const todayOff = dayOffset(todayIso) * ppd;
+  const todayInRange = todayOff >= -2 && todayOff <= tw + 2;
+  const verticalsHtml = `
+    <div class="tl-vertical tl-start" style="left:${startWallX}px;"></div>
+    <div class="tl-vertical tl-horizon" style="left:${horizonWallX}px;"></div>
+    ${todayInRange ? `<div class="tl-vertical tl-today" style="left:${todayOff}px;"></div>` : ''}
+    <div class="tl-scrub" id="tl-scrub" style="left:0px;"><div class="tl-scrub-tag" id="tl-scrub-tag"></div></div>
+  `;
 
   root.innerHTML = `
-    ${railHtml}
-    <div class="tl-content" style="width:${tw}px;">
-      ${buffersHtml}
-      ${verticals}
-      ${axisHtml}
-      ${msHtml}
+    ${buffersHtml}
+    ${axisHtml}
+    ${msHtml}
+    <div class="tl-tracks" id="tl-tracks" style="width:${tw}px;">
       ${lanesHtml}
-      ${addLaneSpacer}
+      ${railHtml}
     </div>
+    ${verticalsHtml}
   `;
+
+  // Stretch full-height things
+  const totalH = root.scrollHeight;
+  root.querySelectorAll('.tl-buffer').forEach(b => { b.style.height = totalH + 'px'; });
+  root.querySelectorAll('.tl-vertical, .tl-scrub').forEach(b => { b.style.height = totalH + 'px'; });
 }
 
 function renderLedger() {
@@ -1298,9 +1494,30 @@ function renderField(f) {
       <div class="check"><input type="checkbox" data-field="${f.key}" ${f.value ? 'checked' : ''}>
       <span style="color:var(--mute); font-size:var(--t-xxs);">${escapeHtml(f.hint || '')}</span></div></div>`;
   }
+  if (f.type === 'color') {
+    const hint = f.hint ? `<span class="color-swatch-label">${escapeHtml(f.hint)}</span>` : '';
+    return `<div class="field"><label>${escapeHtml(f.label)}</label>
+      <div class="color-field">
+        <input type="color" data-field="${f.key}" value="${escapeHtml(f.value || '#0A0A0A')}">
+        ${hint}
+      </div></div>`;
+  }
+  // text/date/number with optional datalist
+  let datalistAttr = '';
+  let datalistHtml = '';
+  if (f.suggest && f.suggest.length) {
+    const id = `dl-${f.key}-${Math.random().toString(36).slice(2,7)}`;
+    datalistAttr = `list="${id}"`;
+    datalistHtml = `<datalist id="${id}">${f.suggest.map(s => `<option value="${escapeHtml(s)}"></option>`).join('')}</datalist>`;
+  }
+  const hint = f.hint ? `<div class="hint">${escapeHtml(f.hint)}</div>` : '';
   return `<div class="field"><label>${escapeHtml(f.label)}</label>
-    <input type="${f.type}" data-field="${f.key}" value="${escapeHtml(f.value != null ? f.value : '')}"
-      ${f.min != null ? `min="${f.min}"` : ''} ${f.max != null ? `max="${f.max}"` : ''}></div>`;
+    <div>
+      <input type="${f.type}" data-field="${f.key}" value="${escapeHtml(f.value != null ? f.value : '')}"
+        ${f.min != null ? `min="${f.min}"` : ''} ${f.max != null ? `max="${f.max}"` : ''} ${datalistAttr}>
+      ${datalistHtml}
+      ${hint}
+    </div></div>`;
 }
 
 function closePopover() { document.getElementById('pop-scrim').classList.remove('open'); }
@@ -1348,42 +1565,51 @@ function editPhase(trackId, phaseId) {
   () => { track.phases = track.phases.filter(p => p.id !== phaseId); });
 }
 
-function addPhase(trackId, suggestedStart) {
-  const track = state.tracks.find(t => t.id === trackId);
-  openPopover('New phase', `${track.name} · add`, [
+function quickLabelPhase(track, suggestedStart, days) {
+  openPopover('New phase', `${track.name} · label`, [
     { type: 'text', key: 'label', label: 'Label', value: '' },
-    { type: 'select', key: 'state', label: 'State', value: 'committed', options: STATE_OPTS },
-    { type: 'date', key: 'start', label: 'Start', value: suggestedStart || realToday() },
-    { type: 'number', key: 'days', label: 'Days', value: 5, min: 1 },
-    { type: 'text', key: 'ix', label: 'Index', value: '' }
+    { type: 'select', key: 'state', label: 'State', value: 'committed', options: STATE_OPTS }
   ],
   (v) => {
     if (!v.label) return;
-    track.phases.push({ id: uid(), label: v.label, state: v.state, start: v.start,
-      days: Math.max(1, Number(v.days) || 1), ix: v.ix || undefined });
+    track.phases.push({
+      id: uid(), label: v.label, state: v.state || 'committed',
+      start: suggestedStart, days: Math.max(1, days)
+    });
   });
 }
 
 function editTrack(trackId) {
   const track = state.tracks.find(t => t.id === trackId);
   openPopover('Track', track.name, [
-    { type: 'text', key: 'name', label: 'Name', value: track.name },
-    { type: 'text', key: 'sub', label: 'Sub', value: track.sub || '' },
+    { type: 'text',  key: 'name',  label: 'Name',  value: track.name },
+    { type: 'text',  key: 'sub',   label: 'Sub',   value: track.sub || '', hint: 'Specificity (e.g. build, reach, visit)' },
+    { type: 'color', key: 'color', label: 'Dot',   value: track.color || '#0A0A0A', hint: 'Color for the dot before the name' },
     { type: 'checkbox', key: 'sequential', label: 'Sequential', value: !!track.sequential, hint: 'phases must follow in order' }
   ],
-  (v) => { track.name = v.name; track.sub = v.sub; track.sequential = v.sequential; },
+  (v) => {
+    track.name = v.name;
+    track.sub = v.sub;
+    track.color = (v.color || '').trim() || undefined;
+    track.sequential = v.sequential;
+  },
   () => { state.tracks = state.tracks.filter(t => t.id !== trackId); });
 }
 
 function addTrack() {
   openPopover('New track', 'Add track', [
-    { type: 'text', key: 'name', label: 'Name', value: '' },
-    { type: 'text', key: 'sub', label: 'Sub', value: '' },
+    { type: 'text',  key: 'name',  label: 'Name',  value: '' },
+    { type: 'text',  key: 'sub',   label: 'Sub',   value: '', hint: 'Specificity (optional)' },
+    { type: 'color', key: 'color', label: 'Dot',   value: '#0A0A0A', hint: 'Color for the dot before the name' },
     { type: 'checkbox', key: 'sequential', label: 'Sequential', value: false, hint: 'phases must follow in order' }
   ],
   (v) => {
     if (!v.name) return;
-    state.tracks.push({ id: uid(), name: v.name, sub: v.sub, sequential: !!v.sequential, phases: [] });
+    state.tracks.push({
+      id: uid(), name: v.name, sub: v.sub,
+      color: (v.color || '').trim() || undefined,
+      sequential: !!v.sequential, phases: []
+    });
   });
 }
 
@@ -1432,21 +1658,78 @@ function editTask(taskId) {
   () => { state.tasks = state.tasks.filter(t => t.id !== taskId); });
 }
 
-function addTask(week) {
-  openPopover('New task', `Wk ${week} · add`, [
-    { type: 'text', key: 'tag', label: 'Tag', value: '' },
-    { type: 'text', key: 'text', label: 'Task', value: '' },
-    { type: 'text', key: 'route', label: 'Route', value: '' },
-    { type: 'select', key: 'type', label: 'Type', value: 'normal', options: TASK_TYPE_OPTS }
-  ],
-  (v) => {
-    if (!v.text) return;
-    state.tasks.push({ id: uid(), tag: v.tag || '·', text: v.text, route: v.route, type: v.type, week });
+function tagPool() {
+  const set = new Set();
+  state.tasks.forEach(t => { if (t.tag && t.tag !== '·') set.add(t.tag); });
+  state.tracks.forEach(t => { if (t.name) set.add(t.name); });
+  return [...set].sort((a, b) => a.localeCompare(b));
+}
+
+// Inline, in-place task composer. Appends a row inside the week-group and focuses the text field.
+// Enter commits · Escape cancels · blur-out commits (if text) or cancels (if empty).
+function beginAddTask(weekNum) {
+  // If there's already an open composer, just focus it
+  const existing = document.querySelector(`.row.row-inline[data-week="${weekNum}"]`);
+  if (existing) { existing.querySelector('.inline-text')?.focus(); return; }
+
+  // Find the week group that matches this week number
+  const weekGroups = document.querySelectorAll('.week-group');
+  let group = null;
+  weekGroups.forEach(g => {
+    const btn = g.querySelector(`[data-add-task="${weekNum}"]`);
+    if (btn) group = g;
+  });
+  if (!group) return;
+
+  const suggestId = `tag-suggest-${weekNum}-${Math.random().toString(36).slice(2,6)}`;
+  const row = document.createElement('div');
+  row.className = 'row row-inline';
+  row.dataset.week = String(weekNum);
+  row.innerHTML = `
+    <input class="inline-tag" list="${suggestId}" placeholder="tag">
+    <input class="inline-text" placeholder="new task — press Enter to save, Esc to cancel">
+    <input class="inline-route" placeholder="route (optional)">
+    <datalist id="${suggestId}">${tagPool().map(t => `<option value="${escapeHtml(t)}">`).join('')}</datalist>
+  `;
+  group.appendChild(row);
+
+  const textEl  = row.querySelector('.inline-text');
+  const tagEl   = row.querySelector('.inline-tag');
+  const routeEl = row.querySelector('.inline-route');
+  textEl.focus();
+
+  let done = false;
+  const finish = (commit) => {
+    if (done) return;
+    done = true;
+    if (commit) {
+      const text = textEl.value.trim();
+      if (!text) { row.remove(); return; }
+      const tag   = tagEl.value.trim() || '·';
+      const route = routeEl.value.trim();
+      state.tasks.push({ id: uid(), tag, text, route, type: 'normal', week: weekNum });
+      render();
+      saveState();
+    } else {
+      row.remove();
+    }
+  };
+
+  row.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); finish(true); }
+    else if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+  });
+  // If focus leaves the whole row, auto-commit (or cancel if empty)
+  row.addEventListener('focusout', () => {
+    setTimeout(() => {
+      if (done) return;
+      if (!row.contains(document.activeElement)) finish(true);
+    }, 40);
   });
 }
 
 /* ════════════════════════════════════════════════════
-   DRAG
+   DRAG SYSTEM
    ════════════════════════════════════════════════════ */
 
 const DRAG_THRESHOLD = 4;
@@ -1480,6 +1763,7 @@ function startBarDrag(e, barEl) {
   };
   e.preventDefault();
 }
+
 function startMilestoneDrag(e, msEl) {
   const ms = state.milestones.find(m => m.id === msEl.dataset.ms);
   if (!ms) return;
@@ -1489,17 +1773,57 @@ function startMilestoneDrag(e, msEl) {
   };
   e.preventDefault();
 }
+
+function startScrubDrag(e, startX) {
+  drag = {
+    kind: 'scrub',
+    pointerStartX: e.clientX, pointerStartY: e.clientY,
+    activated: false,
+    currentX: startX,
+    currentDate: dateFromX(startX)
+  };
+  // Immediately show the playhead at click position (even before drag threshold)
+  setScrubPosition(startX, drag.currentDate, true);
+  e.preventDefault();
+}
+
+function startPaintDrag(e, laneEl) {
+  const rect = laneEl.getBoundingClientRect();
+  const startX = e.clientX - rect.left;
+  const startDate = clampDate(dateFromX(startX));
+  drag = {
+    kind: 'paint', laneEl, trackId: laneEl.dataset.track,
+    startX, startDate,
+    pointerStartX: e.clientX, pointerStartY: e.clientY,
+    activated: false, paintEl: null
+  };
+  e.preventDefault();
+}
+
 function onPointerMove(e) {
+  updateScrub(e);
   if (!drag) return;
   const dx = e.clientX - drag.pointerStartX;
   const dy = e.clientY - drag.pointerStartY;
   if (!drag.activated) {
-    if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
-    drag.activated = true;
+    // Scrub activates immediately (it's the primary interaction)
+    if (drag.kind === 'scrub') {
+      drag.activated = true;
+    } else {
+      if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
+      drag.activated = true;
+    }
     if (drag.kind === 'bar') drag.barEl.classList.add('dragging');
     if (drag.kind === 'milestone') drag.msEl.classList.add('dragging');
+    if (drag.kind === 'paint') {
+      const el = document.createElement('div');
+      el.className = 'paint-bar';
+      el.style.top = ROW_PAD + 'px';
+      drag.laneEl.appendChild(el);
+      drag.paintEl = el;
+    }
   }
-  const ppd = pxPerDay();
+  const ppd = geom().ppd;
   const dDays = Math.round(dx / ppd);
 
   if (drag.kind === 'bar') {
@@ -1534,29 +1858,151 @@ function onPointerMove(e) {
     drag.msEl.style.left = (dayOffset(ms.date) * ppd) + 'px';
     showTip(`<span class="accent">${fmtShort(ms.date)}</span><span class="sep">·</span>${escapeHtml(ms.label)}`, e.clientX, e.clientY);
   }
+
+  if (drag.kind === 'paint') {
+    const rect = drag.laneEl.getBoundingClientRect();
+    const curX = e.clientX - rect.left;
+    const lx = Math.min(drag.startX, curX);
+    const rx = Math.max(drag.startX, curX);
+    const startDate = clampDate(dateFromX(lx));
+    const endDate   = clampDate(dateFromX(rx));
+    const days = Math.max(PAINT_MIN_DAYS, daysBetween(startDate, endDate) + 1);
+    drag.paintEl.style.left = (dayOffset(startDate) * ppd) + 'px';
+    drag.paintEl.style.width = (days * ppd) + 'px';
+    drag.paintStart = startDate;
+    drag.paintDays = days;
+    showTip(`<span class="accent">${fmtShort(startDate)}</span><span class="sep">→</span><span class="accent">${fmtShort(toISO(addDays(fromISO(startDate), days - 1)))}</span><span class="sep">·</span>${days}d`, e.clientX, e.clientY);
+  }
+
+  if (drag.kind === 'scrub') {
+    const tlEl = document.getElementById('tl-root');
+    const rect = tlEl.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    // Clamp to scrubbable area
+    const minX = geom().railW;
+    const maxX = geom().totalWidth;
+    if (x < minX) x = minX;
+    if (x > maxX) x = maxX;
+    const date = dateFromX(x);
+    drag.currentX = x;
+    drag.currentDate = date;
+    setScrubPosition(x, date, true);
+  }
 }
+
 function clampDate(iso) {
-  // Constrain to working window for bars + milestones (not view buffer)
   const d = fromISO(iso);
   const min = fromISO(state.startDate);
   if (d < min) return state.startDate;
   return iso;
 }
+
 function onPointerUp(e) {
   if (!drag) return;
   const wasActivated = drag.activated;
+
   if (drag.kind === 'bar' && drag.barEl) drag.barEl.classList.remove('dragging');
   if (drag.kind === 'milestone' && drag.msEl) drag.msEl.classList.remove('dragging');
+  if (drag.kind === 'paint' && drag.paintEl) drag.paintEl.remove();
+  if (drag.kind === 'scrub') {
+    // On release, fade scrub back to passive (hover) state
+    const scrub = document.getElementById('tl-scrub');
+    if (scrub) scrub.classList.remove('active');
+    clearScrubHits();
+  }
   hideTip();
-  if (wasActivated) { saveState(); renderLedger(); }
-  else {
+
+  if (wasActivated) {
+    if (drag.kind === 'paint') {
+      const track = state.tracks.find(t => t.id === drag.trackId);
+      if (track) quickLabelPhase(track, drag.paintStart, drag.paintDays);
+    } else if (drag.kind === 'scrub') {
+      // Scrubbing doesn't mutate state — nothing to save
+    } else {
+      // Re-render full timeline so stacking/row assignment updates after drag
+      render();
+      saveState();
+    }
+  } else {
     if (drag.kind === 'bar') {
       if (drag.modifierUsed) cyclePhaseState(drag.trackId, drag.phaseId);
       else editPhase(drag.trackId, drag.phaseId);
     }
     if (drag.kind === 'milestone') editMilestone(drag.msId);
+    // scrub click with no movement = silent (just showed playhead briefly)
+    if (drag.kind === 'scrub') {
+      const scrub = document.getElementById('tl-scrub');
+      if (scrub) scrub.classList.remove('active');
+      clearScrubHits();
+    }
   }
   drag = null;
+}
+
+/* SCRUB GUIDE — hover shows passive, click-drag shows active playhead */
+
+function clearScrubHits() {
+  document.querySelectorAll('.bar.scrub-hit, .tl-milestone.scrub-hit')
+    .forEach(el => el.classList.remove('scrub-hit'));
+}
+
+function updateScrubHits(date) {
+  clearScrubHits();
+  const d = fromISO(date);
+  // Bars whose date range contains this date
+  document.querySelectorAll('.bar').forEach(barEl => {
+    const { phase } = findPhase(barEl.dataset.track, barEl.dataset.phase);
+    if (!phase) return;
+    const ps = fromISO(phase.start);
+    const pe = addDays(ps, phase.days - 1);
+    if (d >= ps && d <= pe) barEl.classList.add('scrub-hit');
+  });
+  // Milestones on exact date
+  document.querySelectorAll('.tl-milestone').forEach(msEl => {
+    const ms = state.milestones.find(m => m.id === msEl.dataset.ms);
+    if (ms && ms.date === date) msEl.classList.add('scrub-hit');
+  });
+}
+
+function setScrubPosition(x, date, active) {
+  const scrub = document.getElementById('tl-scrub');
+  const tag = document.getElementById('tl-scrub-tag');
+  if (!scrub || !tag) return;
+  scrub.style.left = x + 'px';
+  tag.textContent = fmtShort(date);
+  scrub.classList.add('show');
+  if (active) {
+    scrub.classList.add('active');
+    updateScrubHits(date);
+  }
+}
+
+function updateScrub(e) {
+  if (drag && drag.kind === 'scrub') return; // handled by drag logic
+  const scrub = document.getElementById('tl-scrub');
+  const tag = document.getElementById('tl-scrub-tag');
+  if (!scrub || !tag) return;
+  const tlEl = document.getElementById('tl-root');
+  if (!tlEl) return;
+  const rect = tlEl.getBoundingClientRect();
+  const inside = e.clientY >= rect.top && e.clientY <= rect.bottom &&
+                 e.clientX >= rect.left && e.clientX <= rect.right;
+  if (!inside || !editMode || drag) {
+    scrub.classList.remove('show');
+    scrub.classList.remove('active');
+    return;
+  }
+  const x = e.clientX - rect.left;
+  if (x < geom().railW) {
+    scrub.classList.remove('show');
+    scrub.classList.remove('active');
+    return;
+  }
+  const date = dateFromX(x);
+  scrub.style.left = x + 'px';
+  tag.textContent = fmtShort(date);
+  scrub.classList.add('show');
+  scrub.classList.remove('active');
 }
 
 document.addEventListener('pointerdown', (e) => {
@@ -1572,7 +2018,34 @@ document.addEventListener('pointerdown', (e) => {
     else { e.preventDefault(); editMilestone(ms.dataset.ms); }
     return;
   }
+
+  if (!editMode) return;
+
+  const tlEl = document.getElementById('tl-root');
+  if (!tlEl) return;
+  const tlRect = tlEl.getBoundingClientRect();
+  const x = e.clientX - tlRect.left;
+  if (x < geom().railW) return;             // ignore rail area
+  if (x > geom().totalWidth) return;        // ignore beyond content
+
+  // Hit detection: which of these zones are we in?
+  const axis = e.target.closest('.tl-axis');
+  const msLane = e.target.closest('#ms-lane');
+  const lane = e.target.closest('.tl-lane');
+
+  // If Shift is held and we're on a track lane, paint-to-create a phase
+  if (e.shiftKey && lane) {
+    startPaintDrag(e, lane);
+    return;
+  }
+
+  // Otherwise: scrub (timeline playhead) is the default everywhere in the timeline body
+  if (axis || msLane || lane) {
+    startScrubDrag(e, x);
+    return;
+  }
 });
+
 document.addEventListener('pointermove', onPointerMove);
 document.addEventListener('pointerup', onPointerUp);
 document.addEventListener('pointercancel', onPointerUp);
@@ -1580,25 +2053,13 @@ document.addEventListener('pointercancel', onPointerUp);
 document.addEventListener('click', (e) => {
   if (drag) return;
   if (editMode) {
-    const msLane = e.target.closest('#ms-lane');
-    if (msLane && !e.target.closest('.tl-milestone')) {
-      const rect = msLane.getBoundingClientRect();
-      addMilestone(dateFromX(e.clientX - rect.left));
-      return;
-    }
-    const lane = e.target.closest('.tl-lane');
-    if (lane && !e.target.closest('.bar')) {
-      const rect = lane.getBoundingClientRect();
-      addPhase(lane.dataset.track, dateFromX(e.clientX - rect.left));
-      return;
-    }
     const trackLabel = e.target.closest('.track-label-wrap');
     if (trackLabel) { editTrack(trackLabel.dataset.track); return; }
     if (e.target.id === 'rail-add-track') { addTrack(); return; }
     const row = e.target.closest('.row');
     if (row && row.dataset.task) { editTask(row.dataset.task); return; }
     const addTaskBtn = e.target.closest('[data-add-task]');
-    if (addTaskBtn) { addTask(Number(addTaskBtn.dataset.addTask)); return; }
+    if (addTaskBtn) { beginAddTask(Number(addTaskBtn.dataset.addTask)); return; }
   }
   if (e.target.id === 'pop-scrim') closePopover();
 });
@@ -1613,7 +2074,10 @@ document.addEventListener('keydown', (e) => {
     toggleEdit(); return;
   }
   if (e.key === 'Escape') {
-    if (drag) { drag = null; hideTip(); render(); }
+    if (drag) {
+      if (drag.paintEl) drag.paintEl.remove();
+      drag = null; hideTip(); render();
+    }
     else closePopover();
   }
 });
@@ -1634,12 +2098,15 @@ function toggleEdit() {
 
 document.getElementById('btn-edit-toggle').addEventListener('click', toggleEdit);
 document.getElementById('btn-undo').addEventListener('click', undo);
+document.getElementById('btn-add-milestone').addEventListener('click', () => addMilestone(realToday()));
+
 document.getElementById('in-start').addEventListener('change', (e) => {
   state.startDate = e.target.value; render(); saveState();
 });
 document.getElementById('in-horizon').addEventListener('change', (e) => {
   state.horizonDate = e.target.value; render(); saveState();
 });
+
 document.getElementById('btn-export').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -1678,13 +2145,13 @@ document.getElementById('btn-token').addEventListener('click', () => {
   const existing = getToken();
   const masked = existing ? existing.slice(0, 4) + '…' + existing.slice(-4) : '(none)';
   const next = prompt(
-    'GitHub Personal Access Token (with "repo" scope).\n' +
-    'Stored locally in this browser only.\n' +
+    'GitHub Personal Access Token (fine-grained, Contents: read/write on jalulia/timeline).\n' +
+    'Stored only in this browser\'s localStorage. Sent only to api.github.com.\n' +
     'Current: ' + masked + '\n\n' +
     'Paste new token, leave blank to keep, or type "clear" to remove:',
     ''
   );
-  if (next === null) return;              // cancel
+  if (next === null) return;
   if (next === '') { flashSave('Unchanged'); return; }
   if (next.toLowerCase() === 'clear') { setToken(''); flashSave('Token cleared'); return; }
   setToken(next.trim());
@@ -1699,7 +2166,7 @@ function syncInputs() {
 let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(renderTimeline, 80);
+  resizeTimer = setTimeout(() => { recomputeGeometry(); render(); }, 80);
 });
 
 (async function init() {
