@@ -21,10 +21,10 @@
     },
     {
       "id": "kjl5ivb",
-      "tag": "home",
-      "text": "build",
-      "route": "Home",
-      "type": "normal",
+      "tag": "Yoshi",
+      "text": "Source bench fabric and materials, fix fridge.",
+      "route": "Build",
+      "type": "blocked",
       "week": 2
     }
   ]
