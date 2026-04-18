@@ -10,30 +10,5 @@
       "soft": true
     }
   ],
-  "tasks": [
-    {
-      "id": "y63frwu",
-      "tag": "Mom's Porch",
-      "text": "tickets",
-      "route": "",
-      "type": "normal",
-      "week": 1
-    },
-    {
-      "id": "kjl5ivb",
-      "tag": "Yoshi",
-      "text": "Source bench fabric and materials, fix fridge.",
-      "route": "Build",
-      "type": "normal",
-      "week": 2
-    },
-    {
-      "id": "9wtjaf6",
-      "tag": "Yoshi",
-      "text": "Mechanic soemthing",
-      "route": "Yoshi Electric",
-      "type": "decision",
-      "week": 2
-    }
-  ]
+  "tasks": []
 }
