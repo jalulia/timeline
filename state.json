@@ -213,14 +213,6 @@
   ],
   "tasks": [
     {
-      "id": "fdo12vu",
-      "tag": "Yoshi",
-      "text": "Budget ballpark — confirm ~$20k start covers what, what comes after",
-      "route": "dossier / budget",
-      "type": "decision",
-      "week": 1
-    },
-    {
       "id": "55ag5o3",
       "tag": "Yoshi",
       "text": "HBL sheets — 3 vs 4, which faces show, order sample first",
