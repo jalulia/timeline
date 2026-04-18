@@ -18,14 +18,6 @@
           "ix": "01"
         },
         {
-          "id": "06q9t1i",
-          "label": "Sample & Order",
-          "state": "active",
-          "start": "2026-04-23",
-          "days": 15,
-          "ix": "02"
-        },
-        {
           "id": "qa1m9jm",
           "label": "Soundproofing",
           "state": "committed",
