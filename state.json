@@ -63,13 +63,13 @@
       "id": "t-cl",
       "name": "CL / CNC",
       "sub": "proc.",
-      "sequential": false,
+      "sequential": true,
       "phases": [
         {
           "id": "ettto5w",
           "label": "Waiting · vendor",
           "state": "waiting",
-          "start": "2026-04-17",
+          "start": "2026-04-22",
           "days": 7
         },
         {
