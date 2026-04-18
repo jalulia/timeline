@@ -60,21 +60,6 @@
         }
       ],
       "color": "#0a0a0a"
-    },
-    {
-      "id": "t-peru",
-      "name": "Peru",
-      "sub": "beyond",
-      "sequential": false,
-      "phases": [
-        {
-          "id": "kh3sn9t",
-          "label": "→ June+ · plan w/ Matt",
-          "state": "beyond",
-          "start": "2026-05-19",
-          "days": 12
-        }
-      ]
     }
   ],
   "milestones": [
