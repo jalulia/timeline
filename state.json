@@ -275,14 +275,6 @@
       "week": 1
     },
     {
-      "id": "y2qhs16",
-      "tag": "Comms",
-      "text": "Single-voice AI pass on combined dossier (check for Matt's zip of PDFs)",
-      "route": "tools / dossier",
-      "type": "normal",
-      "week": 1
-    },
-    {
       "id": "deh2f33",
       "tag": "Yoshi",
       "text": "Place HBL order, soundproofing order, queue delivery for return",
