@@ -275,8 +275,6 @@
     margin-left: 10px;
     font-size: var(--t-sm);
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     letter-spacing: 0.04em;
     pointer-events: none;
   }
@@ -286,6 +284,73 @@
   .tl-milestone:not(.soft) .m-label { font-weight: 600; }
   .tl-milestone.dragging { z-index: 10; }
   .tl-milestone.dragging .m-dot { transform: rotate(45deg) scale(1.5); }
+
+  /* Milestone inline editor — in-place swap of .m-text */
+  .tl-milestone.editing {
+    z-index: 12;
+    overflow: visible;
+    cursor: default;
+  }
+  body.edit-mode .tl-milestone.editing,
+  body.edit-mode .tl-milestone.editing:active {
+    cursor: default;
+  }
+  .m-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    margin-left: 10px;
+    font-size: var(--t-sm);
+    white-space: nowrap;
+  }
+  .ms-label-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font: inherit;
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-sm);
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    padding: 1px 2px;
+    min-width: 80px;
+    width: 160px;
+    border-bottom: 1px solid var(--accent);
+    caret-color: var(--accent);
+  }
+  .ms-soft-chip {
+    border: 1px solid var(--ink-soft);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-xs);
+    line-height: 1;
+    padding: 2px 5px;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.08s, color 0.08s;
+  }
+  .ms-soft-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .ms-soft-chip.hard {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .ms-delete {
+    border: none;
+    background: transparent;
+    color: var(--mute);
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-sm);
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 4px;
+    transition: color 0.08s;
+  }
+  .ms-delete:hover { color: var(--accent); }
 
   /* VERTICALS */
   .tl-vertical {
@@ -383,10 +448,11 @@
     transform: rotate(45deg) scale(1.4);
   }
 
-  /* Crosshair cursor on every scrubbable zone */
+  /* Crosshair cursor on scrubbable zones (axis + track lanes) */
   body.edit-mode .tl-tracks,
-  body.edit-mode .tl-axis,
-  body.edit-mode .tl-milestones { cursor: ew-resize; }
+  body.edit-mode .tl-axis { cursor: ew-resize; }
+  /* Milestones lane: click-to-plant, so show a plant/add cursor */
+  body.edit-mode .tl-milestones { cursor: copy; }
   body.edit-mode .tl-axis:hover,
   body.edit-mode .tl-milestones:hover { background: rgba(255, 74, 2, 0.015); }
 
@@ -470,6 +536,100 @@
   body.edit-mode .tl-rail .rail-add-track { display: flex; }
   .tl-rail .rail-add-track:hover { color: var(--accent); }
 
+  /* Inline editor — shared shape for track add + edit. Sits inside
+     .track-label-wrap or inside .rail-add-track.editing.  */
+  .track-inline {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+  }
+  .track-inline .ti-name-row,
+  .track-inline .ti-sub-row {
+    display: flex;
+    align-items: center;
+    gap: var(--s-1);
+  }
+  .track-inline .ti-sub-row { gap: 6px; }
+  .track-dot-btn {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: var(--ink);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.08s, box-shadow 0.08s;
+  }
+  .track-dot-btn:hover { transform: scale(1.2); box-shadow: 0 0 0 2px rgba(255,74,2,0.25); }
+  .track-name-input,
+  .track-sub-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    text-align: right;
+    padding: 0;
+    font-family: inherit;
+    color: inherit;
+  }
+  .track-name-input {
+    font-size: var(--t-sm);
+    font-weight: 600;
+    color: var(--ink);
+    width: 130px;
+    letter-spacing: 0.01em;
+  }
+  .track-name-input::placeholder { color: var(--mute-soft); font-weight: 500; }
+  .track-sub-input {
+    font-size: var(--t-xxs);
+    color: var(--mute);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    width: 100px;
+  }
+  .track-sub-input::placeholder { color: var(--mute-soft); }
+  .track-seq-chip {
+    font-size: var(--t-xxs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 1px 5px 2px;
+    border: 1px solid var(--rule-hair);
+    border-radius: 2px;
+    background: var(--paper);
+    color: var(--mute);
+    cursor: pointer;
+    user-select: none;
+    font-weight: 500;
+  }
+  .track-seq-chip.on {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .track-delete {
+    background: transparent;
+    border: none;
+    color: var(--mute-soft);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0 2px;
+    cursor: pointer;
+  }
+  .track-delete:hover { color: var(--accent); }
+
+  /* When the +Track row is in edit mode, it gets the same footprint as a track cell. */
+  .tl-rail .rail-add-track.editing {
+    height: auto;
+    padding: var(--row-pad) var(--s-4) var(--row-pad) var(--s-2);
+    align-items: flex-end;
+    cursor: default;
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .tl-rail .rail-add-track.editing:hover { color: var(--ink); }
+
   /* LANES — height set inline based on row count */
   .tl-lane {
     position: relative;
@@ -539,6 +699,84 @@
     margin-right: var(--s-1);
     opacity: 0.6;
   }
+
+  /* Inline phase editor — bar transforms into an editable row in place. */
+  .bar.editing {
+    overflow: visible;
+    z-index: 6;
+    cursor: default;
+    padding: 0 4px;
+    gap: 4px;
+  }
+  body.edit-mode .bar.editing,
+  body.edit-mode .bar.editing:active { cursor: default; }
+  .bar.editing:hover { box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--accent); }
+
+  .phase-state-chip {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 700;
+    border: 1px solid currentColor;
+    background: var(--paper);
+    color: inherit;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    font-family: inherit;
+    line-height: 1;
+  }
+  .bar.active .phase-state-chip { color: var(--paper); border-color: var(--paper); background: transparent; }
+  .bar.waiting .phase-state-chip,
+  .bar.tentative .phase-state-chip,
+  .bar.beyond .phase-state-chip { background: var(--paper); }
+
+  .phase-label-input {
+    flex: 1 1 auto;
+    min-width: 24px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: var(--t-xxs);
+    letter-spacing: 0.04em;
+    font-weight: inherit;
+    padding: 0;
+  }
+  .phase-label-input::placeholder { color: currentColor; opacity: 0.45; }
+
+  .phase-ix-input {
+    width: 26px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: var(--t-xxs);
+    font-weight: 600;
+    text-align: right;
+    padding: 0;
+    opacity: 0.7;
+  }
+  .phase-ix-input::placeholder { opacity: 0.35; }
+
+  .phase-delete {
+    background: transparent;
+    border: none;
+    color: currentColor;
+    opacity: 0.55;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0 2px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .phase-delete:hover { opacity: 1; }
 
   .paint-bar {
     position: absolute;
@@ -777,14 +1015,18 @@
   .row.blocked .task::before { content: '▲ '; color: var(--accent); font-size: 9px; margin-right: 2px; }
   .row.decision .task::before { content: '◆ '; color: var(--ink); margin-right: 2px; }
 
-  /* Inline task composer — fluid, no modal */
+  /* Inline task composer / editor — fluid, no modal.
+     Shared by beginAddTask() and beginEditTask(): same grid as .row so tag/text/route
+     line up with non-editing rows, plus an absolute-positioned control group on the right. */
   .row.row-inline {
     background: var(--hover);
     box-shadow: inset 2px 0 0 var(--accent);
     cursor: default !important;
-    padding: var(--s-2) 0 var(--s-2) var(--s-3);
+    padding: var(--s-2) 72px var(--s-2) var(--s-3);
+    position: relative;
   }
   body.edit-mode .row.row-inline:hover { background: var(--hover); }
+  body.edit-mode .row.row-inline { cursor: default; }
   .row.row-inline input {
     font-family: 'DM Mono', monospace;
     font-size: var(--t-md);
@@ -817,6 +1059,120 @@
   .row.row-inline input::placeholder { color: var(--mute-soft); font-style: italic; }
   .row.row-inline input.inline-tag::placeholder { font-style: normal; letter-spacing: 0.15em; }
 
+  .row.row-inline .inline-controls {
+    position: absolute;
+    right: var(--s-2);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .type-chip {
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-xs);
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    color: var(--mute);
+    font-weight: 600;
+    border-radius: 0;
+    transition: color 0.1s, border-color 0.1s, background 0.1s;
+    letter-spacing: 0;
+  }
+  .type-chip:hover { color: var(--ink); border-color: var(--ink); }
+  .type-chip[data-type="decision"] { color: var(--ink); border-color: var(--ink); }
+  .type-chip[data-type="blocked"] {
+    color: var(--paper);
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .inline-delete {
+    background: transparent;
+    border: none;
+    padding: 0 2px;
+    color: var(--mute-soft);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.1s;
+  }
+  .inline-delete:hover { color: var(--accent); }
+
+  /* Mini track color dot next to a task's tag — visual IA link between task.tag and track.name */
+  .row .tag .tag-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: 2px;
+  }
+
+  /* Week group with no tasks yet — still shows header + add affordance */
+  .week-group.week-empty .week-head { border-bottom-color: var(--rule-hair); }
+  .week-group.week-empty .week-head .wnum,
+  .week-group.week-empty .week-head .wlabel { color: var(--mute); }
+  .week-group.week-empty .empty-hint {
+    padding: var(--s-3) 0;
+    font-size: var(--t-xs);
+    color: var(--mute-soft);
+    letter-spacing: 0.04em;
+    border-bottom: 1px dashed var(--rule-hair);
+  }
+  body.edit-mode .week-group.week-empty .empty-hint::after {
+    content: ' — click + Task to begin';
+    color: var(--mute-soft);
+  }
+
+  /* Inline token row — replaces prompt() */
+  .token-row {
+    display: none;
+    align-items: baseline;
+    gap: var(--s-3);
+    padding: var(--s-3) 0 var(--s-2);
+    border-top: 1px dashed var(--rule-hair);
+    margin-top: var(--s-3);
+  }
+  .token-row.open { display: flex; flex-wrap: wrap; }
+  .token-row .token-hint {
+    font-size: var(--t-xxs);
+    color: var(--mute);
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+  .token-row input.token-input {
+    flex: 1;
+    min-width: 240px;
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-sm);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    padding: 4px 2px 3px;
+    color: var(--ink);
+  }
+  .token-row input.token-input:focus { outline: none; border-bottom-color: var(--accent); }
+  .token-row .token-current { color: var(--mute); font-size: var(--t-xs); }
+
+  /* Two-step reset: button transforms instead of using confirm() */
+  .link.confirming {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    animation: pulseConfirm 0.6s ease-out;
+  }
+  @keyframes pulseConfirm {
+    0%   { opacity: 0.4; }
+    100% { opacity: 1; }
+  }
+
   /* Add-task "+ Task" hint slot — always present in edit-mode */
   .add-task-line {
     display: none;
@@ -838,7 +1194,10 @@
     .doc-clock { font-size: var(--t-md); }
     .row { grid-template-columns: 80px 1fr; padding: var(--s-3) 0; }
     .row .route { grid-column: 2; text-align: left; padding-top: 2px; }
+    .row.row-inline { padding-right: 60px; }
+    .row.row-inline input.inline-route { grid-column: 2; text-align: left; }
     .popover .field { grid-template-columns: 1fr; gap: var(--s-1); }
+    .token-row input.token-input { min-width: 0; width: 100%; }
   }
 </style>
 </head>
@@ -864,6 +1223,14 @@
       <button class="link muted" id="btn-export">Export</button>
       <button class="link muted" id="btn-import">Import</button>
       <button class="link muted" id="btn-reset">Reset</button>
+    </div>
+    <div class="token-row" id="token-row">
+      <span class="t-label">GitHub PAT</span>
+      <input type="password" id="in-token" class="token-input" placeholder="github_pat_… (or type ‘clear’ to remove)" autocomplete="off">
+      <span class="token-current" id="token-current">—</span>
+      <button class="link" id="btn-token-save">Save</button>
+      <button class="link muted" id="btn-token-cancel">Cancel</button>
+      <span class="token-hint">Stored in this browser's localStorage only. Fine-grained PAT with Contents: read/write on <code>jalulia/timeline</code>.</span>
     </div>
   </div>
 
@@ -895,6 +1262,16 @@ const ROW_PAD = 4;       // top/bottom padding inside lane
 const MS_ROW_H = 22;
 const MS_PAD = 6;
 const MS_MIN_LABEL_PX = 68;
+// DM Mono at 11px ≈ 6.6px/char. Milestone width ≈ dot+margin + day(2ch)
+// + sep(· with margins) + label chars + trailing gap so neighbors breathe.
+const MS_CHAR_PX = 6.6;
+const MS_FIXED_PX = 9 /* dot */ + 10 /* dot→text margin */
+                  + 13 /* 2-digit day */ + 17 /* · + 5px each side */;
+const MS_TRAIL_PX = 16; // breathing room to the next milestone
+function msWidthPx(label) {
+  const txtPx = Math.max(1, String(label || '').length) * MS_CHAR_PX;
+  return MS_FIXED_PX + txtPx + MS_TRAIL_PX;
+}
 
 /* ════════════════════════════════════════════════════
    GITHUB-BACKED PERSISTENCE
@@ -1097,16 +1474,6 @@ function persistOnly() {
 function saveState() { snapshot(); persistOnly(); flashSave('Queued'); }
 
 /* ════════════════════════════════════════════════════
-   LABEL POOL — 3rd taxonomy layer
-   ════════════════════════════════════════════════════ */
-
-function labelPool() {
-  const set = new Set();
-  state.tracks.forEach(t => { if (t.label && t.label.trim()) set.add(t.label.trim()); });
-  return [...set].sort((a, b) => a.localeCompare(b));
-}
-
-/* ════════════════════════════════════════════════════
    GEOMETRY
    ════════════════════════════════════════════════════ */
 
@@ -1170,16 +1537,17 @@ function assignPhaseRows(phases) {
   return { rowFor: result, rowCount: Math.max(1, rowEnds.length) };
 }
 
-// Milestones: stacking based on visual width
+// Milestones: stacking based on actual estimated label width.
+// Long labels bump to a new row rather than getting truncated.
 function assignMilestoneRows(milestones, ppd) {
   const sorted = [...milestones].sort((a, b) => fromISO(a.date) - fromISO(b.date));
-  const rowEnds = []; // per-row right-pixel-edge
+  const rowEnds = []; // per-row right-pixel-edge (inclusive of trailing gap)
   const result = new Map();
   sorted.forEach(ms => {
     const x = dayOffset(ms.date) * ppd;
-    const right = x + MS_MIN_LABEL_PX;
+    const right = x + msWidthPx(ms.label);
     let row = 0;
-    while (row < rowEnds.length && rowEnds[row] >= x) row++;
+    while (row < rowEnds.length && rowEnds[row] > x) row++;
     rowEnds[row] = right;
     result.set(ms.id, row);
   });
@@ -1292,20 +1660,11 @@ function renderTimeline() {
     if (off < -8 || off > tw + 8) return;
     const row = msPlan.rowFor.get(ms.id) || 0;
     const top = MS_PAD + row * (MS_ROW_H + 2);
-    // Compute right limit based on next milestone in same row
-    let maxW = 240;
-    const sortedInRow = [...state.milestones]
-      .filter(o => msPlan.rowFor.get(o.id) === row && o.id !== ms.id)
-      .sort((a, b) => fromISO(a.date) - fromISO(b.date));
-    const after = sortedInRow.find(o => fromISO(o.date) > fromISO(ms.date));
-    if (after) {
-      maxW = Math.max(28, dayOffset(after.date) * ppd - off - 16);
-    }
     const day = fromISO(ms.date).getDate();
     msInner += `
       <div class="tl-milestone ${ms.soft ? 'soft' : ''}" style="left:${off}px; top:${top}px;" data-ms="${ms.id}">
         <div class="m-dot"></div>
-        <div class="m-text" style="max-width:${maxW}px;"><span class="m-day">${day}</span><span class="m-sep">·</span><span class="m-label">${escapeHtml(ms.label)}</span></div>
+        <div class="m-text"><span class="m-day">${day}</span><span class="m-sep">·</span><span class="m-label">${escapeHtml(ms.label)}</span></div>
       </div>
     `;
   });
@@ -1382,7 +1741,20 @@ function renderLedger() {
   const root = document.getElementById('ledger-root');
   const byWeek = {};
   state.tasks.forEach(t => { if (!byWeek[t.week]) byWeek[t.week] = []; byWeek[t.week].push(t); });
-  const weekNums = Object.keys(byWeek).map(Number).sort((a, b) => a - b);
+
+  // Render every week in the startDate→horizonDate range, not just weeks that
+  // already have tasks. This closes an IA gap where an empty future week had
+  // no "+ Task" affordance. Extra weeks that tasks live in beyond horizon still
+  // render so no task is ever hidden.
+  const totalDays = Math.max(1, daysBetween(state.startDate, state.horizonDate) + 1);
+  const inRangeWeeks = Math.max(1, Math.ceil(totalDays / 7));
+  const maxTaskWeek = state.tasks.reduce((m, t) => Math.max(m, t.week || 0), 0);
+  const weekCount = Math.max(inRangeWeeks, maxTaskWeek);
+  const weekNums = Array.from({ length: weekCount }, (_, i) => i + 1);
+
+  // Track lookup (case-insensitive) so task.tag can surface the owning track's color dot.
+  const trackByName = new Map();
+  state.tracks.forEach(tr => { if (tr.name) trackByName.set(tr.name.toLowerCase(), tr); });
 
   const weekRange = (n) => {
     const s = addDays(fromISO(state.startDate), (n - 1) * 7);
@@ -1402,28 +1774,36 @@ function renderLedger() {
     return overlap ? `Active: ${overlap.label}` : '';
   };
 
-  if (!weekNums.length) {
-    root.innerHTML = `<div style="color:var(--mute); font-size:var(--t-sm); padding:var(--s-4) 0;">No tasks yet.</div>`;
-    return;
-  }
+  const renderTag = (tagText) => {
+    const t = trackByName.get((tagText || '').toLowerCase());
+    const dot = t && t.color
+      ? `<span class="tag-dot" style="background:${escapeHtml(t.color)};"></span>`
+      : '';
+    return `<span class="tag">${dot}${escapeHtml(tagText || '')}</span>`;
+  };
 
-  root.innerHTML = weekNums.map(n => `
-    <div class="week-group">
-      <div class="week-head">
-        <span class="wnum">Wk ${n}</span>
-        <span class="wlabel">${weekRange(n)}</span>
-        <button class="link muted" data-add-task="${n}">+ Task</button>
-        <span class="wdates">${weekActive(n)}</span>
-      </div>
-      ${byWeek[n].map(t => `
-        <div class="row ${t.type === 'blocked' ? 'blocked' : t.type === 'decision' ? 'decision' : ''}" data-task="${t.id}">
-          <span class="tag">${escapeHtml(t.tag)}</span>
-          <span class="task">${escapeHtml(t.text)}</span>
-          <span class="route">${escapeHtml(t.route || '')}</span>
+  root.innerHTML = weekNums.map(n => {
+    const tasks = byWeek[n] || [];
+    const empty = tasks.length === 0;
+    return `
+      <div class="week-group ${empty ? 'week-empty' : ''}">
+        <div class="week-head">
+          <span class="wnum">Wk ${n}</span>
+          <span class="wlabel">${weekRange(n)}</span>
+          <button class="link muted" data-add-task="${n}">+ Task</button>
+          <span class="wdates">${weekActive(n)}</span>
         </div>
-      `).join('')}
-    </div>
-  `).join('');
+        ${tasks.map(t => `
+          <div class="row ${t.type === 'blocked' ? 'blocked' : t.type === 'decision' ? 'decision' : ''}" data-task="${t.id}">
+            ${renderTag(t.tag)}
+            <span class="task">${escapeHtml(t.text)}</span>
+            <span class="route">${escapeHtml(t.route || '')}</span>
+          </div>
+        `).join('')}
+        ${empty ? `<div class="empty-hint">No tasks</div>` : ''}
+      </div>
+    `;
+  }).join('');
 }
 
 function escapeHtml(s) {
@@ -1535,6 +1915,199 @@ const STATE_OPTS = [
 ];
 const STATE_CYCLE = ['committed', 'active', 'tentative', 'waiting', 'beyond'];
 
+/* ────────────────────────────────────────────────────────
+   Inline TRACK editor — replaces the modal addTrack/editTrack.
+   Hijacks .track-label-wrap (edit) or .rail-add-track (add).
+   ──────────────────────────────────────────────────────── */
+const TRACK_DOT_PALETTE = [
+  '#0A0A0A', '#FF4A02', '#0A4A9E', '#2F7A2F', '#A05FB0', '#C07030', '#888888'
+];
+function nextDotColor(hex) {
+  const i = TRACK_DOT_PALETTE.indexOf((hex || '').toLowerCase()) ;
+  const ix = Math.max(0, i) ;
+  return TRACK_DOT_PALETTE[(ix + 1) % TRACK_DOT_PALETTE.length];
+}
+
+function _trackInlineMarkup() {
+  return `
+    <div class="track-inline">
+      <div class="ti-name-row">
+        <button class="track-dot-btn" type="button" title="Dot color (click to cycle)"></button>
+        <input class="track-name-input" type="text" placeholder="Track name" autocomplete="off" spellcheck="false" />
+        <button class="track-delete" type="button" title="Delete track">×</button>
+      </div>
+      <div class="ti-sub-row">
+        <button class="track-seq-chip" type="button" title="Sequential — phases must follow in order">SEQ</button>
+        <input class="track-sub-input" type="text" placeholder="subtitle" autocomplete="off" spellcheck="false" />
+      </div>
+    </div>
+  `;
+}
+
+// Wire up the inline form inside `host`. `initial` is {name, sub, color, sequential}.
+// Callbacks: onCommit(values), onCancel(), onDelete() — all must finalise whatever DOM
+// state the caller owns (re-render, restore, etc.).
+function _wireTrackInline(host, initial, { onCommit, onCancel, onDelete, showDelete = true }) {
+  const inline = host.querySelector('.track-inline');
+  const dotBtn = inline.querySelector('.track-dot-btn');
+  const nameIn = inline.querySelector('.track-name-input');
+  const subIn  = inline.querySelector('.track-sub-input');
+  const seqBtn = inline.querySelector('.track-seq-chip');
+  const delBtn = inline.querySelector('.track-delete');
+  if (!showDelete && delBtn) delBtn.style.visibility = 'hidden';
+
+  const working = { ...initial };
+  nameIn.value = working.name || '';
+  subIn.value  = working.sub  || '';
+  dotBtn.style.background = working.color || '#0A0A0A';
+  seqBtn.classList.toggle('on', !!working.sequential);
+
+  let done = false;
+  let commitTimer = null;
+  const unregister = registerInlineEditor((a) => finish(a));
+
+  function finish(action) {
+    if (done) return;
+    done = true;
+    unregister();
+    if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
+    if (action === 'cancel') { onCancel(); return; }
+    if (action === 'delete') { onDelete(); return; }
+    // commit
+    working.name = nameIn.value.trim();
+    working.sub  = subIn.value.trim();
+    onCommit(working);
+  }
+
+  // Prevent focus-steal from chip/delete clicks (would trigger spurious focusout → commit).
+  for (const btn of [dotBtn, seqBtn, delBtn]) {
+    if (btn) btn.addEventListener('mousedown', e => e.preventDefault());
+  }
+  dotBtn.addEventListener('click', () => {
+    working.color = nextDotColor(working.color);
+    dotBtn.style.background = working.color;
+    nameIn.focus();
+  });
+  seqBtn.addEventListener('click', () => {
+    working.sequential = !working.sequential;
+    seqBtn.classList.toggle('on', working.sequential);
+    nameIn.focus();
+  });
+  if (delBtn) delBtn.addEventListener('click', () => finish('delete'));
+
+  for (const el of [nameIn, subIn]) {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter')  { e.preventDefault(); finish('commit'); }
+      if (e.key === 'Escape') { e.preventDefault(); finish('cancel'); }
+    });
+    el.addEventListener('focusin', () => {
+      if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
+    });
+    el.addEventListener('focusout', () => {
+      if (commitTimer) clearTimeout(commitTimer);
+      commitTimer = setTimeout(() => {
+        if (done) return;
+        if (!inline.contains(document.activeElement)) finish('commit');
+      }, 40);
+    });
+  }
+
+  nameIn.focus();
+  if (initial.name) nameIn.setSelectionRange(initial.name.length, initial.name.length);
+  return { finish };
+}
+
+function beginEditTrack(trackId) {
+  const track = state.tracks.find(t => t.id === trackId);
+  if (!track) return;
+  const wrap = document.querySelector(`.track-label-wrap[data-track="${trackId}"]`);
+  if (!wrap || wrap.classList.contains('editing')) return;
+  closeOtherInlineRows(null);
+
+  const originalHtml = wrap.innerHTML;
+  wrap.classList.add('editing');
+  wrap.innerHTML = _trackInlineMarkup();
+
+  const initial = {
+    name: track.name,
+    sub: track.sub || '',
+    color: (track.color || '#0A0A0A').toLowerCase(),
+    sequential: !!track.sequential,
+  };
+  _wireTrackInline(wrap, initial, {
+    onCancel: () => {
+      wrap.classList.remove('editing');
+      wrap.innerHTML = originalHtml;
+    },
+    onDelete: () => {
+      state.tracks = state.tracks.filter(t => t.id !== trackId);
+      render(); saveState(); flashSave('Deleted');
+    },
+    onCommit: (v) => {
+      if (!v.name) { // empty name = treat as cancel (don't implicit-delete existing tracks)
+        wrap.classList.remove('editing');
+        wrap.innerHTML = originalHtml;
+        return;
+      }
+      const changed =
+        v.name !== track.name ||
+        (v.sub || '') !== (track.sub || '') ||
+        (v.color || '').toLowerCase() !== (track.color || '#0A0A0A').toLowerCase() ||
+        !!v.sequential !== !!track.sequential;
+      if (!changed) {
+        wrap.classList.remove('editing');
+        wrap.innerHTML = originalHtml;
+        return;
+      }
+      track.name = v.name;
+      track.sub = v.sub || undefined;
+      track.color = (v.color || '').trim() || undefined;
+      track.sequential = !!v.sequential;
+      render(); saveState();
+    }
+  });
+}
+
+function beginAddTrack() {
+  const host = document.getElementById('rail-add-track');
+  if (!host || host.classList.contains('editing')) return;
+  closeOtherInlineRows(null);
+
+  const originalHtml = host.innerHTML;
+  host.classList.add('editing');
+  host.innerHTML = _trackInlineMarkup();
+
+  const initial = { name: '', sub: '', color: '#0A0A0A', sequential: false };
+  _wireTrackInline(host, initial, {
+    showDelete: false,
+    onCancel: () => {
+      host.classList.remove('editing');
+      host.innerHTML = originalHtml;
+    },
+    onDelete: () => { // unused but required by signature
+      host.classList.remove('editing');
+      host.innerHTML = originalHtml;
+    },
+    onCommit: (v) => {
+      if (!v.name) {
+        // empty name on commit = silent discard. Restore the + Track affordance.
+        host.classList.remove('editing');
+        host.innerHTML = originalHtml;
+        return;
+      }
+      state.tracks.push({
+        id: uid(),
+        name: v.name,
+        sub: v.sub || undefined,
+        color: (v.color || '').trim() || undefined,
+        sequential: !!v.sequential,
+        phases: [],
+      });
+      render(); saveState();
+    }
+  });
+}
+
 function findPhase(trackId, phaseId) {
   const tr = state.tracks.find(t => t.id === trackId);
   return { track: tr, phase: tr ? tr.phases.find(p => p.id === phaseId) : null };
@@ -1547,116 +2120,309 @@ function cyclePhaseState(trackId, phaseId) {
   render(); saveState();
 }
 
-function editPhase(trackId, phaseId) {
+/* ────────────────────────────────────────────────────────
+   Inline PHASE editor — the bar itself becomes editable in place.
+   Start/days remain drag-controlled; label/state/ix are inline.
+   Empty label on commit deletes the phase (matches task pattern).
+   ──────────────────────────────────────────────────────── */
+function beginEditPhase(trackId, phaseId, opts = {}) {
   const { track, phase } = findPhase(trackId, phaseId);
-  if (!phase) return;
-  openPopover('Phase', phase.label, [
-    { type: 'text', key: 'label', label: 'Label', value: phase.label },
-    { type: 'select', key: 'state', label: 'State', value: phase.state, options: STATE_OPTS },
-    { type: 'date', key: 'start', label: 'Start', value: phase.start },
-    { type: 'number', key: 'days', label: 'Days', value: phase.days, min: 1 },
-    { type: 'text', key: 'ix', label: 'Index', value: phase.ix || '' }
-  ],
-  (v) => {
-    phase.label = v.label; phase.state = v.state; phase.start = v.start;
-    phase.days = Math.max(1, Number(v.days) || 1);
-    phase.ix = v.ix || undefined;
-  },
-  () => { track.phases = track.phases.filter(p => p.id !== phaseId); });
-}
+  if (!track || !phase) return;
+  const bar = document.querySelector(`.bar[data-track="${trackId}"][data-phase="${phaseId}"]`);
+  if (!bar || bar.classList.contains('editing')) return;
+  closeOtherInlineRows(null);
 
-function quickLabelPhase(track, suggestedStart, days) {
-  openPopover('New phase', `${track.name} · label`, [
-    { type: 'text', key: 'label', label: 'Label', value: '' },
-    { type: 'select', key: 'state', label: 'State', value: 'committed', options: STATE_OPTS }
-  ],
-  (v) => {
-    if (!v.label) return;
-    track.phases.push({
-      id: uid(), label: v.label, state: v.state || 'committed',
-      start: suggestedStart, days: Math.max(1, days)
-    });
+  const originalHtml = bar.innerHTML;
+  const originalStateClass = phase.state;
+  const original = { label: phase.label, state: phase.state, ix: phase.ix || '' };
+  const working  = { ...original };
+
+  bar.classList.add('editing');
+  bar.innerHTML = `
+    <button class="phase-state-chip" type="button" title="State (click to cycle)">${working.state.charAt(0).toUpperCase()}</button>
+    <input class="phase-label-input" type="text" placeholder="Phase label" autocomplete="off" spellcheck="false" />
+    <input class="phase-ix-input" type="text" placeholder="ix" autocomplete="off" spellcheck="false" maxlength="4" />
+    <button class="phase-delete" type="button" title="Delete phase">×</button>
+  `;
+  const chipBtn = bar.querySelector('.phase-state-chip');
+  const labelIn = bar.querySelector('.phase-label-input');
+  const ixIn    = bar.querySelector('.phase-ix-input');
+  const delBtn  = bar.querySelector('.phase-delete');
+
+  labelIn.value = working.label || '';
+  ixIn.value    = working.ix || '';
+
+  let done = false;
+  let commitTimer = null;
+  const unregister = registerInlineEditor(a => finish(a));
+
+  function setBarStateClass(newState) {
+    for (const s of STATE_CYCLE) bar.classList.remove(s);
+    bar.classList.add(newState);
+    chipBtn.textContent = newState.charAt(0).toUpperCase();
+  }
+
+  function restoreOriginalBar() {
+    bar.classList.remove('editing');
+    for (const s of STATE_CYCLE) bar.classList.remove(s);
+    bar.classList.add(originalStateClass);
+    bar.innerHTML = originalHtml;
+  }
+
+  function finish(action) {
+    if (done) return;
+    done = true;
+    unregister();
+    if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
+
+    if (action === 'cancel') {
+      if (opts.isNew) {
+        track.phases = track.phases.filter(p => p.id !== phaseId);
+        render(); saveState();
+      } else {
+        restoreOriginalBar();
+      }
+      return;
+    }
+    if (action === 'delete') {
+      track.phases = track.phases.filter(p => p.id !== phaseId);
+      render(); saveState(); flashSave('Deleted');
+      return;
+    }
+    // commit
+    working.label = labelIn.value.trim();
+    working.ix    = ixIn.value.trim();
+    if (!working.label) {
+      // empty label on commit = delete (consistent with task composer)
+      track.phases = track.phases.filter(p => p.id !== phaseId);
+      render(); saveState();
+      return;
+    }
+    const changed = working.label !== original.label
+      || working.state !== original.state
+      || working.ix !== original.ix;
+    if (!changed && !opts.isNew) {
+      restoreOriginalBar();
+      return;
+    }
+    phase.label = working.label;
+    phase.state = working.state;
+    phase.ix    = working.ix || undefined;
+    render(); saveState();
+  }
+
+  for (const btn of [chipBtn, delBtn]) {
+    btn.addEventListener('mousedown', e => e.preventDefault());
+  }
+  chipBtn.addEventListener('click', () => {
+    const i = STATE_CYCLE.indexOf(working.state);
+    working.state = STATE_CYCLE[(i + 1) % STATE_CYCLE.length];
+    setBarStateClass(working.state);
+    labelIn.focus();
   });
+  delBtn.addEventListener('click', () => finish('delete'));
+
+  for (const el of [labelIn, ixIn]) {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter')  { e.preventDefault(); finish('commit'); }
+      if (e.key === 'Escape') { e.preventDefault(); finish('cancel'); }
+    });
+    el.addEventListener('focusin', () => {
+      if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
+    });
+    el.addEventListener('focusout', () => {
+      if (commitTimer) clearTimeout(commitTimer);
+      commitTimer = setTimeout(() => {
+        if (done) return;
+        if (!bar.contains(document.activeElement)) finish('commit');
+      }, 40);
+    });
+    // Don't let clicks inside the inline editor bubble to the pointerdown-based
+    // bar-drag machinery (which treats the bar as a draggable target).
+    el.addEventListener('pointerdown', e => e.stopPropagation());
+  }
+  // Also stop pointerdowns on chip/delete from starting a bar-drag.
+  for (const btn of [chipBtn, delBtn]) {
+    btn.addEventListener('pointerdown', e => e.stopPropagation());
+  }
+
+  labelIn.focus();
+  if (working.label) labelIn.setSelectionRange(working.label.length, working.label.length);
 }
 
-function editTrack(trackId) {
+function beginAddPhasePainted(trackId, start, days) {
   const track = state.tracks.find(t => t.id === trackId);
-  openPopover('Track', track.name, [
-    { type: 'text',  key: 'name',  label: 'Name',  value: track.name },
-    { type: 'text',  key: 'sub',   label: 'Sub',   value: track.sub || '', hint: 'Specificity (e.g. build, reach, visit)' },
-    { type: 'color', key: 'color', label: 'Dot',   value: track.color || '#0A0A0A', hint: 'Color for the dot before the name' },
-    { type: 'checkbox', key: 'sequential', label: 'Sequential', value: !!track.sequential, hint: 'phases must follow in order' }
-  ],
-  (v) => {
-    track.name = v.name;
-    track.sub = v.sub;
-    track.color = (v.color || '').trim() || undefined;
-    track.sequential = v.sequential;
-  },
-  () => { state.tracks = state.tracks.filter(t => t.id !== trackId); });
+  if (!track) return;
+  closeOtherInlineRows(null);
+  const newPhase = {
+    id: uid(),
+    label: '',
+    state: 'committed',
+    start,
+    days: Math.max(1, days),
+  };
+  track.phases.push(newPhase);
+  render();
+  // The new bar is now in the DOM — hand off to the inline editor.
+  beginEditPhase(track.id, newPhase.id, { isNew: true });
 }
 
-function addTrack() {
-  openPopover('New track', 'Add track', [
-    { type: 'text',  key: 'name',  label: 'Name',  value: '' },
-    { type: 'text',  key: 'sub',   label: 'Sub',   value: '', hint: 'Specificity (optional)' },
-    { type: 'color', key: 'color', label: 'Dot',   value: '#0A0A0A', hint: 'Color for the dot before the name' },
-    { type: 'checkbox', key: 'sequential', label: 'Sequential', value: false, hint: 'phases must follow in order' }
-  ],
-  (v) => {
-    if (!v.name) return;
-    state.tracks.push({
-      id: uid(), name: v.name, sub: v.sub,
-      color: (v.color || '').trim() || undefined,
-      sequential: !!v.sequential, phases: []
-    });
-  });
+// Legacy modal entry points retained as thin shims.
+function editPhase(trackId, phaseId) { beginEditPhase(trackId, phaseId); }
+function quickLabelPhase(track, suggestedStart, days) {
+  beginAddPhasePainted(track.id, suggestedStart, days);
 }
 
-function editMilestone(msId) {
+// Legacy modal entry points — kept as thin shims that delegate to the inline editors.
+// Nothing calls these any more, but leaving the names defined avoids surprises if any
+// dev-console habit or future diff re-introduces them.
+function editTrack(trackId) { beginEditTrack(trackId); }
+function addTrack()          { beginAddTrack(); }
+
+/* ────────────────────────────────────────────────────────
+   Inline MILESTONE editor — the diamond itself becomes editable.
+   Soft/hard toggle is the dot glyph itself (◆ hard, ◇ soft).
+   Empty label on commit deletes (same as phases / tasks).
+   ──────────────────────────────────────────────────────── */
+function beginEditMilestone(msId, opts = {}) {
   const ms = state.milestones.find(m => m.id === msId);
-  openPopover('Milestone', ms.label, [
-    { type: 'text', key: 'label', label: 'Label', value: ms.label },
-    { type: 'date', key: 'date', label: 'Date', value: ms.date },
-    { type: 'checkbox', key: 'soft', label: 'Soft', value: !!ms.soft, hint: 'decision/marker vs. hard deadline' }
-  ],
-  (v) => { ms.label = v.label; ms.date = v.date; ms.soft = v.soft; },
-  () => { state.milestones = state.milestones.filter(m => m.id !== msId); });
-}
+  if (!ms) return;
+  const msEl = document.querySelector(`.tl-milestone[data-ms="${msId}"]`);
+  if (!msEl || msEl.classList.contains('editing')) return;
+  closeOtherInlineRows(null);
 
-function addMilestone(suggestedDate) {
-  openPopover('New milestone', 'Add milestone', [
-    { type: 'text', key: 'label', label: 'Label', value: '' },
-    { type: 'date', key: 'date', label: 'Date', value: suggestedDate || realToday() },
-    { type: 'checkbox', key: 'soft', label: 'Soft', value: true, hint: 'decision/marker vs. hard deadline' }
-  ],
-  (v) => {
-    if (!v.label) return;
-    state.milestones.push({ id: uid(), label: v.label, date: v.date, soft: !!v.soft });
+  const originalHtml = msEl.innerHTML;
+  const original = { label: ms.label, soft: !!ms.soft };
+  const working  = { ...original };
+
+  msEl.classList.add('editing');
+  // Re-render the internals: keep the dot, replace the text with an input + soft chip + delete.
+  const day = fromISO(ms.date).getDate();
+  msEl.innerHTML = `
+    <div class="m-dot"></div>
+    <div class="m-text m-edit">
+      <span class="m-day">${day}</span>
+      <span class="m-sep">·</span>
+      <input class="ms-label-input" type="text" placeholder="Milestone label" autocomplete="off" spellcheck="false" />
+      <button class="ms-soft-chip" type="button" title="Soft (◇) vs hard (◆)">${working.soft ? '◇' : '◆'}</button>
+      <button class="ms-delete" type="button" title="Delete milestone">×</button>
+    </div>
+  `;
+  const labelIn = msEl.querySelector('.ms-label-input');
+  const softBtn = msEl.querySelector('.ms-soft-chip');
+  const delBtn  = msEl.querySelector('.ms-delete');
+
+  labelIn.value = working.label || '';
+
+  let done = false;
+  let commitTimer = null;
+  const unregister = registerInlineEditor(a => finish(a));
+
+  function reflectSoft() {
+    msEl.classList.toggle('soft', working.soft);
+    softBtn.textContent = working.soft ? '◇' : '◆';
+  }
+
+  function restoreOriginal() {
+    msEl.classList.remove('editing');
+    msEl.classList.toggle('soft', !!ms.soft);
+    msEl.innerHTML = originalHtml;
+  }
+
+  function finish(action) {
+    if (done) return;
+    done = true;
+    unregister();
+    if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
+
+    if (action === 'cancel') {
+      if (opts.isNew) {
+        state.milestones = state.milestones.filter(m => m.id !== msId);
+        render(); saveState();
+      } else {
+        restoreOriginal();
+      }
+      return;
+    }
+    if (action === 'delete') {
+      state.milestones = state.milestones.filter(m => m.id !== msId);
+      render(); saveState(); flashSave('Deleted');
+      return;
+    }
+    // commit
+    working.label = labelIn.value.trim();
+    if (!working.label) {
+      state.milestones = state.milestones.filter(m => m.id !== msId);
+      render(); saveState();
+      return;
+    }
+    const changed = working.label !== original.label || working.soft !== original.soft;
+    if (!changed && !opts.isNew) {
+      restoreOriginal();
+      return;
+    }
+    ms.label = working.label;
+    ms.soft  = !!working.soft;
+    render(); saveState();
+  }
+
+  for (const btn of [softBtn, delBtn]) {
+    btn.addEventListener('mousedown', e => e.preventDefault());
+    btn.addEventListener('pointerdown', e => e.stopPropagation());
+  }
+  softBtn.addEventListener('click', () => {
+    working.soft = !working.soft;
+    reflectSoft();
+    labelIn.focus();
   });
+  delBtn.addEventListener('click', () => finish('delete'));
+
+  labelIn.addEventListener('pointerdown', e => e.stopPropagation());
+  labelIn.addEventListener('keydown', e => {
+    if (e.key === 'Enter')  { e.preventDefault(); finish('commit'); }
+    if (e.key === 'Escape') { e.preventDefault(); finish('cancel'); }
+  });
+  labelIn.addEventListener('focusin', () => {
+    if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
+  });
+  labelIn.addEventListener('focusout', () => {
+    if (commitTimer) clearTimeout(commitTimer);
+    commitTimer = setTimeout(() => {
+      if (done) return;
+      if (!msEl.contains(document.activeElement)) finish('commit');
+    }, 40);
+  });
+
+  labelIn.focus();
+  if (working.label) labelIn.setSelectionRange(working.label.length, working.label.length);
 }
 
-const TASK_TYPE_OPTS = [
-  { value: 'normal', label: 'Normal' },
-  { value: 'decision', label: 'Decision ◆' },
-  { value: 'blocked', label: 'Blocked ▲' }
-];
-
-function editTask(taskId) {
-  const task = state.tasks.find(t => t.id === taskId);
-  openPopover('Task', task.text.slice(0, 40), [
-    { type: 'text', key: 'tag', label: 'Tag', value: task.tag },
-    { type: 'text', key: 'text', label: 'Task', value: task.text },
-    { type: 'text', key: 'route', label: 'Route', value: task.route || '' },
-    { type: 'select', key: 'type', label: 'Type', value: task.type, options: TASK_TYPE_OPTS },
-    { type: 'number', key: 'week', label: 'Week', value: task.week, min: 1 }
-  ],
-  (v) => {
-    task.tag = v.tag; task.text = v.text; task.route = v.route; task.type = v.type;
-    task.week = Math.max(1, Number(v.week) || 1);
-  },
-  () => { state.tasks = state.tasks.filter(t => t.id !== taskId); });
+function beginAddMilestoneAt(dateIso) {
+  closeOtherInlineRows(null);
+  const newMs = {
+    id: uid(),
+    label: '',
+    date: dateIso,
+    soft: true,    // default to soft — decisions are more common than hard deadlines
+  };
+  state.milestones.push(newMs);
+  render();
+  beginEditMilestone(newMs.id, { isNew: true });
 }
+
+// Legacy modal entry points — thin shims.
+function editMilestone(msId) { beginEditMilestone(msId); }
+function addMilestone(suggestedDate) {
+  beginAddMilestoneAt(suggestedDate || realToday());
+}
+
+const TASK_TYPE_CYCLE = ['normal', 'decision', 'blocked'];
+const TASK_TYPE_GLYPH = { normal: 'N', decision: '◆', blocked: '▲' };
+const TASK_TYPE_TITLE = {
+  normal:   'Normal — click to mark as decision ◆',
+  decision: 'Decision — click to mark as blocked ▲',
+  blocked:  'Blocked — click to return to normal'
+};
 
 function tagPool() {
   const set = new Set();
@@ -1665,14 +2431,91 @@ function tagPool() {
   return [...set].sort((a, b) => a.localeCompare(b));
 }
 
-// Inline, in-place task composer. Appends a row inside the week-group and focuses the text field.
-// Enter commits · Escape cancels · blur-out commits (if text) or cancels (if empty).
+// Shared inline row scaffold used by both beginAddTask and beginEditTask.
+// Returns the row element, pre-wired controls, and a commit/revert pair.
+// Caller decides what commit() actually does with the values.
+function buildInlineRow({ weekNum, taskId, tag='', text='', route='', type='normal', placeholder }) {
+  const suggestId = `tag-suggest-${Math.random().toString(36).slice(2, 8)}`;
+  const row = document.createElement('div');
+  row.className = 'row row-inline';
+  if (weekNum != null) row.dataset.week = String(weekNum);
+  if (taskId != null) row.dataset.task = String(taskId);
+  row.innerHTML = `
+    <input class="inline-tag" list="${suggestId}" placeholder="tag" value="${escapeHtml(tag)}">
+    <input class="inline-text" placeholder="${escapeHtml(placeholder || 'task — Enter to save, Esc to cancel')}" value="${escapeHtml(text)}">
+    <input class="inline-route" placeholder="route (optional)" value="${escapeHtml(route)}">
+    <datalist id="${suggestId}">${tagPool().map(t => `<option value="${escapeHtml(t)}">`).join('')}</datalist>
+    <span class="inline-controls">
+      <button type="button" class="type-chip" data-type="${escapeHtml(type)}" title="${escapeHtml(TASK_TYPE_TITLE[type] || '')}">${TASK_TYPE_GLYPH[type] || 'N'}</button>
+      ${taskId != null ? `<button type="button" class="inline-delete" title="Delete task" aria-label="Delete task">×</button>` : ''}
+    </span>
+  `;
+
+  const tagEl = row.querySelector('.inline-tag');
+  const textEl = row.querySelector('.inline-text');
+  const routeEl = row.querySelector('.inline-route');
+  const chipEl = row.querySelector('.type-chip');
+  const delEl = row.querySelector('.inline-delete');
+
+  // Type chip cycles normal → decision → blocked → normal. Purely local until commit.
+  chipEl.addEventListener('click', (e) => {
+    e.preventDefault(); e.stopPropagation();
+    const cur = chipEl.dataset.type || 'normal';
+    const next = TASK_TYPE_CYCLE[(TASK_TYPE_CYCLE.indexOf(cur) + 1) % TASK_TYPE_CYCLE.length];
+    chipEl.dataset.type = next;
+    chipEl.textContent = TASK_TYPE_GLYPH[next];
+    chipEl.title = TASK_TYPE_TITLE[next];
+    // Keep focus where it was so commit/cancel behaviour isn't disrupted.
+    (document.activeElement === chipEl ? textEl : document.activeElement)?.focus?.();
+  });
+
+  // Swallow mousedown on controls so they don't steal focus for a blink and cause a
+  // misleading focusout/commit round-trip.
+  chipEl.addEventListener('mousedown', (e) => e.preventDefault());
+  if (delEl) delEl.addEventListener('mousedown', (e) => e.preventDefault());
+
+  return { row, tagEl, textEl, routeEl, chipEl, delEl };
+}
+
+// Synchronously finish (commit or cancel) any other open inline rows so we don't end
+// up with two composers fighting for focus — and so a delayed focusout handler
+// doesn't fire render() after a fresh composer was inserted.
+// ── Shared inline-editor registry ───────────────────────────────
+// Any inline editor (task row, track row, phase bar, milestone marker)
+// registers itself here so opening a new one commits any currently open one.
+// This is what enforces the single-inline-editor-open invariant across the app.
+const _activeInlineEditors = new Set();
+function registerInlineEditor(finishFn) {
+  const entry = { finish: finishFn };
+  _activeInlineEditors.add(entry);
+  return () => _activeInlineEditors.delete(entry);
+}
+function closeAllInlineEditors(except) {
+  // Copy to array because finish() mutates the set via unregister().
+  for (const entry of Array.from(_activeInlineEditors)) {
+    if (entry === except) continue;
+    try { entry.finish('commit'); } catch (_) { /* swallow */ }
+  }
+}
+
+function closeOtherInlineRows(exceptRow) {
+  document.querySelectorAll('.row.row-inline').forEach(r => {
+    if (r === exceptRow) return;
+    if (typeof r._finishInline === 'function') r._finishInline('commit');
+  });
+  closeAllInlineEditors();
+}
+
+// Inline task composer — appends a fresh row under the clicked week's add-task line.
+// Enter commits · Escape cancels · blur-out commits (or cancels if empty).
 function beginAddTask(weekNum) {
-  // If there's already an open composer, just focus it
-  const existing = document.querySelector(`.row.row-inline[data-week="${weekNum}"]`);
+  // If there's already an open add-composer in this week, just refocus it.
+  const existing = document.querySelector(`.row.row-inline[data-week="${weekNum}"]:not([data-task])`);
   if (existing) { existing.querySelector('.inline-text')?.focus(); return; }
 
-  // Find the week group that matches this week number
+  // Close any other open composer synchronously so state and DOM stay in lockstep.
+  closeOtherInlineRows(null);
+
   const weekGroups = document.querySelectorAll('.week-group');
   let group = null;
   weekGroups.forEach(g => {
@@ -1681,51 +2524,121 @@ function beginAddTask(weekNum) {
   });
   if (!group) return;
 
-  const suggestId = `tag-suggest-${weekNum}-${Math.random().toString(36).slice(2,6)}`;
-  const row = document.createElement('div');
-  row.className = 'row row-inline';
-  row.dataset.week = String(weekNum);
-  row.innerHTML = `
-    <input class="inline-tag" list="${suggestId}" placeholder="tag">
-    <input class="inline-text" placeholder="new task — press Enter to save, Esc to cancel">
-    <input class="inline-route" placeholder="route (optional)">
-    <datalist id="${suggestId}">${tagPool().map(t => `<option value="${escapeHtml(t)}">`).join('')}</datalist>
-  `;
-  group.appendChild(row);
-
-  const textEl  = row.querySelector('.inline-text');
-  const tagEl   = row.querySelector('.inline-tag');
-  const routeEl = row.querySelector('.inline-route');
+  const { row, tagEl, textEl, routeEl, chipEl } = buildInlineRow({
+    weekNum, type: 'normal',
+    placeholder: 'new task — Enter to save, Esc to cancel'
+  });
+  // Slot above any "empty-hint" so the composer is visually continuous with the week.
+  const emptyHint = group.querySelector('.empty-hint');
+  if (emptyHint) group.insertBefore(row, emptyHint); else group.appendChild(row);
   textEl.focus();
 
   let done = false;
-  const finish = (commit) => {
+  const finish = (action) => {
     if (done) return;
     done = true;
+    const commit = action === 'commit' || action === true;
     if (commit) {
       const text = textEl.value.trim();
       if (!text) { row.remove(); return; }
-      const tag   = tagEl.value.trim() || '·';
+      const tag = tagEl.value.trim() || '·';
       const route = routeEl.value.trim();
-      state.tasks.push({ id: uid(), tag, text, route, type: 'normal', week: weekNum });
-      render();
-      saveState();
+      const type = chipEl.dataset.type || 'normal';
+      state.tasks.push({ id: uid(), tag, text, route, type, week: weekNum });
+      render(); saveState();
     } else {
       row.remove();
     }
   };
+  row._finishInline = finish;
 
   row.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') { e.preventDefault(); finish(true); }
-    else if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+    if (e.key === 'Enter') { e.preventDefault(); finish('commit'); }
+    else if (e.key === 'Escape') { e.preventDefault(); finish('cancel'); }
   });
-  // If focus leaves the whole row, auto-commit (or cancel if empty)
   row.addEventListener('focusout', () => {
     setTimeout(() => {
       if (done) return;
-      if (!row.contains(document.activeElement)) finish(true);
+      if (!row.contains(document.activeElement)) finish('commit');
     }, 40);
   });
+}
+
+// Inline task editor — swaps an existing row's contents for editable inputs in place.
+// Same keyboard semantics as beginAddTask. Type chip cycles; delete button removes.
+function beginEditTask(taskId) {
+  const task = state.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  const oldRow = document.querySelector(`.row[data-task="${taskId}"]`);
+  if (!oldRow || oldRow.classList.contains('row-inline')) return;
+
+  // Synchronously commit/close any other open inline rows before swapping this one.
+  closeOtherInlineRows(oldRow);
+
+  const { row, tagEl, textEl, routeEl, chipEl, delEl } = buildInlineRow({
+    taskId, tag: task.tag, text: task.text, route: task.route || '', type: task.type || 'normal',
+    placeholder: 'task — Enter to save, Esc to revert'
+  });
+  oldRow.replaceWith(row);
+
+  // Focus the text field and place caret at end (less disruptive than selecting all).
+  textEl.focus();
+  try { textEl.setSelectionRange(textEl.value.length, textEl.value.length); } catch (_) {}
+
+  const original = { tag: task.tag, text: task.text, route: task.route || '', type: task.type || 'normal' };
+  let done = false;
+
+  const revert = () => { render(); };
+
+  const commit = () => {
+    const text = textEl.value.trim();
+    if (!text) {
+      // Committing empty text is treated as delete so users don't end up with ghost rows.
+      state.tasks = state.tasks.filter(t => t.id !== taskId);
+    } else {
+      task.tag = tagEl.value.trim() || '·';
+      task.text = text;
+      task.route = routeEl.value.trim();
+      task.type = chipEl.dataset.type || 'normal';
+    }
+    render(); saveState();
+  };
+
+  const finish = (action) => {
+    if (done) return;
+    done = true;
+    if (action === 'commit') {
+      // No-op diff avoids a spurious save/commit churn on GitHub.
+      const changed = tagEl.value.trim() !== original.tag ||
+                      textEl.value.trim() !== original.text ||
+                      routeEl.value.trim() !== original.route ||
+                      (chipEl.dataset.type || 'normal') !== original.type;
+      if (!changed) { revert(); return; }
+      commit();
+    } else if (action === 'delete') {
+      state.tasks = state.tasks.filter(t => t.id !== taskId);
+      render(); saveState();
+    } else {
+      revert();
+    }
+  };
+
+  row.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); finish('commit'); }
+    else if (e.key === 'Escape') { e.preventDefault(); finish('cancel'); }
+  });
+  row.addEventListener('focusout', () => {
+    setTimeout(() => {
+      if (done) return;
+      if (!row.contains(document.activeElement)) finish('commit');
+    }, 40);
+  });
+  if (delEl) {
+    delEl.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      finish('delete');
+    });
+  }
 }
 
 /* ════════════════════════════════════════════════════
@@ -2006,16 +2919,22 @@ function updateScrub(e) {
 }
 
 document.addEventListener('pointerdown', (e) => {
+  // If we're inside an inline editor (track, phase bar, milestone), don't
+  // treat the pointerdown as a drag-start or a modal-open: the editor's own
+  // handlers own the event.
+  if (e.target.closest('.bar.editing, .tl-milestone.editing, .track-label-wrap.editing, #rail-add-track.editing')) {
+    return;
+  }
   const bar = e.target.closest('.bar');
   if (bar) {
     if (editMode) startBarDrag(e, bar);
-    else { e.preventDefault(); editPhase(bar.dataset.track, bar.dataset.phase); }
+    else { e.preventDefault(); beginEditPhase(bar.dataset.track, bar.dataset.phase); }
     return;
   }
   const ms = e.target.closest('.tl-milestone');
   if (ms) {
     if (editMode) startMilestoneDrag(e, ms);
-    else { e.preventDefault(); editMilestone(ms.dataset.ms); }
+    else { e.preventDefault(); beginEditMilestone(ms.dataset.ms); }
     return;
   }
 
@@ -2039,8 +2958,16 @@ document.addEventListener('pointerdown', (e) => {
     return;
   }
 
-  // Otherwise: scrub (timeline playhead) is the default everywhere in the timeline body
-  if (axis || msLane || lane) {
+  // Click on empty spot in the milestones lane plants a new milestone at that date.
+  // (Clicks directly on an existing milestone are already handled above and returned.)
+  if (msLane) {
+    e.preventDefault();
+    beginAddMilestoneAt(dateFromX(x));
+    return;
+  }
+
+  // Otherwise: scrub (timeline playhead) is the default in axis + track lanes
+  if (axis || lane) {
     startScrubDrag(e, x);
     return;
   }
@@ -2054,10 +2981,19 @@ document.addEventListener('click', (e) => {
   if (drag) return;
   if (editMode) {
     const trackLabel = e.target.closest('.track-label-wrap');
-    if (trackLabel) { editTrack(trackLabel.dataset.track); return; }
-    if (e.target.id === 'rail-add-track') { addTrack(); return; }
+    if (trackLabel) { beginEditTrack(trackLabel.dataset.track); return; }
+    // Only open the inline add when clicking the + Track affordance itself.
+    // Ignore clicks inside it once it's been swapped to inline-edit mode.
+    if (e.target.id === 'rail-add-track' && !e.target.classList.contains('editing')) {
+      beginAddTrack(); return;
+    }
+    if (e.target.closest('#rail-add-track.editing')) return;
+    // Ignore clicks inside an inline composer / editor so its own inputs and
+    // controls (type chip, delete, inputs) don't re-trigger an edit swap.
+    const inlineHit = e.target.closest('.row.row-inline');
+    if (inlineHit) return;
     const row = e.target.closest('.row');
-    if (row && row.dataset.task) { editTask(row.dataset.task); return; }
+    if (row && row.dataset.task) { beginEditTask(row.dataset.task); return; }
     const addTaskBtn = e.target.closest('[data-add-task]');
     if (addTaskBtn) { beginAddTask(Number(addTaskBtn.dataset.addTask)); return; }
   }
@@ -2077,8 +3013,14 @@ document.addEventListener('keydown', (e) => {
     if (drag) {
       if (drag.paintEl) drag.paintEl.remove();
       drag = null; hideTip(); render();
+      return;
     }
-    else closePopover();
+    if (resetArmed) { disarmReset(); return; }
+    if (document.getElementById('token-row').classList.contains('open') &&
+        !document.getElementById('token-row').contains(document.activeElement)) {
+      closeTokenRow(); return;
+    }
+    closePopover();
   }
 });
 
@@ -2130,32 +3072,78 @@ document.getElementById('file-import').addEventListener('change', (e) => {
   reader.readAsText(file);
   e.target.value = '';
 });
-document.getElementById('btn-reset').addEventListener('click', () => {
-  if (confirm('Reset to seed timeline? This clears all edits.')) {
-    state = JSON.parse(JSON.stringify(SEED));
-    syncInputs(); render(); saveState();
+/* Two-step Reset — avoids a native confirm() dialog.
+   First click puts the button in a "confirming" state for 3s; a second click
+   within that window actually resets. Anything else (timeout, click elsewhere,
+   Escape) reverts the button silently. */
+let resetArmed = false;
+let resetTimer = null;
+const resetBtn = document.getElementById('btn-reset');
+function disarmReset() {
+  if (!resetArmed) return;
+  resetArmed = false;
+  resetBtn.textContent = 'Reset';
+  resetBtn.classList.remove('confirming');
+  if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
+}
+resetBtn.addEventListener('click', () => {
+  if (!resetArmed) {
+    resetArmed = true;
+    resetBtn.textContent = 'Confirm reset · clears edits';
+    resetBtn.classList.add('confirming');
+    resetTimer = setTimeout(disarmReset, 3000);
+    return;
   }
+  disarmReset();
+  state = JSON.parse(JSON.stringify(SEED));
+  syncInputs(); render(); saveState();
+  flashSave('Reset');
 });
+document.addEventListener('click', (e) => {
+  if (resetArmed && !e.target.closest('#btn-reset')) disarmReset();
+}, true);
+
 document.getElementById('btn-sync').addEventListener('click', async () => {
   flashSave('Syncing…');
   await loadState();
   syncInputs(); render();
 });
+
+/* Inline token editor — a collapsible row of the toolbar instead of a native prompt().
+   The input is never shown in plain text; the "current" slot only shows a masked hint. */
+const tokenRow = document.getElementById('token-row');
+const tokenInput = document.getElementById('in-token');
+const tokenCurrent = document.getElementById('token-current');
+function refreshTokenCurrent() {
+  const t = getToken();
+  tokenCurrent.textContent = t ? `current: ${t.slice(0, 4)}…${t.slice(-4)}` : 'current: (none)';
+}
+function openTokenRow() {
+  refreshTokenCurrent();
+  tokenInput.value = '';
+  tokenRow.classList.add('open');
+  setTimeout(() => tokenInput.focus(), 20);
+}
+function closeTokenRow() {
+  tokenRow.classList.remove('open');
+  tokenInput.value = '';
+}
 document.getElementById('btn-token').addEventListener('click', () => {
-  const existing = getToken();
-  const masked = existing ? existing.slice(0, 4) + '…' + existing.slice(-4) : '(none)';
-  const next = prompt(
-    'GitHub Personal Access Token (fine-grained, Contents: read/write on jalulia/timeline).\n' +
-    'Stored only in this browser\'s localStorage. Sent only to api.github.com.\n' +
-    'Current: ' + masked + '\n\n' +
-    'Paste new token, leave blank to keep, or type "clear" to remove:',
-    ''
-  );
-  if (next === null) return;
-  if (next === '') { flashSave('Unchanged'); return; }
-  if (next.toLowerCase() === 'clear') { setToken(''); flashSave('Token cleared'); return; }
-  setToken(next.trim());
+  if (tokenRow.classList.contains('open')) closeTokenRow();
+  else openTokenRow();
+});
+document.getElementById('btn-token-cancel').addEventListener('click', closeTokenRow);
+document.getElementById('btn-token-save').addEventListener('click', () => {
+  const v = tokenInput.value.trim();
+  if (!v) { flashSave('Unchanged'); closeTokenRow(); return; }
+  if (v.toLowerCase() === 'clear') { setToken(''); flashSave('Token cleared'); closeTokenRow(); return; }
+  setToken(v);
   flashSave('Token saved');
+  closeTokenRow();
+});
+tokenInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('btn-token-save').click(); }
+  else if (e.key === 'Escape') { e.preventDefault(); closeTokenRow(); }
 });
 
 function syncInputs() {
