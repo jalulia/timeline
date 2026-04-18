@@ -266,14 +266,6 @@
       "week": 1
     },
     {
-      "id": "x7472mh",
-      "tag": "CL / CNC",
-      "text": "Vendor response overdue — self-set cutoff 24 Apr, then self-pay path",
-      "route": "waiting / decision",
-      "type": "blocked",
-      "week": 1
-    },
-    {
       "id": "vjgoupv",
       "tag": "Comms",
       "text": "Single-voice AI pass on combined dossier (check for Matt's zip of PDFs)",
