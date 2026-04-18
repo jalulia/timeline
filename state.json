@@ -84,13 +84,6 @@
           "state": "tentative",
           "start": "2026-04-26",
           "days": 5
-        },
-        {
-          "id": "vevugfr",
-          "label": "",
-          "state": "committed",
-          "start": "2026-05-15",
-          "days": 3
         }
       ]
     },
