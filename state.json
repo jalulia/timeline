@@ -6,7 +6,7 @@
       "id": "t-yoshi",
       "name": "Yoshi",
       "sub": "build",
-      "sequential": true,
+      "sequential": false,
       "phases": [
         {
           "id": "17mml8i",
@@ -57,7 +57,7 @@
           "ix": "06"
         }
       ],
-      "color": "#2f7a2f"
+      "color": "#5A7A8A"
     },
     {
       "id": "t-cl",
@@ -128,7 +128,7 @@
           "id": "2zxqvti",
           "label": "Confirm window",
           "state": "tentative",
-          "start": "2026-04-20",
+          "start": "2026-04-26",
           "days": 5
         },
         {
