@@ -3,63 +3,6 @@
   "horizonDate": "2026-05-31",
   "tracks": [
     {
-      "id": "t-yoshi",
-      "name": "Yoshi",
-      "sub": "build",
-      "sequential": false,
-      "phases": [
-        {
-          "id": "17mml8i",
-          "label": "Plan & Dossier",
-          "state": "active",
-          "start": "2026-04-17",
-          "days": 5,
-          "ix": "01"
-        },
-        {
-          "id": "a3a1oj7",
-          "label": "Sample & Order",
-          "state": "committed",
-          "start": "2026-04-24",
-          "days": 7,
-          "ix": "02"
-        },
-        {
-          "id": "wwxfyyy",
-          "label": "Body Prep",
-          "state": "committed",
-          "start": "2026-05-01",
-          "days": 6,
-          "ix": "03"
-        },
-        {
-          "id": "ua0d8li",
-          "label": "Soundproofing",
-          "state": "committed",
-          "start": "2026-05-07",
-          "days": 5,
-          "ix": "04"
-        },
-        {
-          "id": "4emxg16",
-          "label": "Cabinet Build",
-          "state": "committed",
-          "start": "2026-05-12",
-          "days": 14,
-          "ix": "05"
-        },
-        {
-          "id": "dyxjz7h",
-          "label": "Finish",
-          "state": "committed",
-          "start": "2026-05-26",
-          "days": 5,
-          "ix": "06"
-        }
-      ],
-      "color": "#5A7A8A"
-    },
-    {
       "id": "t-cl",
       "name": "CL / CNC",
       "sub": "proc.",
