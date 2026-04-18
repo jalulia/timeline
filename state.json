@@ -77,13 +77,6 @@
           "state": "tentative",
           "start": "2026-04-24",
           "days": 2
-        },
-        {
-          "id": "jv5iic3",
-          "label": "Order · receive",
-          "state": "tentative",
-          "start": "2026-04-26",
-          "days": 5
         }
       ]
     },
