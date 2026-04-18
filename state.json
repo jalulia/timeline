@@ -74,29 +74,6 @@
       ]
     },
     {
-      "id": "t-heidi",
-      "name": "Heidi",
-      "sub": "reach",
-      "color": "#7C3AED",
-      "sequential": false,
-      "phases": [
-        {
-          "id": "560l0of",
-          "label": "Draft · send",
-          "state": "committed",
-          "start": "2026-04-18",
-          "days": 5
-        },
-        {
-          "id": "b3sdl9w",
-          "label": "Waiting · reply",
-          "state": "waiting",
-          "start": "2026-04-20",
-          "days": 10
-        }
-      ]
-    },
-    {
       "id": "t-mom",
       "name": "Mom",
       "sub": "visit",
