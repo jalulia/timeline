@@ -10,5 +10,14 @@
       "soft": true
     }
   ],
-  "tasks": []
+  "tasks": [
+    {
+      "id": "y63frwu",
+      "tag": "home",
+      "text": "tickets",
+      "route": "",
+      "type": "normal",
+      "week": 1
+    }
+  ]
 }
