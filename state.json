@@ -84,7 +84,7 @@
           "label": "Order · receive",
           "state": "tentative",
           "start": "2026-04-30",
-          "days": 1
+          "days": 3
         }
       ],
       "color": "#FF4A02"
