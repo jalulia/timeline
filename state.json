@@ -135,6 +135,13 @@
           "state": "tentative",
           "start": "2026-05-05",
           "days": 7
+        },
+        {
+          "id": "u01hlo6",
+          "label": "whore",
+          "state": "committed",
+          "start": "2026-05-12",
+          "days": 10
         }
       ]
     },
