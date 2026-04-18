@@ -6,10 +6,10 @@
       "id": "t-yoshi",
       "name": "Yoshi",
       "sub": "build",
-      "sequential": false,
+      "sequential": true,
       "phases": [
         {
-          "id": "17mml8i",
+          "id": "fufjxw0",
           "label": "Plan & Dossier",
           "state": "active",
           "start": "2026-04-17",
@@ -17,31 +17,31 @@
           "ix": "01"
         },
         {
-          "id": "a3a1oj7",
+          "id": "4rjlgk8",
           "label": "Sample & Order",
           "state": "committed",
-          "start": "2026-04-24",
+          "start": "2026-04-22",
           "days": 7,
           "ix": "02"
         },
         {
-          "id": "wwxfyyy",
+          "id": "j90f0xu",
           "label": "Body Prep",
           "state": "committed",
-          "start": "2026-05-01",
+          "start": "2026-04-29",
           "days": 6,
           "ix": "03"
         },
         {
-          "id": "ua0d8li",
+          "id": "w6p9sso",
           "label": "Soundproofing",
           "state": "committed",
-          "start": "2026-05-07",
-          "days": 5,
+          "start": "2026-05-05",
+          "days": 7,
           "ix": "04"
         },
         {
-          "id": "4emxg16",
+          "id": "1frzy25",
           "label": "Cabinet Build",
           "state": "committed",
           "start": "2026-05-12",
@@ -49,15 +49,14 @@
           "ix": "05"
         },
         {
-          "id": "dyxjz7h",
+          "id": "6k68tvk",
           "label": "Finish",
           "state": "committed",
-          "start": "2026-05-24",
+          "start": "2026-05-26",
           "days": 5,
           "ix": "06"
         }
-      ],
-      "color": "#5A7A8A"
+      ]
     },
     {
       "id": "t-cl",
@@ -66,28 +65,27 @@
       "sequential": false,
       "phases": [
         {
-          "id": "gwjhvhi",
+          "id": "t1i4dxw",
           "label": "Waiting · vendor",
           "state": "waiting",
           "start": "2026-04-17",
           "days": 7
         },
         {
-          "id": "dy91ow1",
+          "id": "iwj3xz3",
           "label": "Decide",
           "state": "tentative",
           "start": "2026-04-24",
           "days": 2
         },
         {
-          "id": "1xlxx7r",
+          "id": "emz8xs4",
           "label": "Order · receive",
           "state": "tentative",
           "start": "2026-04-26",
           "days": 5
         }
-      ],
-      "color": "#2f7a2f"
+      ]
     },
     {
       "id": "t-heidi",
@@ -96,24 +94,24 @@
       "sequential": false,
       "phases": [
         {
-          "id": "idys71c",
+          "id": "gw7yxav",
           "label": "Draft · send",
           "state": "committed",
           "start": "2026-04-18",
           "days": 2
         },
         {
-          "id": "0tb3j1b",
+          "id": "3co2ys9",
           "label": "Waiting · reply",
           "state": "waiting",
-          "start": "2026-05-06",
+          "start": "2026-04-20",
           "days": 7
         },
         {
-          "id": "fi3ymh0",
+          "id": "3ju7rav",
           "label": "Follow-up",
           "state": "tentative",
-          "start": "2026-05-01",
+          "start": "2026-04-27",
           "days": 4
         }
       ]
@@ -125,17 +123,17 @@
       "sequential": false,
       "phases": [
         {
-          "id": "2zxqvti",
+          "id": "iwlsxtl",
           "label": "Confirm window",
           "state": "tentative",
-          "start": "2026-04-26",
+          "start": "2026-04-20",
           "days": 5
         },
         {
-          "id": "m6kjvsu",
+          "id": "5vwqe7l",
           "label": "Travel · ~1wk",
           "state": "tentative",
-          "start": "2026-05-09",
+          "start": "2026-05-05",
           "days": 7
         }
       ]
@@ -147,24 +145,24 @@
       "sequential": false,
       "phases": [
         {
-          "id": "6nyg6g8",
+          "id": "sgdu02p",
           "label": "Work packages",
           "state": "committed",
           "start": "2026-04-21",
           "days": 4
         },
         {
-          "id": "cww0weo",
+          "id": "hxr7jiz",
           "label": "Brief team",
           "state": "tentative",
           "start": "2026-05-03",
           "days": 4
         },
         {
-          "id": "ujgp6e2",
+          "id": "brhupnf",
           "label": "Re-sync",
           "state": "tentative",
-          "start": "2026-04-17",
+          "start": "2026-05-12",
           "days": 3
         }
       ]
@@ -176,10 +174,10 @@
       "sequential": false,
       "phases": [
         {
-          "id": "0j90n7r",
+          "id": "80fr7g3",
           "label": "→ June+ · plan w/ Matt",
           "state": "beyond",
-          "start": "2026-04-23",
+          "start": "2026-05-26",
           "days": 12
         }
       ]
@@ -187,25 +185,25 @@
   ],
   "milestones": [
     {
-      "id": "2h9lpbe",
+      "id": "iuf7g0i",
       "label": "Heidi draft",
       "date": "2026-04-19",
       "soft": true
     },
     {
-      "id": "6axaa05",
+      "id": "t3j5b44",
       "label": "CL cutoff",
-      "date": "2026-04-30",
+      "date": "2026-04-24",
       "soft": false
     },
     {
-      "id": "5vbnp3g",
+      "id": "9zbjmlk",
       "label": "Mom date",
       "date": "2026-04-29",
       "soft": true
     },
     {
-      "id": "qv1dp5r",
+      "id": "mq761jr",
       "label": "Travel tent.",
       "date": "2026-05-05",
       "soft": false
@@ -213,7 +211,15 @@
   ],
   "tasks": [
     {
-      "id": "55ag5o3",
+      "id": "ijur8n2",
+      "tag": "Yoshi",
+      "text": "Budget ballpark — confirm ~$20k start covers what, what comes after",
+      "route": "dossier / budget",
+      "type": "decision",
+      "week": 1
+    },
+    {
+      "id": "dy0vit7",
       "tag": "Yoshi",
       "text": "HBL sheets — 3 vs 4, which faces show, order sample first",
       "route": "dossier / materials",
@@ -221,7 +227,7 @@
       "week": 1
     },
     {
-      "id": "169fynu",
+      "id": "jksq57w",
       "tag": "Yoshi",
       "text": "Cabinet layout — water, puff, stove, sink, storage positions",
       "route": "dossier / layout",
@@ -229,7 +235,7 @@
       "week": 1
     },
     {
-      "id": "6a5ax67",
+      "id": "ob2i0ll",
       "tag": "Yoshi",
       "text": "Build sequence lock — soundproofing + body holes before cabinetry",
       "route": "dossier / sequence",
@@ -237,7 +243,7 @@
       "week": 1
     },
     {
-      "id": "4a2xmoc",
+      "id": "gooaos8",
       "tag": "Yoshi",
       "text": "Emissions / Georgia legalization status",
       "route": "dossier / compliance",
@@ -245,7 +251,7 @@
       "week": 1
     },
     {
-      "id": "xj969yf",
+      "id": "w0vi4cu",
       "tag": "Heidi",
       "text": "Draft with fresh brain — impactful, clear ask, no filler",
       "route": "outreach / heidi",
@@ -253,7 +259,7 @@
       "week": 1
     },
     {
-      "id": "mi9ryji",
+      "id": "ccz1ef9",
       "tag": "Mom",
       "text": "Reply with window for summer help",
       "route": "personal / calendar",
@@ -261,7 +267,7 @@
       "week": 1
     },
     {
-      "id": "obreq8g",
+      "id": "xakk1yg",
       "tag": "CL / CNC",
       "text": "Vendor response overdue — self-set cutoff 24 Apr, then self-pay path",
       "route": "waiting / decision",
@@ -269,7 +275,7 @@
       "week": 1
     },
     {
-      "id": "y2qhs16",
+      "id": "sy0732z",
       "tag": "Comms",
       "text": "Single-voice AI pass on combined dossier (check for Matt's zip of PDFs)",
       "route": "tools / dossier",
@@ -277,7 +283,7 @@
       "week": 1
     },
     {
-      "id": "deh2f33",
+      "id": "69k1rvo",
       "tag": "Yoshi",
       "text": "Place HBL order, soundproofing order, queue delivery for return",
       "route": "orders",
@@ -285,7 +291,7 @@
       "week": 2
     },
     {
-      "id": "4837rvu",
+      "id": "xl8ghh5",
       "tag": "Comms",
       "text": "Work packages — 90% whiteboards per person pre-travel",
       "route": "handoff",
@@ -293,7 +299,7 @@
       "week": 2
     },
     {
-      "id": "ej6u2zi",
+      "id": "mrca87n",
       "tag": "Heidi",
       "text": "If no reply by end of week, soft follow-up",
       "route": "outreach / heidi",
@@ -301,7 +307,7 @@
       "week": 2
     },
     {
-      "id": "kh93e6v",
+      "id": "tbuakw7",
       "tag": "Yoshi",
       "text": "Fill water tank hole, front left, remaining body penetrations",
       "route": "build / body",
@@ -309,7 +315,7 @@
       "week": 3
     },
     {
-      "id": "m1jk0y5",
+      "id": "binax9q",
       "tag": "Comms",
       "text": "Brief team on departure date, open threads, decision authority",
       "route": "handoff",
@@ -317,7 +323,7 @@
       "week": 3
     },
     {
-      "id": "aeud9od",
+      "id": "67t1vup",
       "tag": "Mom",
       "text": "Travel window — ~1 week on the ground (tentative)",
       "route": "personal / travel",
@@ -325,7 +331,7 @@
       "week": 4
     },
     {
-      "id": "vwrm8ns",
+      "id": "bnekymz",
       "tag": "Yoshi",
       "text": "Soundproofing install, 2–3 layers + vibration",
       "route": "build / sound",
@@ -333,7 +339,7 @@
       "week": 4
     },
     {
-      "id": "58m2cyr",
+      "id": "ruajefe",
       "tag": "Yoshi",
       "text": "Cabinet build begins once soundproofing closed out",
       "route": "build / cabinet",
@@ -341,7 +347,7 @@
       "week": 5
     },
     {
-      "id": "rqo8fvz",
+      "id": "ffeqnlw",
       "tag": "Yoshi",
       "text": "Finish & equip — final fit, water, power, inventory",
       "route": "build / finish",
@@ -349,7 +355,7 @@
       "week": 6
     },
     {
-      "id": "0yx0ipp",
+      "id": "5iwng4i",
       "tag": "Peru",
       "text": "Plan with Matt — dates, scope, what ships where",
       "route": "beyond-horizon",
