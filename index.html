@@ -174,6 +174,45 @@
   }
   .save-indicator.flash { color: var(--accent); }
 
+  /* Zoom cluster — muted −/level/+/FIT, sits right of the spacer. */
+  .zoom-cluster {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 2px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    user-select: none;
+  }
+  .zoom-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-xs);
+    line-height: 1;
+    background: transparent;
+    border: none;
+    color: var(--mute);
+    cursor: pointer;
+    padding: 4px 7px;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    transition: color 0.08s, background 0.08s;
+  }
+  .zoom-btn:hover { color: var(--accent); background: rgba(255, 74, 2, 0.04); }
+  .zoom-btn.zoom-fit {
+    border-left: 1px solid var(--rule-hair);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+  }
+  .zoom-level {
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-xxs);
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    min-width: 28px;
+    text-align: center;
+    font-weight: 600;
+  }
+
   /* ══════════════════════════════════════════════════
      TIMELINE
      ══════════════════════════════════════════════════ */
@@ -181,7 +220,19 @@
     position: relative;
     width: 100%;
     user-select: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* Subtle, DM-Mono-era scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule) transparent;
   }
+  .tl::-webkit-scrollbar { height: 8px; }
+  .tl::-webkit-scrollbar-track { background: transparent; }
+  .tl::-webkit-scrollbar-thumb {
+    background: var(--rule);
+    border-radius: 4px;
+  }
+  .tl::-webkit-scrollbar-thumb:hover { background: var(--mute); }
 
   .tl-buffer {
     position: absolute;
@@ -210,9 +261,12 @@
   .day-tick.month { top: 24px; bottom: 0; background: var(--ink); width: 1.5px; }
   .day-tick.in-buffer { opacity: 0.4; }
 
+  /* Month labels live in the top band (y≈0–15); day numbers live in the
+     middle band (y≈16–24). They used to share the same band and collide
+     horizontally whenever a month name sat over days 2–4. */
   .day-num {
     position: absolute;
-    top: 9px;
+    top: 16px;
     font-size: var(--t-xxs);
     color: var(--mute);
     letter-spacing: 0.05em;
@@ -226,14 +280,15 @@
 
   .month-label {
     position: absolute;
-    top: 6px;
+    top: 0;
     font-family: 'Instrument Serif', serif;
     font-style: italic;
-    font-size: var(--t-xl);
+    font-size: 15px;
     color: var(--ink);
-    transform: translateX(14px);
+    transform: translateX(8px);
     white-space: nowrap;
     line-height: 1;
+    letter-spacing: 0.01em;
     pointer-events: none;
   }
   .month-label.in-buffer { color: var(--mute-soft); }
@@ -318,6 +373,18 @@
     border-bottom: 1px solid var(--accent);
     caret-color: var(--accent);
   }
+  .ms-date-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-xs);
+    color: var(--mute);
+    padding: 1px 2px;
+    border-bottom: 1px solid var(--rule);
+    min-width: 96px;
+  }
+  .ms-date-input:focus { border-bottom-color: var(--accent); color: var(--ink); }
   .ms-soft-chip {
     border: 1px solid var(--ink-soft);
     background: var(--paper);
@@ -340,17 +407,19 @@
     border-color: var(--ink);
   }
   .ms-delete {
-    border: none;
-    background: transparent;
+    border: 1px solid var(--rule-hair);
+    background: var(--paper);
     color: var(--mute);
     font-family: 'DM Mono', monospace;
-    font-size: var(--t-sm);
+    font-size: 16px;
     line-height: 1;
     cursor: pointer;
-    padding: 2px 4px;
-    transition: color 0.08s;
+    padding: 3px 8px 4px;
+    transition: color 0.08s, border-color 0.08s, background 0.08s;
+    min-width: 22px;
+    min-height: 22px;
   }
-  .ms-delete:hover { color: var(--accent); }
+  .ms-delete:hover { color: var(--accent); border-color: var(--accent); background: rgba(255, 74, 2, 0.06); }
 
   /* VERTICALS */
   .tl-vertical {
@@ -607,15 +676,18 @@
     color: var(--accent);
   }
   .track-delete {
-    background: transparent;
-    border: none;
-    color: var(--mute-soft);
-    font-size: 14px;
+    background: var(--paper);
+    border: 1px solid var(--rule-hair);
+    color: var(--mute);
+    font-size: 16px;
     line-height: 1;
-    padding: 0 2px;
+    padding: 2px 7px 3px;
     cursor: pointer;
+    min-width: 22px;
+    min-height: 22px;
+    transition: color 0.08s, border-color 0.08s, background 0.08s;
   }
-  .track-delete:hover { color: var(--accent); }
+  .track-delete:hover { color: var(--accent); border-color: var(--accent); background: rgba(255, 74, 2, 0.06); }
 
   /* When the +Track row is in edit mode, it gets the same footprint as a track cell. */
   .tl-rail .rail-add-track.editing {
@@ -765,18 +837,63 @@
   }
   .phase-ix-input::placeholder { opacity: 0.35; }
 
-  .phase-delete {
+  /* Floating panel above the bar in edit mode — hosts the start/days inputs.
+     Lives in the bar so it inherits editing state & co-commits on focusout. */
+  .phase-edit-detail {
+    position: absolute;
+    top: -34px;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 4px 8px 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: var(--t-xxs);
+    color: var(--ink);
+    z-index: 9;
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    letter-spacing: 0.02em;
+  }
+  .phase-edit-detail .pe-lbl {
+    color: var(--mute);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 9px;
+    font-weight: 600;
+  }
+  .phase-edit-detail input {
     background: transparent;
     border: none;
-    color: currentColor;
-    opacity: 0.55;
-    font-size: 14px;
+    outline: none;
+    font: inherit;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink);
+    padding: 1px 2px;
+    border-bottom: 1px solid var(--rule);
+    caret-color: var(--accent);
+  }
+  .phase-edit-detail input:focus { border-bottom-color: var(--accent); }
+  .phase-edit-detail .pe-date { width: 112px; }
+  .phase-edit-detail .pe-days { width: 46px; text-align: right; }
+  .phase-edit-detail .pe-sep { color: var(--mute-soft); padding: 0 2px; }
+
+  .phase-delete {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    color: #1a1a1a;
+    opacity: 0.85;
+    font-size: 15px;
     line-height: 1;
-    padding: 0 2px;
+    padding: 2px 6px 3px;
     cursor: pointer;
     flex-shrink: 0;
+    min-width: 22px;
+    transition: opacity 0.08s, background 0.08s;
   }
-  .phase-delete:hover { opacity: 1; }
+  .phase-delete:hover { opacity: 1; background: #fff; }
 
   .paint-bar {
     position: absolute;
@@ -1211,11 +1328,17 @@
 
   <div class="toolbar">
     <div class="t-row">
-      <button class="link active" id="btn-edit-toggle">Editing · Live</button>
+      <button class="link active" id="btn-edit-toggle" title="Toggle edit mode (E)">Edit on</button>
       <span class="t-input"><span class="t-label">Start</span><input type="date" id="in-start" class="tool-input"></span>
       <span class="t-input"><span class="t-label">Horizon</span><input type="date" id="in-horizon" class="tool-input"></span>
       <button class="link muted" id="btn-add-milestone">+ Milestone</button>
       <span class="t-spacer"></span>
+      <span class="zoom-cluster" id="zoom-cluster" title="Cmd/Ctrl + scroll to zoom">
+        <button class="zoom-btn" id="btn-zoom-out" title="Zoom out">−</button>
+        <span class="zoom-level" id="zoom-level">FIT</span>
+        <button class="zoom-btn" id="btn-zoom-in" title="Zoom in">+</button>
+        <button class="zoom-btn zoom-fit" id="btn-zoom-fit" title="Fit horizon to page">FIT</button>
+      </span>
       <span class="save-indicator" id="save-indicator">Saved</span>
       <button class="link muted" id="btn-undo" title="Undo (⌘Z)">Undo</button>
       <button class="link muted" id="btn-sync" title="Pull latest from GitHub">Sync</button>
@@ -1311,72 +1434,29 @@ const daysBetween = (a, b) => Math.round((fromISO(b) - fromISO(a)) / 86400000);
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const fmtShort = (iso) => { const d = fromISO(iso); return `${d.getDate()} ${MONTHS[d.getMonth()]}`; };
 
+/* Minimal starter state — a single example milestone, no tracks, no tasks.
+   New users get a clean page; they discover by clicking the milestone, the
+   +Track affordance in the rail, and the +Milestone button in the toolbar.
+   Reset button returns the app to this exact state. */
 const SEED = {
   startDate: '2026-04-17',
   horizonDate: '2026-05-31',
-  tracks: [
-    { id: 't-yoshi', name: 'Yoshi', sub: 'build', color: '#D97706', sequential: true, phases: [
-      { id: uid(), label: 'Plan & Dossier',   state: 'active',    start: '2026-04-17', days: 5,  ix: '01' },
-      { id: uid(), label: 'Sample & Order',   state: 'committed', start: '2026-04-22', days: 7,  ix: '02' },
-      { id: uid(), label: 'Body Prep',        state: 'committed', start: '2026-04-29', days: 6,  ix: '03' },
-      { id: uid(), label: 'Soundproofing',    state: 'committed', start: '2026-05-05', days: 7,  ix: '04' },
-      { id: uid(), label: 'Cabinet Build',    state: 'committed', start: '2026-05-12', days: 14, ix: '05' },
-      { id: uid(), label: 'Finish',           state: 'committed', start: '2026-05-26', days: 5,  ix: '06' }
-    ]},
-    { id: 't-cl', name: 'CL / CNC', sub: 'proc.', color: '#0891B2', sequential: false, phases: [
-      { id: uid(), label: 'Waiting · vendor', state: 'waiting',   start: '2026-04-17', days: 7 },
-      { id: uid(), label: 'Decide',           state: 'tentative', start: '2026-04-22', days: 5 },
-      { id: uid(), label: 'Order · receive',  state: 'tentative', start: '2026-04-26', days: 7 }
-    ]},
-    { id: 't-heidi', name: 'Heidi', sub: 'reach', color: '#7C3AED', sequential: false, phases: [
-      { id: uid(), label: 'Draft · send',     state: 'committed', start: '2026-04-18', days: 5 },
-      { id: uid(), label: 'Waiting · reply',  state: 'waiting',   start: '2026-04-20', days: 10 },
-      { id: uid(), label: 'Follow-up',        state: 'tentative', start: '2026-04-27', days: 4 }
-    ]},
-    { id: 't-mom', name: 'Mom', sub: 'visit', color: '#EC4899', sequential: false, phases: [
-      { id: uid(), label: 'Confirm window',   state: 'tentative', start: '2026-04-20', days: 7 },
-      { id: uid(), label: 'Book flights',     state: 'tentative', start: '2026-04-24', days: 4 },
-      { id: uid(), label: 'Travel · ~1wk',    state: 'tentative', start: '2026-05-05', days: 7 }
-    ]},
-    { id: 't-comms', name: 'Comms', sub: 'team', color: '#059669', sequential: false, phases: [
-      { id: uid(), label: 'Work packages',    state: 'committed', start: '2026-04-21', days: 6 },
-      { id: uid(), label: 'Team sync',        state: 'tentative', start: '2026-04-24', days: 3 },
-      { id: uid(), label: 'Brief team',       state: 'tentative', start: '2026-05-03', days: 4 },
-      { id: uid(), label: 'Re-sync',          state: 'tentative', start: '2026-05-12', days: 3 }
-    ]}
-  ],
+  tracks: [],
   milestones: [
-    { id: uid(), label: 'Heidi draft',    date: '2026-04-19', soft: true  },
-    { id: uid(), label: 'HBL sample req', date: '2026-04-20', soft: true  },
-    { id: uid(), label: 'CL cutoff',      date: '2026-04-24', soft: false },
-    { id: uid(), label: 'Dossier lock',   date: '2026-04-25', soft: true  },
-    { id: uid(), label: 'Mom date',       date: '2026-04-29', soft: true  },
-    { id: uid(), label: 'Travel tent.',   date: '2026-05-05', soft: false }
+    { id: uid(), label: 'click here to edit', date: '2026-05-01', soft: true }
   ],
-  tasks: [
-    { id: uid(), tag: 'Yoshi',    text: 'Budget ballpark — confirm ~$20k start covers what, what comes after', route: 'dossier / budget',    type: 'decision', week: 1 },
-    { id: uid(), tag: 'Yoshi',    text: 'HBL sheets — 3 vs 4, which faces show, order sample first',           route: 'dossier / materials', type: 'decision', week: 1 },
-    { id: uid(), tag: 'Yoshi',    text: 'Cabinet layout — water, puff, stove, sink, storage positions',        route: 'dossier / layout',    type: 'decision', week: 1 },
-    { id: uid(), tag: 'Yoshi',    text: 'Build sequence lock — soundproofing + body holes before cabinetry',   route: 'dossier / sequence',  type: 'decision', week: 1 },
-    { id: uid(), tag: 'Yoshi',    text: 'Emissions / Georgia legalization status',                             route: 'dossier / compliance', type: 'decision', week: 1 },
-    { id: uid(), tag: 'Heidi',    text: 'Draft with fresh brain — impactful, clear ask, no filler',            route: 'outreach / heidi',    type: 'normal',   week: 1 },
-    { id: uid(), tag: 'Mom',      text: 'Reply with window for summer help',                                   route: 'personal / calendar', type: 'normal',   week: 1 },
-    { id: uid(), tag: 'CL / CNC', text: 'Vendor response overdue — self-set cutoff 24 Apr, then self-pay path', route: 'waiting / decision',  type: 'blocked',  week: 1 },
-    { id: uid(), tag: 'Comms',    text: "Single-voice AI pass on combined dossier (check for Matt's zip of PDFs)", route: 'tools / dossier', type: 'normal',   week: 1 },
-    { id: uid(), tag: 'Yoshi',    text: 'Place HBL order, soundproofing order, queue delivery for return',     route: 'orders',              type: 'normal',   week: 2 },
-    { id: uid(), tag: 'Comms',    text: 'Work packages — 90% whiteboards per person pre-travel',               route: 'handoff',             type: 'normal',   week: 2 },
-    { id: uid(), tag: 'Heidi',    text: 'If no reply by end of week, soft follow-up',                          route: 'outreach / heidi',    type: 'normal',   week: 2 },
-    { id: uid(), tag: 'Yoshi',    text: 'Fill water tank hole, front left, remaining body penetrations',      route: 'build / body',        type: 'normal',   week: 3 },
-    { id: uid(), tag: 'Comms',    text: 'Brief team on departure date, open threads, decision authority',     route: 'handoff',             type: 'normal',   week: 3 },
-    { id: uid(), tag: 'Mom',      text: 'Travel window — ~1 week on the ground (tentative)',                  route: 'personal / travel',   type: 'normal',   week: 4 },
-    { id: uid(), tag: 'Yoshi',    text: 'Soundproofing install, 2–3 layers + vibration',                      route: 'build / sound',       type: 'normal',   week: 4 },
-    { id: uid(), tag: 'Yoshi',    text: 'Cabinet build begins once soundproofing closed out',                 route: 'build / cabinet',     type: 'normal',   week: 5 },
-    { id: uid(), tag: 'Yoshi',    text: 'Finish & equip — final fit, water, power, inventory',               route: 'build / finish',      type: 'normal',   week: 6 }
-  ]
+  tasks: []
 };
 
 let state = JSON.parse(JSON.stringify(SEED));
 let editMode = true;
+
+/* Zoom: multiplier on the "fit" ppd. 1× = horizon fits in page; 8× = dense zoom in.
+   Cursor-anchored wheel (Cmd/Ctrl+wheel) and muted −/1×/+/FIT cluster in toolbar. */
+let zoomFactor = 1;
+const ZOOM_MIN = 1;
+const ZOOM_MAX = 8;
+const ZOOM_STEP = 1.25;          // multiplicative per wheel tick / button press
 let saveTimer = null;
 
 function realToday() { return toISO(new Date()); }
@@ -1490,6 +1570,8 @@ function recomputeGeometry() {
 
   let ppd = (pageInnerW - railW) / (workingDays + 2 * VISIBLE_BUFFER_DAYS);
   if (ppd < MIN_PX_PER_DAY) ppd = MIN_PX_PER_DAY;
+  // Apply zoom factor after the fit-to-page clamp so 1× always fits.
+  ppd = ppd * zoomFactor;
   ppd = Math.floor(ppd * 100) / 100;
 
   const railBufferDays = railW / ppd;
@@ -1514,6 +1596,59 @@ function isInBuffer(iso) {
   const d = fromISO(iso);
   return d < fromISO(state.startDate) || d > fromISO(state.horizonDate);
 }
+
+/* ─── ZOOM ──────────────────────────────────────────
+   Zoom is orthogonal to state — we never persist the factor, we never mutate
+   startDate/horizonDate. Rail stays pinned to the viewport's left edge via
+   translateX(scrollLeft). Cursor-anchored wheel keeps the date under the
+   cursor fixed on screen. */
+function updateRailTransform() {
+  const tlEl = document.getElementById('tl-root');
+  if (!tlEl) return;
+  const rail = tlEl.querySelector('.tl-rail');
+  if (rail) rail.style.transform = `translateX(${tlEl.scrollLeft}px)`;
+}
+
+function updateZoomBadge() {
+  const badge = document.getElementById('zoom-level');
+  if (!badge) return;
+  badge.textContent = zoomFactor === 1
+    ? 'FIT'
+    : (zoomFactor >= 10 ? Math.round(zoomFactor) : zoomFactor.toFixed(1)) + '×';
+}
+
+function clampZoom(z) { return Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, z)); }
+
+/* Apply a zoom around an anchor. anchor = { viewportX, date } or null for
+   centered-on-viewport. Preserves the date under viewportX by adjusting
+   scrollLeft after the new geometry is computed. */
+function applyZoom(targetZoom, anchor) {
+  const z = clampZoom(targetZoom);
+  if (z === zoomFactor) { updateZoomBadge(); return; }
+  const tlEl = document.getElementById('tl-root');
+  if (!tlEl) { zoomFactor = z; updateZoomBadge(); return; }
+  // Capture viewport-relative cursor x + date under cursor BEFORE changing zoom
+  let anchorViewportX, anchorDate;
+  if (anchor && anchor.date) {
+    anchorViewportX = anchor.viewportX;
+    anchorDate = anchor.date;
+  } else {
+    anchorViewportX = tlEl.clientWidth / 2;
+    anchorDate = dateFromX(tlEl.scrollLeft + anchorViewportX);
+  }
+  zoomFactor = z;
+  render();
+  // After render, recompute scrollLeft so anchorDate stays under anchorViewportX
+  const newAnchorContentX = xForDate(anchorDate);
+  const desiredScroll = newAnchorContentX - anchorViewportX;
+  const maxScroll = Math.max(0, tlEl.scrollWidth - tlEl.clientWidth);
+  tlEl.scrollLeft = Math.max(0, Math.min(maxScroll, desiredScroll));
+  updateRailTransform();
+  updateZoomBadge();
+}
+
+function setZoom(target, anchor) { applyZoom(target, anchor); }
+function zoomFit() { applyZoom(1, null); }
 
 /* ════════════════════════════════════════════════════
    STACKING — assign rows to overlapping items
@@ -1812,7 +1947,7 @@ function escapeHtml(s) {
   }[c]));
 }
 
-function render() { renderTimeline(); renderLedger(); }
+function render() { renderTimeline(); renderLedger(); updateRailTransform(); updateZoomBadge(); }
 
 /* ════════════════════════════════════════════════════
    POPOVER
@@ -1999,6 +2134,11 @@ function _wireTrackInline(host, initial, { onCommit, onCancel, onDelete, showDel
     el.addEventListener('keydown', e => {
       if (e.key === 'Enter')  { e.preventDefault(); finish('commit'); }
       if (e.key === 'Escape') { e.preventDefault(); finish('cancel'); }
+      // Cmd/Ctrl + Backspace = delete this track. Noop for the +Track composer
+      // (onDelete is bound to a cancel restore there, so no harm).
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'Backspace' || e.key === 'Delete')) {
+        e.preventDefault(); finish('delete');
+      }
     });
     el.addEventListener('focusin', () => {
       if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
@@ -2134,7 +2274,10 @@ function beginEditPhase(trackId, phaseId, opts = {}) {
 
   const originalHtml = bar.innerHTML;
   const originalStateClass = phase.state;
-  const original = { label: phase.label, state: phase.state, ix: phase.ix || '' };
+  const original = {
+    label: phase.label, state: phase.state, ix: phase.ix || '',
+    start: phase.start, days: phase.days
+  };
   const working  = { ...original };
 
   bar.classList.add('editing');
@@ -2142,15 +2285,26 @@ function beginEditPhase(trackId, phaseId, opts = {}) {
     <button class="phase-state-chip" type="button" title="State (click to cycle)">${working.state.charAt(0).toUpperCase()}</button>
     <input class="phase-label-input" type="text" placeholder="Phase label" autocomplete="off" spellcheck="false" />
     <input class="phase-ix-input" type="text" placeholder="ix" autocomplete="off" spellcheck="false" maxlength="4" />
-    <button class="phase-delete" type="button" title="Delete phase">×</button>
+    <button class="phase-delete" type="button" title="Delete phase (Cmd/Ctrl+Del)">×</button>
+    <div class="phase-edit-detail">
+      <span class="pe-lbl">Start</span>
+      <input class="pe-date" type="date" />
+      <span class="pe-sep">·</span>
+      <span class="pe-lbl">Days</span>
+      <input class="pe-days" type="number" min="1" step="1" />
+    </div>
   `;
   const chipBtn = bar.querySelector('.phase-state-chip');
   const labelIn = bar.querySelector('.phase-label-input');
   const ixIn    = bar.querySelector('.phase-ix-input');
   const delBtn  = bar.querySelector('.phase-delete');
+  const dateIn  = bar.querySelector('.pe-date');
+  const daysIn  = bar.querySelector('.pe-days');
 
   labelIn.value = working.label || '';
   ixIn.value    = working.ix || '';
+  dateIn.value  = working.start || '';
+  daysIn.value  = working.days || 1;
 
   let done = false;
   let commitTimer = null;
@@ -2226,6 +2380,10 @@ function beginEditPhase(trackId, phaseId, opts = {}) {
     el.addEventListener('keydown', e => {
       if (e.key === 'Enter')  { e.preventDefault(); finish('commit'); }
       if (e.key === 'Escape') { e.preventDefault(); finish('cancel'); }
+      // Cmd/Ctrl + Backspace = delete this phase regardless of label content.
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'Backspace' || e.key === 'Delete')) {
+        e.preventDefault(); finish('delete');
+      }
     });
     el.addEventListener('focusin', () => {
       if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
@@ -2292,27 +2450,28 @@ function beginEditMilestone(msId, opts = {}) {
   closeOtherInlineRows(null);
 
   const originalHtml = msEl.innerHTML;
-  const original = { label: ms.label, soft: !!ms.soft };
+  const original = { label: ms.label, soft: !!ms.soft, date: ms.date };
   const working  = { ...original };
 
   msEl.classList.add('editing');
   // Re-render the internals: keep the dot, replace the text with an input + soft chip + delete.
-  const day = fromISO(ms.date).getDate();
   msEl.innerHTML = `
     <div class="m-dot"></div>
     <div class="m-text m-edit">
-      <span class="m-day">${day}</span>
+      <input class="ms-date-input" type="date" title="Milestone date" />
       <span class="m-sep">·</span>
       <input class="ms-label-input" type="text" placeholder="Milestone label" autocomplete="off" spellcheck="false" />
       <button class="ms-soft-chip" type="button" title="Soft (◇) vs hard (◆)">${working.soft ? '◇' : '◆'}</button>
-      <button class="ms-delete" type="button" title="Delete milestone">×</button>
+      <button class="ms-delete" type="button" title="Delete milestone (Cmd/Ctrl+Del)">×</button>
     </div>
   `;
   const labelIn = msEl.querySelector('.ms-label-input');
+  const dateIn  = msEl.querySelector('.ms-date-input');
   const softBtn = msEl.querySelector('.ms-soft-chip');
   const delBtn  = msEl.querySelector('.ms-delete');
 
   labelIn.value = working.label || '';
+  dateIn.value  = working.date || '';
 
   let done = false;
   let commitTimer = null;
@@ -2351,18 +2510,22 @@ function beginEditMilestone(msId, opts = {}) {
     }
     // commit
     working.label = labelIn.value.trim();
+    working.date  = (dateIn.value || original.date);
     if (!working.label) {
       state.milestones = state.milestones.filter(m => m.id !== msId);
       render(); saveState();
       return;
     }
-    const changed = working.label !== original.label || working.soft !== original.soft;
+    const changed = working.label !== original.label
+                 || working.soft !== original.soft
+                 || working.date !== original.date;
     if (!changed && !opts.isNew) {
       restoreOriginal();
       return;
     }
     ms.label = working.label;
     ms.soft  = !!working.soft;
+    ms.date  = working.date;
     render(); saveState();
   }
 
@@ -2377,21 +2540,27 @@ function beginEditMilestone(msId, opts = {}) {
   });
   delBtn.addEventListener('click', () => finish('delete'));
 
-  labelIn.addEventListener('pointerdown', e => e.stopPropagation());
-  labelIn.addEventListener('keydown', e => {
-    if (e.key === 'Enter')  { e.preventDefault(); finish('commit'); }
-    if (e.key === 'Escape') { e.preventDefault(); finish('cancel'); }
-  });
-  labelIn.addEventListener('focusin', () => {
-    if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
-  });
-  labelIn.addEventListener('focusout', () => {
-    if (commitTimer) clearTimeout(commitTimer);
-    commitTimer = setTimeout(() => {
-      if (done) return;
-      if (!msEl.contains(document.activeElement)) finish('commit');
-    }, 40);
-  });
+  for (const el of [labelIn, dateIn]) {
+    el.addEventListener('pointerdown', e => e.stopPropagation());
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter')  { e.preventDefault(); finish('commit'); }
+      if (e.key === 'Escape') { e.preventDefault(); finish('cancel'); }
+      // Cmd/Ctrl + Backspace = delete this milestone regardless of label content.
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'Backspace' || e.key === 'Delete')) {
+        e.preventDefault(); finish('delete');
+      }
+    });
+    el.addEventListener('focusin', () => {
+      if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
+    });
+    el.addEventListener('focusout', () => {
+      if (commitTimer) clearTimeout(commitTimer);
+      commitTimer = setTimeout(() => {
+        if (done) return;
+        if (!msEl.contains(document.activeElement)) finish('commit');
+      }, 40);
+    });
+  }
 
   labelIn.focus();
   if (working.label) labelIn.setSelectionRange(working.label.length, working.label.length);
@@ -2790,12 +2959,14 @@ function onPointerMove(e) {
   if (drag.kind === 'scrub') {
     const tlEl = document.getElementById('tl-root');
     const rect = tlEl.getBoundingClientRect();
-    let x = e.clientX - rect.left;
-    // Clamp to scrubbable area
-    const minX = geom().railW;
+    const viewportX = e.clientX - rect.left;
+    // Rail is pinned to viewport-left; translate viewport x → content x
+    const contentX = viewportX + tlEl.scrollLeft;
+    // Clamp in content coordinates. Rail covers [scrollLeft, scrollLeft+railW].
+    const railW = geom().railW;
+    const minX = tlEl.scrollLeft + railW;
     const maxX = geom().totalWidth;
-    if (x < minX) x = minX;
-    if (x > maxX) x = maxX;
+    let x = Math.max(minX, Math.min(maxX, contentX));
     const date = dateFromX(x);
     drag.currentX = x;
     drag.currentDate = date;
@@ -2905,14 +3076,21 @@ function updateScrub(e) {
     scrub.classList.remove('active');
     return;
   }
-  const x = e.clientX - rect.left;
-  if (x < geom().railW) {
+  const viewportX = e.clientX - rect.left;
+  // Rail is pinned to viewport's left edge; don't scrub over it
+  if (viewportX < geom().railW) {
     scrub.classList.remove('show');
     scrub.classList.remove('active');
     return;
   }
-  const date = dateFromX(x);
-  scrub.style.left = x + 'px';
+  const contentX = viewportX + tlEl.scrollLeft;
+  if (contentX > geom().totalWidth) {
+    scrub.classList.remove('show');
+    scrub.classList.remove('active');
+    return;
+  }
+  const date = dateFromX(contentX);
+  scrub.style.left = contentX + 'px';
   tag.textContent = fmtShort(date);
   scrub.classList.add('show');
   scrub.classList.remove('active');
@@ -2943,9 +3121,10 @@ document.addEventListener('pointerdown', (e) => {
   const tlEl = document.getElementById('tl-root');
   if (!tlEl) return;
   const tlRect = tlEl.getBoundingClientRect();
-  const x = e.clientX - tlRect.left;
-  if (x < geom().railW) return;             // ignore rail area
-  if (x > geom().totalWidth) return;        // ignore beyond content
+  const viewportX = e.clientX - tlRect.left;
+  if (viewportX < geom().railW) return;     // ignore rail area (pinned to viewport)
+  const contentX = viewportX + tlEl.scrollLeft;
+  if (contentX > geom().totalWidth) return; // ignore beyond content
 
   // Hit detection: which of these zones are we in?
   const axis = e.target.closest('.tl-axis');
@@ -2962,13 +3141,13 @@ document.addEventListener('pointerdown', (e) => {
   // (Clicks directly on an existing milestone are already handled above and returned.)
   if (msLane) {
     e.preventDefault();
-    beginAddMilestoneAt(dateFromX(x));
+    beginAddMilestoneAt(dateFromX(contentX));
     return;
   }
 
   // Otherwise: scrub (timeline playhead) is the default in axis + track lanes
   if (axis || lane) {
-    startScrubDrag(e, x);
+    startScrubDrag(e, contentX);
     return;
   }
 });
@@ -2976,6 +3155,25 @@ document.addEventListener('pointerdown', (e) => {
 document.addEventListener('pointermove', onPointerMove);
 document.addEventListener('pointerup', onPointerUp);
 document.addEventListener('pointercancel', onPointerUp);
+
+/* Cmd/Ctrl + wheel = cursor-anchored zoom. Wheel alone = native horizontal scroll.
+   We non-passive so we can preventDefault and block the browser's page-zoom. */
+document.addEventListener('wheel', (e) => {
+  if (!e.ctrlKey && !e.metaKey) return;
+  const tlEl = document.getElementById('tl-root');
+  if (!tlEl) return;
+  const rect = tlEl.getBoundingClientRect();
+  const inside = e.clientX >= rect.left && e.clientX <= rect.right
+              && e.clientY >= rect.top  && e.clientY <= rect.bottom;
+  if (!inside) return;
+  e.preventDefault();
+  const viewportX = e.clientX - rect.left;
+  const anchorDate = dateFromX(viewportX + tlEl.scrollLeft);
+  // Wheel delta → multiplicative zoom. deltaY < 0 (scroll up) = zoom in.
+  const dir = e.deltaY < 0 ? 1 : -1;
+  const factor = dir > 0 ? ZOOM_STEP : 1 / ZOOM_STEP;
+  applyZoom(zoomFactor * factor, { viewportX, date: anchorDate });
+}, { passive: false });
 
 document.addEventListener('click', (e) => {
   if (drag) return;
@@ -3041,6 +3239,10 @@ function toggleEdit() {
 document.getElementById('btn-edit-toggle').addEventListener('click', toggleEdit);
 document.getElementById('btn-undo').addEventListener('click', undo);
 document.getElementById('btn-add-milestone').addEventListener('click', () => addMilestone(realToday()));
+
+document.getElementById('btn-zoom-in').addEventListener('click', () => applyZoom(zoomFactor * ZOOM_STEP, null));
+document.getElementById('btn-zoom-out').addEventListener('click', () => applyZoom(zoomFactor / ZOOM_STEP, null));
+document.getElementById('btn-zoom-fit').addEventListener('click', () => zoomFit());
 
 document.getElementById('in-start').addEventListener('change', (e) => {
   state.startDate = e.target.value; render(); saveState();
@@ -3164,6 +3366,14 @@ window.addEventListener('resize', () => {
   snapshot();
   updateClock();
   setInterval(updateClock, 30000);
+
+  // Keep the rail pinned to the viewport's left edge as the timeline scrolls.
+  const tlEl = document.getElementById('tl-root');
+  if (tlEl) {
+    tlEl.addEventListener('scroll', updateRailTransform, { passive: true });
+    updateRailTransform();
+  }
+  updateZoomBadge();
 })();
 </script>
 </body>
