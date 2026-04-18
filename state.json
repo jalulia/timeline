@@ -91,7 +91,7 @@
       "id": "t-heidi",
       "name": "Heidi",
       "sub": "reach",
-      "sequential": false,
+      "sequential": true,
       "phases": [
         {
           "id": "i1y24ke",
@@ -114,7 +114,8 @@
           "start": "2026-04-27",
           "days": 4
         }
-      ]
+      ],
+      "color": "#0a0a0a"
     },
     {
       "id": "t-mom",
