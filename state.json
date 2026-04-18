@@ -6,7 +6,7 @@
       "id": "t-yoshi",
       "name": "Yoshi",
       "sub": "build",
-      "sequential": true,
+      "sequential": false,
       "phases": [
         {
           "id": "17mml8i",
@@ -57,7 +57,7 @@
           "ix": "06"
         }
       ],
-      "color": "#0a4a9e"
+      "color": "#2F7A2F"
     },
     {
       "id": "t-cl",
