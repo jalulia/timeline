@@ -40,6 +40,14 @@
           "start": "2026-05-26",
           "days": 5,
           "ix": "06"
+        },
+        {
+          "id": "aisu0rw",
+          "label": "Source mats",
+          "state": "committed",
+          "start": "2026-04-24",
+          "days": 7,
+          "ix": "02"
         }
       ]
     },
