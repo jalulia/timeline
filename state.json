@@ -28,7 +28,7 @@
           "id": "wwxfyyy",
           "label": "Body Prep",
           "state": "committed",
-          "start": "2026-04-29",
+          "start": "2026-04-30",
           "days": 6,
           "ix": "03"
         },
@@ -36,8 +36,8 @@
           "id": "ua0d8li",
           "label": "Soundproofing",
           "state": "committed",
-          "start": "2026-05-05",
-          "days": 7,
+          "start": "2026-05-07",
+          "days": 5,
           "ix": "04"
         },
         {
