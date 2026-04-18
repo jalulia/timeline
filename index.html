@@ -2346,6 +2346,9 @@ function beginEditPhase(trackId, phaseId, opts = {}) {
     // commit
     working.label = labelIn.value.trim();
     working.ix    = ixIn.value.trim();
+    working.start = dateIn.value || original.start;
+    const daysParsed = parseInt(daysIn.value, 10);
+    working.days  = Number.isFinite(daysParsed) && daysParsed > 0 ? daysParsed : original.days;
     if (!working.label) {
       // empty label on commit = delete (consistent with task composer)
       track.phases = track.phases.filter(p => p.id !== phaseId);
@@ -2354,7 +2357,9 @@ function beginEditPhase(trackId, phaseId, opts = {}) {
     }
     const changed = working.label !== original.label
       || working.state !== original.state
-      || working.ix !== original.ix;
+      || working.ix !== original.ix
+      || working.start !== original.start
+      || working.days !== original.days;
     if (!changed && !opts.isNew) {
       restoreOriginalBar();
       return;
@@ -2362,6 +2367,8 @@ function beginEditPhase(trackId, phaseId, opts = {}) {
     phase.label = working.label;
     phase.state = working.state;
     phase.ix    = working.ix || undefined;
+    phase.start = working.start;
+    phase.days  = working.days;
     render(); saveState();
   }
 
@@ -2376,7 +2383,7 @@ function beginEditPhase(trackId, phaseId, opts = {}) {
   });
   delBtn.addEventListener('click', () => finish('delete'));
 
-  for (const el of [labelIn, ixIn]) {
+  for (const el of [labelIn, ixIn, dateIn, daysIn]) {
     el.addEventListener('keydown', e => {
       if (e.key === 'Enter')  { e.preventDefault(); finish('commit'); }
       if (e.key === 'Escape') { e.preventDefault(); finish('cancel'); }
