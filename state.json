@@ -113,6 +113,13 @@
           "state": "tentative",
           "start": "2026-04-27",
           "days": 4
+        },
+        {
+          "id": "ibjhbce",
+          "label": "",
+          "state": "committed",
+          "start": "2026-05-09",
+          "days": 12
         }
       ]
     },
