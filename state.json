@@ -55,13 +55,6 @@
           "start": "2026-05-26",
           "days": 5,
           "ix": "06"
-        },
-        {
-          "id": "ek3mbis",
-          "label": "",
-          "state": "committed",
-          "start": "2026-04-17",
-          "days": 54
         }
       ],
       "color": "#2f7a2f"
@@ -144,6 +137,13 @@
           "state": "tentative",
           "start": "2026-05-09",
           "days": 7
+        },
+        {
+          "id": "ygaadlu",
+          "label": "",
+          "state": "committed",
+          "start": "2026-05-09",
+          "days": 24
         }
       ]
     },
