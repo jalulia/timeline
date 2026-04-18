@@ -10,5 +10,14 @@
       "soft": true
     }
   ],
-  "tasks": []
+  "tasks": [
+    {
+      "id": "5twh91u",
+      "tag": "mom",
+      "text": "home",
+      "route": "flight",
+      "type": "blocked",
+      "week": 1
+    }
+  ]
 }
