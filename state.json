@@ -113,13 +113,6 @@
           "state": "tentative",
           "start": "2026-04-27",
           "days": 4
-        },
-        {
-          "id": "bxn2f9s",
-          "label": "",
-          "state": "committed",
-          "start": "2026-05-05",
-          "days": 14
         }
       ]
     },
