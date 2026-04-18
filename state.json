@@ -200,6 +200,12 @@
       "label": "Travel tent.",
       "date": "2026-05-05",
       "soft": false
+    },
+    {
+      "id": "lsfa6kq",
+      "label": "",
+      "date": "2026-06-02",
+      "soft": true
     }
   ],
   "tasks": [
