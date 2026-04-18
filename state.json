@@ -83,8 +83,8 @@
           "id": "rvrwods",
           "label": "Order · receive",
           "state": "tentative",
-          "start": "2026-04-26",
-          "days": 5
+          "start": "2026-04-30",
+          "days": 1
         }
       ],
       "color": "#FF4A02"
