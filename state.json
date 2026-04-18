@@ -6,7 +6,7 @@
       "id": "t-yoshi",
       "name": "Yoshi",
       "sub": "build",
-      "sequential": false,
+      "sequential": true,
       "phases": [
         {
           "id": "17mml8i",
@@ -57,7 +57,7 @@
           "ix": "06"
         }
       ],
-      "color": "#2F7A2F"
+      "color": "#2f7a2f"
     },
     {
       "id": "t-cl",
@@ -135,7 +135,7 @@
           "id": "m6kjvsu",
           "label": "Travel · ~1wk",
           "state": "tentative",
-          "start": "2026-05-05",
+          "start": "2026-05-09",
           "days": 7
         }
       ]
