@@ -18,6 +18,14 @@
       "route": "",
       "type": "normal",
       "week": 1
+    },
+    {
+      "id": "kjl5ivb",
+      "tag": "home",
+      "text": "build",
+      "route": "Home",
+      "type": "normal",
+      "week": 2
     }
   ]
 }
