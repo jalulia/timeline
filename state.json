@@ -245,6 +245,24 @@
       "label": "Test",
       "date": "2026-04-30",
       "soft": true
+    },
+    {
+      "id": "37zr9xp",
+      "label": "New milestone",
+      "date": "2026-05-08",
+      "soft": true
+    },
+    {
+      "id": "nsh88oz",
+      "label": "New milestone",
+      "date": "2026-05-17",
+      "soft": true
+    },
+    {
+      "id": "vsvbcne",
+      "label": "New milestone",
+      "date": "2026-05-28",
+      "soft": true
     }
   ],
   "tasks": [
