@@ -14,7 +14,8 @@
           "state": "active",
           "start": "2026-04-17",
           "days": 5,
-          "ix": "01"
+          "ix": "01",
+          "row": 0
         },
         {
           "id": "4rjlgk8",
@@ -22,7 +23,8 @@
           "state": "committed",
           "start": "2026-04-22",
           "days": 7,
-          "ix": "02"
+          "ix": "02",
+          "row": 0
         },
         {
           "id": "j90f0xu",
@@ -30,7 +32,8 @@
           "state": "committed",
           "start": "2026-04-27",
           "days": 1,
-          "ix": "03"
+          "ix": "03",
+          "row": 0
         },
         {
           "id": "w6p9sso",
@@ -38,7 +41,8 @@
           "state": "committed",
           "start": "2026-05-05",
           "days": 7,
-          "ix": "04"
+          "ix": "04",
+          "row": 0
         },
         {
           "id": "1frzy25",
@@ -46,7 +50,8 @@
           "state": "committed",
           "start": "2026-05-12",
           "days": 14,
-          "ix": "05"
+          "ix": "05",
+          "row": 0
         },
         {
           "id": "6k68tvk",
@@ -54,7 +59,8 @@
           "state": "committed",
           "start": "2026-05-26",
           "days": 5,
-          "ix": "06"
+          "ix": "06",
+          "row": 0
         }
       ]
     },
@@ -69,21 +75,24 @@
           "label": "Waiting · vendor",
           "state": "waiting",
           "start": "2026-04-17",
-          "days": 7
+          "days": 7,
+          "row": 0
         },
         {
           "id": "iwj3xz3",
           "label": "Decide",
           "state": "tentative",
           "start": "2026-04-27",
-          "days": 2
+          "days": 2,
+          "row": 0
         },
         {
           "id": "emz8xs4",
           "label": "Order · receive",
           "state": "tentative",
           "start": "2026-04-26",
-          "days": 5
+          "days": 5,
+          "row": 0
         }
       ]
     },
@@ -98,21 +107,24 @@
           "label": "Draft · send",
           "state": "committed",
           "start": "2026-04-18",
-          "days": 2
+          "days": 2,
+          "row": 0
         },
         {
           "id": "3co2ys9",
           "label": "Waiting · reply",
           "state": "waiting",
           "start": "2026-04-23",
-          "days": 7
+          "days": 7,
+          "row": 0
         },
         {
           "id": "3ju7rav",
           "label": "Follow-up",
           "state": "tentative",
           "start": "2026-04-27",
-          "days": 4
+          "days": 4,
+          "row": 0
         }
       ]
     },
@@ -127,21 +139,32 @@
           "label": "Confirm window",
           "state": "tentative",
           "start": "2026-04-20",
-          "days": 5
+          "days": 5,
+          "row": 0
         },
         {
           "id": "5vwqe7l",
           "label": "Travel · ~1wk",
           "state": "tentative",
           "start": "2026-05-05",
-          "days": 7
+          "days": 7,
+          "row": 0
         },
         {
           "id": "u01hlo6",
           "label": "whore",
           "state": "committed",
           "start": "2026-05-12",
-          "days": 15
+          "days": 15,
+          "row": 0
+        },
+        {
+          "id": "xtvtvvs",
+          "label": "New phase",
+          "state": "tentative",
+          "start": "2026-04-30",
+          "days": 10,
+          "row": 1
         }
       ]
     },
@@ -156,21 +179,24 @@
           "label": "Work packages",
           "state": "committed",
           "start": "2026-04-21",
-          "days": 4
+          "days": 4,
+          "row": 0
         },
         {
           "id": "hxr7jiz",
           "label": "Brief team",
           "state": "tentative",
           "start": "2026-05-03",
-          "days": 4
+          "days": 4,
+          "row": 0
         },
         {
           "id": "brhupnf",
           "label": "Re-sync",
           "state": "tentative",
           "start": "2026-05-12",
-          "days": 3
+          "days": 3,
+          "row": 0
         }
       ]
     },
@@ -185,7 +211,8 @@
           "label": "→ June+ · plan w/ Matt",
           "state": "beyond",
           "start": "2026-05-26",
-          "days": 12
+          "days": 12,
+          "row": 0
         }
       ]
     }
