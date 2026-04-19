@@ -220,6 +220,12 @@
       "label": "New Milestone",
       "date": "2026-05-03",
       "soft": true
+    },
+    {
+      "id": "aawi3tc",
+      "label": "",
+      "date": "2026-05-04",
+      "soft": true
     }
   ],
   "tasks": [
