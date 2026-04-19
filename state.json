@@ -397,7 +397,7 @@
       "tag": "Yoshi",
       "text": "Finish & equip — final fit, water, power, inventory",
       "route": "build / finish",
-      "type": "normal",
+      "type": "decision",
       "week": 6
     },
     {
