@@ -245,6 +245,12 @@
       "label": "Travel tent.",
       "date": "2026-05-05",
       "soft": false
+    },
+    {
+      "id": "vziw6fj",
+      "label": "Home",
+      "date": "2026-05-01",
+      "soft": true
     }
   ],
   "tasks": [
