@@ -151,5 +151,11 @@
   "version": 8,
   "startDate": "2026-04-11",
   "horizonDate": "2026-06-20",
-  "projects": []
+  "projects": [
+    {
+      "id": "p-obs3ya6",
+      "name": "Yoshi",
+      "collapsed": false
+    }
+  ]
 }
