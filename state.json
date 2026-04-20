@@ -61,7 +61,7 @@
         {
           "id": "qn4yvkn",
           "label": "Phase Stack Example",
-          "state": "committed",
+          "state": "waiting",
           "start": "2026-04-16",
           "days": 19
         }
