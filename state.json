@@ -263,6 +263,12 @@
       "label": "Milestone",
       "date": "2026-04-07",
       "soft": true
+    },
+    {
+      "id": "632mt44",
+      "label": "Milestone Stack",
+      "date": "2026-05-01",
+      "soft": true
     }
   ],
   "tasks": [
