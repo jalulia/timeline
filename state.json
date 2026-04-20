@@ -9,7 +9,6 @@
       "id": "e3xib27",
       "name": "New Trck",
       "color": "#2F7A2F",
-      "projectId": "p-obs3ya6",
       "phases": []
     }
   ],
@@ -158,11 +157,5 @@
   "version": 8,
   "startDate": "2026-04-11",
   "horizonDate": "2026-06-20",
-  "projects": [
-    {
-      "id": "p-obs3ya6",
-      "name": "Yoshi",
-      "collapsed": false
-    }
-  ]
+  "projects": []
 }
