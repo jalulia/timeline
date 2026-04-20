@@ -109,38 +109,6 @@
       "color": "#2f7a2f"
     },
     {
-      "id": "t-comms",
-      "name": "Comms",
-      "sub": "team",
-      "sequential": false,
-      "phases": [
-        {
-          "id": "myn6fd1",
-          "label": "Work packages",
-          "state": "committed",
-          "start": "2026-04-21",
-          "days": 4,
-          "row": 0
-        },
-        {
-          "id": "iqsmqhb",
-          "label": "Brief team",
-          "state": "tentative",
-          "start": "2026-05-03",
-          "days": 4,
-          "row": 0
-        },
-        {
-          "id": "j71qlt5",
-          "label": "Re-sync",
-          "state": "tentative",
-          "start": "2026-05-12",
-          "days": 3,
-          "row": 0
-        }
-      ]
-    },
-    {
       "id": "rn4yxz1",
       "name": "New track",
       "sub": "",
