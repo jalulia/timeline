@@ -4,7 +4,7 @@
       "id": "t-yoshi",
       "name": "Yoshi",
       "sub": "build",
-      "sequential": true,
+      "sequential": false,
       "phases": [
         {
           "id": "xpq472o",
@@ -68,7 +68,8 @@
           "days": 5,
           "row": 1
         }
-      ]
+      ],
+      "color": "#0a4a9e"
     },
     {
       "id": "t-cl",
