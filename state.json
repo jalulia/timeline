@@ -59,6 +59,14 @@
           "days": 5,
           "ix": "06",
           "row": 0
+        },
+        {
+          "id": "qvkook8",
+          "label": "New phase",
+          "state": "tentative",
+          "start": "2026-04-14",
+          "days": 5,
+          "row": 1
         }
       ]
     },
@@ -331,6 +339,6 @@
     }
   ],
   "version": 7,
-  "startDate": "2026-04-14",
+  "startDate": "2026-04-11",
   "horizonDate": "2026-06-20"
 }
