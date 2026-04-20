@@ -116,7 +116,7 @@
       "phases": [
         {
           "id": "vjbbpho",
-          "label": "",
+          "label": "Phase Label",
           "state": "committed",
           "start": "2026-04-24",
           "days": 7
