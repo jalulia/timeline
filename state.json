@@ -330,5 +330,7 @@
       "week": 6
     }
   ],
-  "version": 7
+  "version": 7,
+  "startDate": "2026-04-14",
+  "horizonDate": "2026-06-20"
 }
