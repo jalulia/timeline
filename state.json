@@ -50,6 +50,13 @@
           "days": 5,
           "ix": "06",
           "row": 0
+        },
+        {
+          "id": "9pfwz3e",
+          "label": "Yoshi Dossier",
+          "state": "active",
+          "start": "2026-04-13",
+          "days": 6
         }
       ],
       "color": "#0a4a9e"
