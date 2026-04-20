@@ -113,7 +113,16 @@
       "name": "New track",
       "sub": "",
       "sequential": false,
-      "phases": []
+      "phases": [
+        {
+          "id": "vjbbpho",
+          "label": "",
+          "state": "committed",
+          "start": "2026-04-24",
+          "days": 7
+        }
+      ],
+      "color": "#a05fb0"
     },
     {
       "id": "58oie52",
