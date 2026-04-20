@@ -1,30 +1,6 @@
 {
   "tracks": [
     {
-      "id": "rn4yxz1",
-      "name": "New track",
-      "sub": "",
-      "sequential": false,
-      "phases": [
-        {
-          "id": "vjbbpho",
-          "label": "Phase Label",
-          "state": "committed",
-          "start": "2026-04-16",
-          "days": 19
-        },
-        {
-          "id": "nwjpm9y",
-          "label": "Phase label",
-          "state": "committed",
-          "start": "2026-05-12",
-          "days": 23,
-          "ix": "01"
-        }
-      ],
-      "color": "#a05fb0"
-    },
-    {
       "id": "58oie52",
       "name": "New track",
       "sub": "",
