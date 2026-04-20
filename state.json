@@ -9,7 +9,7 @@
       "sequential": true,
       "phases": [
         {
-          "id": "fufjxw0",
+          "id": "xpq472o",
           "label": "Plan & Dossier",
           "state": "active",
           "start": "2026-04-17",
@@ -18,25 +18,25 @@
           "row": 0
         },
         {
-          "id": "4rjlgk8",
+          "id": "zmqqkj2",
           "label": "Sample & Order",
           "state": "committed",
-          "start": "2026-04-27",
+          "start": "2026-04-22",
           "days": 7,
           "ix": "02",
           "row": 0
         },
         {
-          "id": "j90f0xu",
+          "id": "9yn9lok",
           "label": "Body Prep",
           "state": "committed",
-          "start": "2026-04-27",
-          "days": 1,
+          "start": "2026-04-29",
+          "days": 6,
           "ix": "03",
           "row": 0
         },
         {
-          "id": "w6p9sso",
+          "id": "j3bgq49",
           "label": "Soundproofing",
           "state": "committed",
           "start": "2026-05-05",
@@ -45,7 +45,7 @@
           "row": 0
         },
         {
-          "id": "1frzy25",
+          "id": "rrw8onf",
           "label": "Cabinet Build",
           "state": "committed",
           "start": "2026-05-12",
@@ -54,7 +54,7 @@
           "row": 0
         },
         {
-          "id": "6k68tvk",
+          "id": "chf2xc7",
           "label": "Finish",
           "state": "committed",
           "start": "2026-05-26",
@@ -71,7 +71,7 @@
       "sequential": false,
       "phases": [
         {
-          "id": "t1i4dxw",
+          "id": "pea3uti",
           "label": "Waiting · vendor",
           "state": "waiting",
           "start": "2026-04-17",
@@ -79,15 +79,15 @@
           "row": 0
         },
         {
-          "id": "iwj3xz3",
+          "id": "elphlnv",
           "label": "Decide",
           "state": "tentative",
-          "start": "2026-04-27",
+          "start": "2026-04-24",
           "days": 2,
           "row": 0
         },
         {
-          "id": "emz8xs4",
+          "id": "6081yd9",
           "label": "Order · receive",
           "state": "tentative",
           "start": "2026-04-26",
@@ -103,7 +103,7 @@
       "sequential": false,
       "phases": [
         {
-          "id": "gw7yxav",
+          "id": "75t24qn",
           "label": "Draft · send",
           "state": "committed",
           "start": "2026-04-18",
@@ -111,15 +111,15 @@
           "row": 0
         },
         {
-          "id": "3co2ys9",
+          "id": "q619jdv",
           "label": "Waiting · reply",
           "state": "waiting",
-          "start": "2026-04-23",
+          "start": "2026-04-20",
           "days": 7,
           "row": 0
         },
         {
-          "id": "3ju7rav",
+          "id": "gmm8mk8",
           "label": "Follow-up",
           "state": "tentative",
           "start": "2026-04-27",
@@ -135,7 +135,7 @@
       "sequential": false,
       "phases": [
         {
-          "id": "iwlsxtl",
+          "id": "ouqhok7",
           "label": "Confirm window",
           "state": "tentative",
           "start": "2026-04-20",
@@ -143,20 +143,12 @@
           "row": 0
         },
         {
-          "id": "5vwqe7l",
+          "id": "tz3kq7z",
           "label": "Travel · ~1wk",
           "state": "tentative",
           "start": "2026-05-05",
           "days": 7,
           "row": 0
-        },
-        {
-          "id": "xtvtvvs",
-          "label": "New phase",
-          "state": "tentative",
-          "start": "2026-04-30",
-          "days": 10,
-          "row": 1
         }
       ]
     },
@@ -167,7 +159,7 @@
       "sequential": false,
       "phases": [
         {
-          "id": "sgdu02p",
+          "id": "myn6fd1",
           "label": "Work packages",
           "state": "committed",
           "start": "2026-04-21",
@@ -175,7 +167,7 @@
           "row": 0
         },
         {
-          "id": "hxr7jiz",
+          "id": "iqsmqhb",
           "label": "Brief team",
           "state": "tentative",
           "start": "2026-05-03",
@@ -183,7 +175,7 @@
           "row": 0
         },
         {
-          "id": "brhupnf",
+          "id": "j71qlt5",
           "label": "Re-sync",
           "state": "tentative",
           "start": "2026-05-12",
@@ -199,7 +191,7 @@
       "sequential": false,
       "phases": [
         {
-          "id": "80fr7g3",
+          "id": "i95ivmp",
           "label": "→ June+ · plan w/ Matt",
           "state": "beyond",
           "start": "2026-05-26",
@@ -207,82 +199,45 @@
           "row": 0
         }
       ]
-    },
-    {
-      "id": "uq7nltw",
-      "name": "New track",
-      "sub": "",
-      "sequential": false,
-      "phases": []
     }
   ],
   "milestones": [
     {
-      "id": "iuf7g0i",
-      "label": "Milestone",
+      "id": "osex4hf",
+      "label": "Heidi draft",
       "date": "2026-04-19",
       "soft": true
     },
     {
-      "id": "t3j5b44",
+      "id": "fwvwg97",
       "label": "CL cutoff",
       "date": "2026-04-24",
       "soft": false
     },
     {
-      "id": "9zbjmlk",
-      "label": "Milestone",
-      "date": "2026-04-28",
-      "soft": true
-    },
-    {
-      "id": "mq761jr",
-      "label": "Test Diamond fill",
+      "id": "cxro3rn",
+      "label": "Mom date",
       "date": "2026-04-29",
+      "soft": true
+    },
+    {
+      "id": "djgguey",
+      "label": "Travel tent.",
+      "date": "2026-05-05",
       "soft": false
-    },
-    {
-      "id": "2sfa0tv",
-      "label": "New Milestone",
-      "date": "2026-05-02",
-      "soft": true
-    },
-    {
-      "id": "aawi3tc",
-      "label": "Test",
-      "date": "2026-04-30",
-      "soft": true
-    },
-    {
-      "id": "37zr9xp",
-      "label": "New milestone",
-      "date": "2026-05-08",
-      "soft": true
-    },
-    {
-      "id": "nsh88oz",
-      "label": "New milestone",
-      "date": "2026-05-17",
-      "soft": true
-    },
-    {
-      "id": "vsvbcne",
-      "label": "New milestone",
-      "date": "2026-05-28",
-      "soft": true
     }
   ],
   "tasks": [
     {
-      "id": "ijur8n2",
+      "id": "vzmty9a",
       "tag": "Yoshi",
-      "text": "Budget ballpark — confirm ~$20k start covers what, what comes after",
+      "text": "Budget ballpark — confirm ~$20k start covers what",
       "route": "dossier / budget",
       "type": "decision",
       "week": 1
     },
     {
-      "id": "dy0vit7",
+      "id": "teoocl9",
       "tag": "Yoshi",
       "text": "HBL sheets — 3 vs 4, which faces show, order sample first",
       "route": "dossier / materials",
@@ -290,39 +245,15 @@
       "week": 1
     },
     {
-      "id": "jksq57w",
-      "tag": "Yoshi",
-      "text": "Cabinet layout — water, puff, stove, sink, storage positions",
-      "route": "dossier / layout",
-      "type": "decision",
-      "week": 1
-    },
-    {
-      "id": "ob2i0ll",
-      "tag": "Yoshi",
-      "text": "Build sequence lock — soundproofing + body holes before cabinetry",
-      "route": "dossier / sequence",
-      "type": "decision",
-      "week": 1
-    },
-    {
-      "id": "gooaos8",
-      "tag": "Yoshi",
-      "text": "Emissions / Georgia legalization status",
-      "route": "dossier / compliance",
-      "type": "decision",
-      "week": 1
-    },
-    {
-      "id": "w0vi4cu",
+      "id": "kf4znfi",
       "tag": "Heidi",
-      "text": "Draft with fresh brain — impactful, clear ask, no filler",
+      "text": "Draft with fresh brain — impactful, clear ask",
       "route": "outreach / heidi",
       "type": "normal",
       "week": 1
     },
     {
-      "id": "ccz1ef9",
+      "id": "nb69vh9",
       "tag": "Mom",
       "text": "Reply with window for summer help",
       "route": "personal / calendar",
@@ -330,31 +261,23 @@
       "week": 1
     },
     {
-      "id": "xakk1yg",
+      "id": "lafemb6",
       "tag": "CL / CNC",
-      "text": "Vendor response overdue — self-set cutoff 24 Apr, then self-pay path",
+      "text": "Vendor response overdue — self-set cutoff 24 Apr",
       "route": "waiting / decision",
       "type": "blocked",
       "week": 1
     },
     {
-      "id": "sy0732z",
-      "tag": "Comms",
-      "text": "Single-voice AI pass on combined dossier (check for Matt's zip of PDFs)",
-      "route": "tools / dossier",
-      "type": "normal",
-      "week": 1
-    },
-    {
-      "id": "69k1rvo",
+      "id": "wzpf3xi",
       "tag": "Yoshi",
-      "text": "Place HBL order, soundproofing order, queue delivery for return",
+      "text": "Place HBL order, soundproofing order",
       "route": "orders",
       "type": "normal",
       "week": 2
     },
     {
-      "id": "xl8ghh5",
+      "id": "ezu1g3d",
       "tag": "Comms",
       "text": "Work packages — 90% whiteboards per person pre-travel",
       "route": "handoff",
@@ -362,39 +285,23 @@
       "week": 2
     },
     {
-      "id": "mrca87n",
-      "tag": "Heidi",
-      "text": "If no reply by end of week, soft follow-up",
-      "route": "outreach / heidi",
-      "type": "normal",
-      "week": 2
-    },
-    {
-      "id": "tbuakw7",
+      "id": "u32fnh4",
       "tag": "Yoshi",
-      "text": "Fill water tank hole, front left, remaining body penetrations",
+      "text": "Fill water tank hole, body penetrations",
       "route": "build / body",
       "type": "normal",
       "week": 3
     },
     {
-      "id": "binax9q",
+      "id": "bgqxwlj",
       "tag": "Comms",
-      "text": "Brief team on departure date, open threads, decision authority",
+      "text": "Brief team on departure, decision authority",
       "route": "handoff",
       "type": "normal",
       "week": 3
     },
     {
-      "id": "67t1vup",
-      "tag": "Mom",
-      "text": "Travel window — ~1 week on the ground (tentative)",
-      "route": "personal / travel",
-      "type": "normal",
-      "week": 4
-    },
-    {
-      "id": "bnekymz",
+      "id": "04jt58m",
       "tag": "Yoshi",
       "text": "Soundproofing install, 2–3 layers + vibration",
       "route": "build / sound",
@@ -402,25 +309,17 @@
       "week": 4
     },
     {
-      "id": "ruajefe",
+      "id": "xzbhb3y",
       "tag": "Yoshi",
-      "text": "Cabinet build begins once soundproofing closed out",
+      "text": "Cabinet build begins once soundproofing closed",
       "route": "build / cabinet",
       "type": "normal",
       "week": 5
     },
     {
-      "id": "ffeqnlw",
-      "tag": "Yoshi",
-      "text": "Finish & equip — final fit, water, power, inventory",
-      "route": "build / finish",
-      "type": "decision",
-      "week": 6
-    },
-    {
-      "id": "5iwng4i",
+      "id": "mg2a7ed",
       "tag": "Peru",
-      "text": "Plan with Matt — dates, scope, what ships where",
+      "text": "Plan with Matt — dates, scope",
       "route": "beyond-horizon",
       "type": "normal",
       "week": 6
