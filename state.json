@@ -120,6 +120,14 @@
           "state": "committed",
           "start": "2026-04-24",
           "days": 7
+        },
+        {
+          "id": "nwjpm9y",
+          "label": "Phase label",
+          "state": "committed",
+          "start": "2026-05-05",
+          "days": 6,
+          "ix": "01"
         }
       ],
       "color": "#a05fb0"
