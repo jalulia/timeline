@@ -126,7 +126,7 @@
           "id": "q619jdv",
           "label": "Waiting · reply",
           "state": "waiting",
-          "start": "2026-04-18",
+          "start": "2026-05-07",
           "days": 8,
           "row": 0
         },
@@ -158,7 +158,7 @@
           "id": "tz3kq7z",
           "label": "Travel · ~1wk",
           "state": "tentative",
-          "start": "2026-05-05",
+          "start": "2026-05-23",
           "days": 7,
           "row": 0
         }
