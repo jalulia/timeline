@@ -50,14 +50,6 @@
           "days": 5,
           "ix": "06",
           "row": 0
-        },
-        {
-          "id": "qvkook8",
-          "label": "New phase",
-          "state": "tentative",
-          "start": "2026-04-14",
-          "days": 4,
-          "row": 1
         }
       ],
       "color": "#0a4a9e"
