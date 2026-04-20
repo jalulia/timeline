@@ -1,6 +1,4 @@
 {
-  "startDate": "2026-04-14",
-  "horizonDate": "2026-06-20",
   "tracks": [
     {
       "id": "t-yoshi",
@@ -331,5 +329,6 @@
       "type": "normal",
       "week": 6
     }
-  ]
+  ],
+  "version": 7
 }
