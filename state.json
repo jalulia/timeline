@@ -3,8 +3,7 @@
     {
       "id": "58oie52",
       "name": "Main",
-      "phases": [],
-      "projectId": "p-gsmp1q4"
+      "phases": []
     }
   ],
   "milestones": [
@@ -152,11 +151,5 @@
   "version": 8,
   "startDate": "2026-04-11",
   "horizonDate": "2026-06-20",
-  "projects": [
-    {
-      "id": "p-gsmp1q4",
-      "name": "New trackYoshi",
-      "collapsed": false
-    }
-  ]
+  "projects": []
 }
