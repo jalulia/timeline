@@ -257,6 +257,12 @@
       "label": "Home",
       "date": "2026-05-01",
       "soft": true
+    },
+    {
+      "id": "7a2cnyr",
+      "label": "Milestone",
+      "date": "2026-04-07",
+      "soft": true
     }
   ],
   "tasks": [
