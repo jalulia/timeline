@@ -55,7 +55,7 @@
           "id": "9pfwz3e",
           "label": "Yoshi Dossier",
           "state": "active",
-          "start": "2026-04-07",
+          "start": "2026-04-23",
           "days": 12
         },
         {
@@ -77,7 +77,7 @@
         {
           "id": "pea3uti",
           "label": "Waiting · vendor",
-          "state": "waiting",
+          "state": "beyond",
           "start": "2026-04-26",
           "days": 7,
           "row": 0
