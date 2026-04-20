@@ -57,6 +57,13 @@
           "state": "active",
           "start": "2026-04-07",
           "days": 12
+        },
+        {
+          "id": "qn4yvkn",
+          "label": "Phase Stack Example",
+          "state": "committed",
+          "start": "2026-04-20",
+          "days": 7
         }
       ],
       "color": "#0a4a9e"
