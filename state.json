@@ -1,46 +1,6 @@
 {
   "tracks": [
     {
-      "id": "t-cl",
-      "name": "CL / CNC",
-      "sub": "proc.",
-      "sequential": false,
-      "phases": [
-        {
-          "id": "pea3uti",
-          "label": "Waiting · vendor",
-          "state": "beyond",
-          "start": "2026-04-26",
-          "days": 7,
-          "row": 0
-        },
-        {
-          "id": "elphlnv",
-          "label": "Decide",
-          "state": "tentative",
-          "start": "2026-05-20",
-          "days": 3,
-          "row": 0
-        },
-        {
-          "id": "6081yd9",
-          "label": "Order · receive",
-          "state": "tentative",
-          "start": "2026-06-02",
-          "days": 5,
-          "row": 0
-        },
-        {
-          "id": "xg9aua3",
-          "label": "Order",
-          "state": "committed",
-          "start": "2026-05-21",
-          "days": 6
-        }
-      ],
-      "color": "#2f7a2f"
-    },
-    {
       "id": "rn4yxz1",
       "name": "New track",
       "sub": "",
