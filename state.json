@@ -141,22 +141,6 @@
       ]
     },
     {
-      "id": "t-peru",
-      "name": "Peru",
-      "sub": "beyond",
-      "sequential": false,
-      "phases": [
-        {
-          "id": "i95ivmp",
-          "label": "→ June+ · plan w/ Matt",
-          "state": "beyond",
-          "start": "2026-05-26",
-          "days": 12,
-          "row": 0
-        }
-      ]
-    },
-    {
       "id": "rn4yxz1",
       "name": "New track",
       "sub": "",
