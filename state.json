@@ -7,15 +7,6 @@
       "sequential": false,
       "phases": [
         {
-          "id": "xpq472o",
-          "label": "Plan & Dossier",
-          "state": "active",
-          "start": "2026-04-19",
-          "days": 3,
-          "ix": "01",
-          "row": 0
-        },
-        {
           "id": "zmqqkj2",
           "label": "Sample & Order",
           "state": "committed",
