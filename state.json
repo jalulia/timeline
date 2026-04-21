@@ -5,7 +5,16 @@
       "name": "Build",
       "color": "#0A4A9E",
       "projectId": "p-f9c44f2",
-      "phases": []
+      "phases": [
+        {
+          "id": "91buwz6",
+          "label": "Dossier",
+          "state": "active",
+          "start": "2026-04-21",
+          "days": 3,
+          "ix": "01"
+        }
+      ]
     },
     {
       "id": "2mfoby7",
