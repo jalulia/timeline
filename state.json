@@ -1,56 +1,14 @@
 {
-  "tracks": [
-    {
-      "id": "sfheeb8",
-      "name": "Build",
-      "color": "#0A4A9E",
-      "projectId": "p-f9c44f2",
-      "phases": [
-        {
-          "id": "91buwz6",
-          "label": "Dossier",
-          "state": "active",
-          "start": "2026-04-19",
-          "days": 1,
-          "ix": "01"
-        }
-      ]
-    },
-    {
-      "id": "2mfoby7",
-      "name": "Interior",
-      "color": "#2F7A2F",
-      "projectId": "p-f9c44f2",
-      "phases": []
-    },
-    {
-      "id": "wtjvx8k",
-      "name": "SC",
-      "color": "#A05FB0",
-      "projectId": "p-1fj3rwp",
-      "phases": []
-    }
-  ],
+  "startDate": "2026-04-17",
+  "horizonDate": "2026-05-31",
+  "tracks": [],
   "milestones": [
     {
-      "id": "ijdfnes",
+      "id": "gb20fdi",
       "label": "click here to edit",
       "date": "2026-05-01",
       "soft": true
     }
   ],
-  "tasks": [],
-  "version": 8,
-  "projects": [
-    {
-      "id": "p-f9c44f2",
-      "name": "Yoshi",
-      "collapsed": false
-    },
-    {
-      "id": "p-1fj3rwp",
-      "name": "Travel",
-      "collapsed": false
-    }
-  ]
+  "tasks": []
 }
