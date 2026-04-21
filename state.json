@@ -1,6 +1,4 @@
 {
-  "startDate": "2026-04-17",
-  "horizonDate": "2026-05-31",
   "tracks": [],
   "milestones": [
     {
@@ -10,5 +8,13 @@
       "soft": true
     }
   ],
-  "tasks": []
+  "tasks": [],
+  "version": 8,
+  "projects": [
+    {
+      "id": "p-f9c44f2",
+      "name": "Yoshi",
+      "collapsed": false
+    }
+  ]
 }
