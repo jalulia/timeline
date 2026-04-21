@@ -10,5 +10,14 @@
       "soft": true
     }
   ],
-  "tasks": []
+  "tasks": [
+    {
+      "id": "5rc7snb",
+      "tag": "·",
+      "text": "dfgdf",
+      "route": "",
+      "type": "normal",
+      "week": 1
+    }
+  ]
 }
